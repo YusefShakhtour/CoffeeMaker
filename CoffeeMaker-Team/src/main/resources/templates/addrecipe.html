@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/addrecipe.css" />
+	<title>Add A Recipe</title>
+</head>
+<body>
+	
+	<div layout:fragment="content">
+	<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+		<script>
+			/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+			/*<![CDATA[*/ 
+			var app = angular.module('addRecipe', []);
+			app.controller('populateCtrl', function($scope, $http, $q) {
+				
+				/* Logic that handles controlling your page goes here */
+				
+				$http.get("/api/v1/recipes").then(function(response) {
+					$scope.recipes = response.data;
+				});
+				
+				$http.get("/api/v1/inventory").then(function(response) {
+					$scope.inventory = response.data;
+					$scope.ingredients = $scope.inventory.ingredients;
+				});
+				
+				$scope.idivs = [{ id: 1 }];
+				
+				$scope.iadd = function() {
+					if ( $scope.ingredients.length > $scope.idivs.length ) {
+						$scope.idivs.push({ id: $scope.idivs.length + 1 });
+					}
+				}
+				
+				$scope.idelete = function(index) {
+					if ($scope.idivs.length > 1) {
+						$scope.idivs.splice(index, 1);
+					}
+				}
+				
+				/* Check boxes for errors */
+				$scope.checkValidity = function() {
+					
+					var rn = document.getElementById("rname");
+					for (var i = 0; i < $scope.recipes.length; i++) {
+						if (rn.value.toUpperCase().trim() == $scope.recipes[i].name.toUpperCase().trim()) {
+							rn.setCustomValidity("This recipe already exists");
+							rn.reportValidity();
+							return false;
+						} else {
+							rn.setCustomValidity("");
+						}
+					}
+					
+					var rp = document.getElementById("rprice");
+					if ($scope.rprice < 1) {
+						rp.setCustomValidity('Please enter a positive integer quantity');
+						rp.reportValidity();
+						return false;
+					}
+						
+					for (i = 0; i < $scope.idivs.length; i++ ) {
+						var input = document.getElementById("units-" + i);
+						if ($scope.idivs[i].units < 1) {
+							input.setCustomValidity('Please enter a positive integer quantity');
+							input.reportValidity();
+							return false;
+						} else {
+							
+							for ( j = i + 1; j < $scope.idivs.length; j++) {
+								if ( $scope.idivs[i].selection && $scope.idivs[i].selection == $scope.idivs[j].selection ) {
+									var name = document.getElementById("ingredient-" + j);
+									name.setCustomValidity('Duplicate Ingredient.');
+									name.reportValidity();
+									return false;
+								}
+							}
+							
+							input.setCustomValidity('');
+						}
+					}
+					
+					return true;
+				}
+				
+				/* Submit recipe */
+				$scope.submit = function() {
+					
+					if ( $scope.checkValidity() ) {
+						var newRecipe = {};
+						newRecipe['id'] = null;
+						newRecipe['name'] = $scope.rname;
+						newRecipe['price'] = $scope.rprice;
+						newRecipe['ingredients'] = [];
+						for (var i = 0; i < $scope.idivs.length; i++) {
+							var newIngredient = {};
+							newIngredient['id'] = null
+							newIngredient['ingredient'] = $scope.idivs[i].selection.ingredient;
+							newIngredient['amount'] = $scope.idivs[i].units;
+							newRecipe['ingredients'].push(newIngredient);
+						}
+						
+						$http.post("/api/v1/recipes", newRecipe).then(
+								function(success) {
+									$scope.success = true;
+									window.location.reload();
+								}, function(rejection) {
+									if ( rejection.status == 507 ) {
+										alert("There is not enough space in the recipe book.");
+									}
+									console.error("Error while adding recipe");
+								});
+						
+					}
+				}
+		
+			});
+			
+			/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+			/*]]>*/
+		</script>
+		
+		<div ng-app="addRecipe" ng-controller="populateCtrl">
+
+			<!--- Various HTML elements, with extra tags telling Angular how to work with them, go here -->
+			<nav>
+				<a href="/index">Home</a>
+				<div class="title">Add A Recipe</div>
+			</nav>
+			<main>
+				<fieldset class="recipe">
+				
+					<legend>Recipe</legend>
+					<div class="inputs">
+						<div class="name">Name</div>
+						<input id="rname" type="text" ng-click="checkValidity()" ng-model="rname" required="true" />
+						<div class="price">Price</div>
+						<input id="rprice" type="number" ng-click="checkValidity()" ng-change="checkValidity()" ng-model="rprice" required="true" />
+					</div>
+
+					<fieldset class="outContainer">
+						<legend>Ingredients</legend>
+
+
+							<div ng-repeat="div in idivs" class="inContainer">
+								<div class="label1">Name</div>
+								<select 
+									name="Ingredient"
+									id="ingredient-{{$index}}"
+									class="label3" 
+									ng-model="div.selection"
+									ng-click="checkValidity()"
+									ng-options="item as item.ingredient for item in ingredients"
+									required="true"
+								>
+								</select>
+								<div class="label2">Units</div>
+								<input
+									type="number"
+									id="units-{{$index}}"
+									class="label4"
+									ng-change="checkValidity()"
+									ng-click="checkValidity()"
+									ng-model="div.units"
+									required="true" 
+								/>
+								<button ng-click="idelete($index)">Delete</button>
+							</div>
+
+						<button class="add" id="add" ng-click="iadd()">Add</button>
+
+					</fieldset>
+					<button id="sub" class="submit" ng-disabled="$isDisabled" ng-click="submit()">Submit</button>
+				</fieldset>
+				<fieldset class="book">
+					<legend>Recipe Book ( {{recipes.length}} / 3 )</legend>
+					<ul>
+						<li ng-repeat="recipe in recipes">{{recipe.name}}</li>
+					</ul>
+				</fieldset>
+			</main>
+		</div>
+</body>
+</html>

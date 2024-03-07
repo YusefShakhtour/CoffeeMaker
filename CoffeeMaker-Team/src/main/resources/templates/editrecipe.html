@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/editrecipe.css" />
+    <title>Edit Recipe</title>
+</head>
+<body>
+
+    <div layout:fragment="content">
+	<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+		<script>
+			/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+			/*<![CDATA[*/ 
+			var app = angular.module('editRecipe', []);
+			app.controller('populateCtrl', function($scope, $http, $q) {
+				
+				/* Logic that handles controlling your page goes here */
+				
+				$http.get("/api/v1/recipes").then(function(response) {
+					$scope.recipes = response.data;
+				});
+				
+				$http.get("/api/v1/inventory").then(function(response) {
+					$scope.inventory = response.data;
+					$scope.ingredients = $scope.inventory.ingredients;
+				});
+				
+				$scope.idivs = [];
+				$scope.newidivs = [];
+				
+				$scope.iadd = function() {
+					if ( $scope.ingredients.length > $scope.newidivs.length + $scope.idivs.length ) {
+						$scope.newidivs.push({});
+					}
+				}
+				
+				$scope.idelete = function(index) {
+					if ($scope.idivs.length > 1) {
+						$scope.idivs.splice(index, 1);
+					} else {
+						$scope.idivs = [];
+					}
+				}
+				
+				$scope.newidelete = function(index) {
+					if ($scope.newidivs.length > 1) {
+						$scope.newidivs.splice(index, 1);
+					} else {
+						$scope.newidivs = [];
+					}
+				}
+				
+				$scope.changeSelection = function() {
+					$scope.idivs = [];
+					
+					$scope.rprice = $scope.rselection.price;
+					for (i = 0; i < $scope.rselection.ingredients.length; i++ ) {
+						$scope.idivs.push({ ingredient: $scope.rselection.ingredients[i].ingredient});
+						$scope.idivs[i].units = $scope.rselection.ingredients[i].amount;
+					}
+					
+				}
+				
+				$scope.filteri = function(item) {
+					for (var i = 0; i < $scope.idivs.length; i++) {
+						if ($scope.idivs[i].ingredient === item.ingredient) {
+							return false;
+						}
+					}
+					return true;
+				};
+
+				
+				
+				/* Check boxes for errors */
+				$scope.checkValidity = function() {
+					
+					var rp = document.getElementById("rprice");
+					if ($scope.rprice < 1) {
+						rp.setCustomValidity('Please enter a positive integer quantity');
+						rp.reportValidity();
+						return false;
+					}
+					
+					for (i = 0; i < $scope.idivs.length; i++ ) {
+						var input = document.getElementById("units-" + i);
+						if ($scope.idivs[i].units < 1) {
+							input.setCustomValidity('Please enter a positive integer quantity');
+							input.reportValidity();
+							return false;
+						}
+					}
+						
+					for (i = 0; i < $scope.newidivs.length; i++ ) {
+						var input = document.getElementById("newunits-" + i);
+						if ($scope.newidivs[i].units < 1) {
+							input.setCustomValidity('Please enter a positive integer quantity');
+							input.reportValidity();
+							return false;
+						} else {
+							for ( j = i + 1; j < $scope.newidivs.length; j++) {
+								if ( $scope.newidivs[i].selection && $scope.newidivs[i].selection == $scope.newidivs[j].selection ) {
+									var name = document.getElementById("ingredient-" + j);
+									name.setCustomValidity('Duplicate Ingredient.');
+									name.reportValidity();
+									return false;
+								}
+							}
+							
+							input.setCustomValidity('');
+						}
+					}
+					
+					return true;
+				}
+				
+				/* Submit recipe */
+				$scope.submit = function() {
+					
+					if ( $scope.idivs.length + $scope.newidivs.length < 1 ) {
+						alert("There are no ingredients in the recipe.");
+						return;
+					}
+					
+					if ( $scope.checkValidity() ) {
+						
+						var newRecipe = {};
+						newRecipe['id'] = null;
+						newRecipe['name'] = $scope.rselection.name;
+						newRecipe['price'] = $scope.rprice;
+						newRecipe['ingredients'] = [];
+						for (var i = 0; i < $scope.idivs.length; i++) {
+							var newIngredient = {};
+							newIngredient['id'] = null
+							newIngredient['ingredient'] = $scope.idivs[i].ingredient;
+							newIngredient['amount'] = $scope.idivs[i].units;
+							newRecipe['ingredients'].push(newIngredient);
+						}
+						for (var i = 0; i < $scope.newidivs.length; i++) {
+							var newIngredient = {};
+							newIngredient['id'] = null
+							newIngredient['ingredient'] = $scope.newidivs[i].selection.ingredient;
+							newIngredient['amount'] = $scope.newidivs[i].units;
+							newRecipe['ingredients'].push(newIngredient);
+						}
+						
+						$http.delete("/api/v1/recipes/" + $scope.rselection.name).then(
+							function(success) {
+								$http.post("/api/v1/recipes", newRecipe).then(
+										function(success) {
+											$scope.success = true;
+											window.location.reload();
+										}, function(rejection) {
+											console.error("Error while adding recipe");
+										});
+							}, function(rejection) {
+								console.error("Error while adding recipe");
+							});
+					}
+				}
+		
+			});
+			
+			/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+			/*]]>*/
+		</script>
+		
+		<div ng-app="editRecipe" ng-controller="populateCtrl">
+
+			<!--- Various HTML elements, with extra tags telling Angular how to work with them, go here -->
+			<nav>
+				<a href="/index">Home</a>
+				<div class="title">Edit A Recipe</div>
+			</nav>
+			<main>
+				<fieldset class="recipe">
+				
+					<legend>Recipe</legend>
+					<div class="inputs">
+						<div class="name">Select Recipe</div>
+						<select 
+							name="recipe"
+							class="label3" 
+							ng-model="rselection"
+							ng-click="checkValidity()"
+							ng-change="changeSelection()"
+							ng-options="item as item.name for item in recipes"
+							required="true"
+						>
+						</select>
+						<div class="price">Price</div>
+						<input id="rprice" type="number" ng-click="checkValidity()" ng-change="checkValidity()" ng-model="rprice" required="true" />
+					</div>
+
+					<fieldset class="outContainer">
+						<legend>Ingredients</legend>
+							<div ng-repeat="div in idivs" class="inContainer">
+								<div class="label1">Name</div>
+								<div class="ingredient">{{div.ingredient}}</div>
+								<div class="label2">Units</div>
+								<input
+									type="number"
+									id="units-{{$index}}"
+									class="label4"
+									ng-change="checkValidity()"
+									ng-click="checkValidity()"
+									ng-model="div.units"
+									required="true" 
+								/>
+								<button ng-click="idelete($index)">Delete</button>
+							</div>
+							<div ng-repeat="div in newidivs" class="inContainer">
+								<div class="label1">Name</div>
+									<select 
+										name="Ingredient"
+										id="ingredient-{{$index}}"
+										class="label3" 
+										ng-model="div.selection"
+										ng-click="checkValidity()"
+										required="true"
+									>
+									<option ng-repeat="item in ingredients | filter: filteri" ng-value="item">{{item.ingredient}}</option>
+								</select>
+
+								<div class="label2">Units</div>
+								<input
+									type="number"
+									id="newunits-{{$index}}"
+									class="label4"
+									ng-change="checkValidity()"
+									ng-click="checkValidity()"
+									ng-model="div.units"
+									required="true" 
+								/>
+								<button ng-click="newidelete($index)">Delete</button>
+							</div>
+						<button class="add" id="add" ng-click="iadd()">Add</button>
+
+					</fieldset>
+					<button id="sub" class="submit" ng-disabled="$isDisabled" ng-click="submit()">Submit</button>
+				</fieldset>
+			</main>
+		</div>
+</body>
+</html>

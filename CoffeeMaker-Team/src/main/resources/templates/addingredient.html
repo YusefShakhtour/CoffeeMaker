@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/addingredient.css" />
+    <title>Document</title>
+</head>
+<body>
+		<div layout:fragment="content">
+	<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+		<script>
+			/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+			/*<![CDATA[*/ 
+			var app = angular.module('addIngredient', []);
+			app.controller('populateCtrl', function($scope, $http, $q) {
+				
+				$http.get("/api/v1/inventory").then(function(response) {
+					$scope.inventory = response.data;
+					$scope.ingredients = $scope.inventory.ingredients;
+				});
+
+				
+				/* Logic that handles controlling your page goes here */
+				$scope.submit = function() {
+					
+					var newInventory = { id: null, ingredients: [] }
+		
+					newInventory.ingredients.push({
+						id: null,
+						ingredient: $scope.name,
+						amount: $scope.quantity
+					});
+
+					$http.put("/api/v1/inventory", newInventory).then(function(success) {
+						$scope.success = true;
+						console.log("worked");
+						window.location.reload();
+						console.log($scope.ingredients);
+					}, function(rejection) {
+						console.log(newInventory);
+						console.error("Error while adding ingredient");
+						if (!nameIn.checkValidity()) {
+							nameIn.reportValidity();
+						}
+						if (!amtIn.checkValidity()) {
+							console.log(amtIn.value);
+							amtIn.reportValidity();
+						}
+					});	
+				}
+				
+				var nameIn = document.getElementById("nameIn");
+				nameIn.addEventListener("change", function(e) {
+					for (var i = 0; i < $scope.ingredients.length; i++) {
+						if (nameIn.value.toUpperCase().trim() == $scope.ingredients[i].ingredient.toUpperCase().trim()) {
+							nameIn.setCustomValidity("This ingredient already exists");
+							nameIn.reportValidity();
+						}
+					}
+				});
+				
+				var amtIn = document.getElementById("amtIn");
+				amtIn.addEventListener("change", function(e) {
+					const input = e.target;
+					if (input.validity.patternMismatch) {
+						amtIn.setCustomValidity("Please enter a positive integer quantity");
+						amtIn.reportValidity();
+					}
+					else {
+						amtIn.setCustomValidity("");
+					}
+				});
+				
+			});
+			
+			/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+			/*]]>*/
+		</script>
+		
+			<!--- Various HTML elements, with extra tags telling Angular how to work with them, go here -->
+
+		
+	<div ng-app="addIngredient" ng-controller="populateCtrl">
+    <nav>
+        <a href="/index">Home</a>
+        <div class="header">Add an Ingredient</div>
+    </nav>
+        <div class="container">
+        <fieldset class="add">
+            <legend>Add Ingredient</legend>
+            <div class="label1">Name</div>
+            <input type="text" ng-model="name" required class="in1" id="nameIn"/>
+            <br><br>
+            <div class="label2">Quantity</div>
+            <input type="text" ng-model="quantity" pattern="^[1-9]+[0-9]*$" required class="in2" id="amtIn"/>
+            <button ng-click="submit()">Submit</button>
+        </fieldset>
+        <fieldset class="list">
+            <legend>Ingredients List</legend>
+            <ul>
+                <li ng-repeat="ingredient in ingredients">{{ingredient.ingredient}}</li>
+            </ul>
+        </fieldset>
+    </div>
+</body>
+</html>
