@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/inventory.css" />
+    <title>Add Inventory</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+	<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+		<script>
+			/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+			/*<![CDATA[*/ 
+			var app = angular.module('addInventory', []);
+			app.controller('populateCtrl', function($scope, $http, $q) {
+				
+				/* Logic that handles controlling your page goes here */
+				
+				$scope.getInventory = function() {
+					$http.get("/api/v1/inventory").then(function(response) {
+						$scope.inventory = response.data;
+						$scope.ingredients = $scope.inventory.ingredients
+						angular.forEach($scope.ingredients, function(item) {
+				            item.units = 0;
+				        });
+					}, function(rejection) {
+						console.error("Error while getting Inventory");
+					});
+				}
+				
+				$scope.checkValidity = function() {
+					for (i = 0; i < $scope.ingredients.length; i++ ) {
+						var input = document.getElementById("units-" + i);
+						if ($scope.ingredients[i].units < 0) {
+							input.setCustomValidity('Please enter a non-negative integer quantity');
+							input.reportValidity();
+							return false;
+						} else {
+							input.setCustomValidity('');
+						}
+					}
+					
+					return true;
+				}
+	
+				$scope.submit = function() {
+					
+					if ( $scope.checkValidity() ) {
+						
+						
+						var newInventory = { id: null, ingredients: [] }
+						
+						for (i = 0; i < $scope.ingredients.length; i++) {
+							
+							newInventory.ingredients.push({
+								id: null,
+								ingredient: $scope.ingredients[i].ingredient,
+								amount: $scope.ingredients[i].units
+							});
+						}
+						
+						$http.put("/api/v1/inventory", newInventory).then(
+							function(response) {
+								$scope.getInventory();
+							}, function(rejection) {
+								console.error("Error while updating Inventory!");
+							});
+						
+					}
+					
+				}
+				
+				$scope.getInventory();
+		
+			});
+			
+			/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+			/*]]>*/
+		</script>
+		
+		<div ng-app="addInventory" ng-controller="populateCtrl">
+		
+			<!--- Various HTML elements, with extra tags telling Angular how to work with them, go here -->
+
+			    <nav>
+			        <a href="/index">Home</a>
+			        <div class="title">Add Inventory</div>
+			    </nav>
+			    <main>
+			    
+			    	<fieldset class="inventory">
+			            <legend>Inventory</legend>
+			            <fieldset>
+				            <legend>Ingredients</legend>
+				            <div ng-repeat="item in inventory.ingredients" class="inContainer">
+				                <div class="label1">Name</div>
+				                <div>{{item.ingredient}}</div>
+				                <div class="label2">Units</div>
+				                <div>{{item.amount}}</div>
+				                <div class="label5">{{item.change}}</div>
+				            </div>
+			            </fieldset>
+			        </fieldset>
+			        <fieldset class="addinventory">
+			            <legend>Add Inventory</legend>
+			
+			            <fieldset class="outContainer">
+			                <legend>Ingredients</legend>
+			                <div ng-repeat="item in ingredients" class="inContainer">
+			                    <div class="label1">Name</div>
+			                    <div>{{item.ingredient}}</div>
+			                    <div class="label2">Units</div>
+			                    <input id="units-{{$index}}" type="number" ng-click="checkValidity()" ng-model="item.units" class="label4" required="true">
+			                </div>
+			
+			            </fieldset>
+			            <button class="submit" ng-click="submit()">Submit</button>
+			        </fieldset>
+			    </main>
+			</div>
+</body>
+</html>

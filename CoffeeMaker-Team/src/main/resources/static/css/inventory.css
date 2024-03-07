@@ -1,0 +1,104 @@
+
+nav { 
+    margin: 5px;
+}
+
+.title {
+    text-align: center;
+
+}
+
+.add {
+    float: right;
+    margin-right: 25px;
+}
+
+.submit {
+    float: right;
+    margin-right: 30px;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.inventory {
+    width: 70%;
+    margin: auto;
+}
+
+.addinventory {
+    width: 70%;
+    margin: auto
+}
+
+.book {
+    width: 25%;
+    overflow-y: scroll;
+}
+
+.inputs {
+    display:grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: .2fr .2fr;
+    row-gap: 10px;
+}
+.name {
+    margin-left: 30%;
+    grid-row: 1 / 2;
+    grid-column: 1 / 2;
+}
+
+.price {
+    margin-left: 30%;
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
+}
+
+
+.inContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr .1fr;
+    column-gap: 10px;
+    border: 1px solid black;
+    padding: 1%;
+    margin: 1%;
+}
+
+.inContainer button { 
+    grid-column: 5 / 6;
+}
+
+.outContainer {
+    justify-content: center;
+    border: 1px solid black;
+    height:500px;
+    margin: 20px;
+    overflow-y: scroll;
+}
+
+.label1 {
+    text-align: center;
+    grid-column: 1 / 2;
+}
+
+.label3 {
+    justify-content: center;
+    grid-column: 2 / 3;
+}
+
+.label2 {
+    text-align: center;
+    grid-column: 3 / 4;
+}
+
+.label4 { 
+    text-align: center;
+    grid-column: 4 / 5;
+}
+
+.label5 {
+    color: red
+}
