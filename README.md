@@ -1,6 +1,15 @@
 # csc326-TP-202-3
 
 
+*Line Coverage (should be >=70%)*
+
+![Coverage](.github/badges/jacoco.svg)
+
+*Branch Coverage (should be >=50%)*
+
+![Branches](.github/badges/branches.svg)
+
+
 ### Extra Credit
 
 _Any extra credit done must be documented in the README or Wiki so that we can easily see what was done._
