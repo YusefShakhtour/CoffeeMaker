@@ -24,13 +24,13 @@ class OrderTest {
         final Order o1 = new Order();
 
         o1.setName( "Order 1" );
-        o1.setPrice( 10 );
+        o1.setPayment( 10 );
         service.save( o1 );
 
         final Order o2 = new Order();
 
         o2.setName( "Order 1" );
-        o2.setPrice( 10 );
+        o2.setPayment( 10 );
         service.save( o2 );
 
         final List<Order> orders = service.findAll();
@@ -46,7 +46,7 @@ class OrderTest {
         final Order o1 = new Order();
 
         o1.setName( "Order 1" );
-        o1.setPrice( 10 );
+        o1.setPayment( 10 );
         service.save( o1 );
 
         final Order o2 = new Order();
@@ -54,7 +54,7 @@ class OrderTest {
         o2.setName( "Order 1" );
         o2.setPrice( 10 );
         service.save( o2 );
-
+        Assertions.assertEquals( o2.getName(), "Order 2" );
         final List<Order> orders = service.findAll();
         Assertions.assertEquals( 2, orders.size(), "Creating two orders should result in two orders in the database" );
 
