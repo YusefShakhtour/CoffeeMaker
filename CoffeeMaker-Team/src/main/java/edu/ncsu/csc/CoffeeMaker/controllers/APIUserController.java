@@ -14,13 +14,35 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.ncsu.csc.CoffeeMaker.models.User;
 import edu.ncsu.csc.CoffeeMaker.services.UserService;
 
+/**
+ * This is the controller that holds the REST endpoints that handle CRUD
+ * operations for Users.
+ *
+ * Spring will automatically convert all of the ResponseEntity and List results
+ * to JSON
+ *
+ * @author Zack Martin
+ *
+ */
 @SuppressWarnings ( { "unchecked", "rawtypes" } )
 @RestController
 public class APIUserController extends APIController {
 
+    /**
+     * UserService object, to be autowired in by Spring to allow for
+     * manipulating the User model
+     */
     @Autowired
     private UserService userService;
 
+    /**
+     * REST API method to provide GET access to a specific user, as indicated by
+     * the path variable provided (the name of the user desired)
+     *
+     * @param name
+     *            user name
+     * @return response to the request
+     */
     @GetMapping ( BASE_PATH + "/users/{name}" )
     public ResponseEntity getUser ( @PathVariable ( "name" ) final String name ) {
         final User user = userService.findByName( name );
@@ -29,23 +51,37 @@ public class APIUserController extends APIController {
                 : new ResponseEntity( user, HttpStatus.OK );
     }
 
+    /**
+     * REST API method to provide POST access to the User model. This is used to
+     * create a new User by automatically converting the JSON RequestBody
+     * provided to a User object. Invalid JSON will fail.
+     *
+     * @param user
+     *            The valid user to be saved.
+     * @return ResponseEntity indicating success if the user could be saved, or
+     *         an error if it could not be
+     */
     @PostMapping ( BASE_PATH + "/users" )
     public ResponseEntity createUser ( @RequestBody final User user ) {
         if ( null != userService.findByName( user.getName() ) ) {
             return new ResponseEntity( errorResponse( "User with the name " + user.getName() + " already exists" ),
                     HttpStatus.CONFLICT );
         }
-        if ( userService.findAll().size() < 3 ) {
-            userService.save( user );
-            return new ResponseEntity( successResponse( user.getName() + " successfully created" ), HttpStatus.OK );
-        }
-        else {
-            return new ResponseEntity( errorResponse( "Insufficient space for user" + user.getName() ),
-                    HttpStatus.INSUFFICIENT_STORAGE );
-        }
+        userService.save( user );
+        return new ResponseEntity( successResponse( user.getName() + " successfully created" ), HttpStatus.OK );
 
     }
 
+    /**
+     * REST API method to provide PUT access to the User model. This is used to
+     * update a user by automatically converting the JSON RequestBody provided
+     * to a User object. Invalid JSON will fail.
+     *
+     * @param user
+     *            The valid user to be saved.
+     * @return ResponseEntity indicating success if the user could be saved, or
+     *         an error if it could not be
+     */
     @PutMapping ( BASE_PATH + "/users/{name}" )
     public ResponseEntity updateUser ( @PathVariable final String name, @RequestBody final User user ) {
 
@@ -67,6 +103,16 @@ public class APIUserController extends APIController {
 
     }
 
+    /**
+     * REST API method to allow deleting a User from the CoffeeMaker's by making
+     * a DELETE request to the API endpoint and indicating the user to delete
+     * (as a path variable)
+     *
+     * @param name
+     *            The name of the user to delete
+     * @return Success if the user could be deleted; an error if the user does
+     *         not exist
+     */
     @DeleteMapping ( BASE_PATH + "/recipes/{name}" )
     public ResponseEntity deleteUser ( @PathVariable final String name ) {
         final User user = userService.findByName( name );

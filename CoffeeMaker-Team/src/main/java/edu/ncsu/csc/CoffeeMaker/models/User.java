@@ -5,6 +5,13 @@ import javax.persistence.Id;
 
 import edu.ncsu.csc.CoffeeMaker.models.enums.UserType;
 
+/**
+ * User for the coffee maker. User is tied to the database using Hibernate
+ * libraries. See UserRepository and UserService for the other two pieces used
+ * for database support.
+ *
+ * @author Zack Martin
+ */
 public class User extends DomainObject {
 
     /** User id */
