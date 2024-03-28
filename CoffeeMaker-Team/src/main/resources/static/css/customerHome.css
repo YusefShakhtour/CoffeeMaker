@@ -35,12 +35,13 @@ body {
 .recipeList {
     overflow-y: scroll;
     width: 600px;
-    height: 200px;
+    height: min-height;
 }
 
 .newOrder {
-	width: 550px;
-	height: 50px
+	display: flex;
+	flex-direction: column;
+	min-height: 200px;
 }
 
 .recipeName {
@@ -50,4 +51,9 @@ body {
 .submitOrder {
     margin-left: 35%;
 
+}
+
+.orderObject {
+    display: flex;
+    justify-content: center;
 }

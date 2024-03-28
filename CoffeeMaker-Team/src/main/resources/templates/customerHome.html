@@ -4,7 +4,7 @@
 <meta charset="ISO-8859-1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="../static/css/customerHome.css" />
+<link rel="stylesheet" href="css/customerHome.css" />
 <title>Customer Home</title>
 </head>
 <body>
@@ -25,6 +25,9 @@
 				$scope.order.push(recipe)
 			}
 			
+			$scope.removeFromOrder = function(index) {
+				$scope.order.splice(index, 1);
+			}
 		});
 		
 		/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
@@ -37,14 +40,14 @@
 		<fieldset class="orderContainer p-4">
 			<legend>New Order</legend>
 			<div class="newOrder border border-dark">
-		        <div class="orderName d-flex">
-                	<div class="p-2 recipeName col-3">Mocha Latte</div>
-                	<button class="deleteFromOrder m-2">Delete</button>
-            	</div>
-				<div ng-repeat="recipe in order track by $index" class="p-2 orderName">{{recipe.name}}</div>
+				<div class="orderObject" ng-repeat="recipe in order track by $index">
+					<div  class="p-2 orderName">{{recipe.name}}</div>
+					<button class="deleteFromOrder m-2" ng-click="removeFromOrder($index)">Delete</button>
+				</div>
 			</div>
+			
 			<button class="submitOrder justify-content-center mt-4">Submit Order</button>
-	
+			
 		</fieldset>
 		
 		<fieldset class="recipeContainer p-4">
