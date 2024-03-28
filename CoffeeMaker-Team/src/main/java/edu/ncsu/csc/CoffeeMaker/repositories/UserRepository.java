@@ -6,4 +6,5 @@ import edu.ncsu.csc.CoffeeMaker.models.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    User findByName ( String name );
 }

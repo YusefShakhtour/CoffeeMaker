@@ -19,4 +19,8 @@ public class UserService extends Service<User, Long> {
     protected JpaRepository<User, Long> getRepository () {
         return userRepository;
     }
+
+    public User findByName ( final String name ) {
+        return userRepository.findByName( name );
+    }
 }
