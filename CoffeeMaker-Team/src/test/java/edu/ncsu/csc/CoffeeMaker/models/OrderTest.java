@@ -21,6 +21,12 @@ class OrderTest {
     void testCreateOrder () {
         Assertions.assertEquals( 0, service.findAll().size(), "There should be no Orders in the CoffeeMaker" );
 
+        final Recipe r1 = new Recipe( "Coffee", 15 );
+        r1.addIngredient( new Ingredient( "Chocolate", 1 ) );
+        r1.addIngredient( new Ingredient( "Milk", -3 ) );
+        r1.addIngredient( new Ingredient( "Coffee", 1 ) );
+        r1.addIngredient( new Ingredient( "Sugar", 1 ) );
+
         final Order o1 = new Order();
 
         o1.setName( "Order 1" );
@@ -43,16 +49,18 @@ class OrderTest {
     void testCreateOrder () {
         Assertions.assertEquals( 0, service.findAll().size(), "There should be no Orders in the CoffeeMaker" );
 
-        final Order o1 = new Order();
+        final Order o1 = new Order( "Order 1", 10 );
 
         o1.setName( "Order 1" );
         o1.setPayment( 10 );
         service.save( o1 );
+        Assertions.assertEquals( o1.getName(), "Order 2" );
+        Assertions.assertEquals( o1.getPayment(), 10 );
 
         final Order o2 = new Order();
 
         o2.setName( "Order 1" );
-        o2.setPrice( 10 );
+        o2.setPayment( 5 );
         service.save( o2 );
         Assertions.assertEquals( o2.getName(), "Order 2" );
         final List<Order> orders = service.findAll();
