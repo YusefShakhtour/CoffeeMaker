@@ -1,5 +1,7 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
+import java.util.Objects;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -123,6 +125,32 @@ public class User extends DomainObject {
         setName( user.getName() );
         setPassword( user.getPassword() );
         setUserType( user.getUserType() );
+    }
+
+    @Override
+    public int hashCode () {
+        return Objects.hash( id, name, pass, userType );
+    }
+
+    @Override
+    public boolean equals ( final Object obj ) {
+        if ( this == obj ) {
+            return true;
+        }
+        if ( obj == null ) {
+            return false;
+        }
+        if ( getClass() != obj.getClass() ) {
+            return false;
+        }
+        final User other = (User) obj;
+        return Objects.equals( id, other.id ) && Objects.equals( name, other.name )
+                && Objects.equals( pass, other.pass ) && userType == other.userType;
+    }
+
+    @Override
+    public String toString () {
+        return "User [id=" + id + ", name=" + name + ", pass=" + pass + ", userType=" + userType + "]";
     }
 
 }
