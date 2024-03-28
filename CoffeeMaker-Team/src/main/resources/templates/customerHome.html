@@ -4,7 +4,7 @@
 <meta charset="ISO-8859-1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-<link rel="stylesheet" type="text/css" href="./customerHome.css" />
+<link rel="stylesheet" href="css/customerHome.css" />
 
 <title>Customer Home</title>
 </head>
@@ -16,7 +16,15 @@
 		var app = angular.module('customerHome', []);
 		app.controller('populateCtrl', function($scope, $http, $q) {
 			
+			$http.get("/api/v1/recipes").then(function(response) {
+				$scope.recipes = response.data;
+			});
 			
+			$scope.order = []
+			
+			$scope.addToOrder = function(recipe) {
+				$scope.order.push(recipe)
+			}
 			
 		});
 		
@@ -29,7 +37,7 @@
 		<fieldset class="orderContainer col-6 p-4">
 			<legend>New Order</legend>
 			<div class="newOrder border border-dark">
-				<div class="p-2 orderName">Mocha Latte</div>
+				<div ng-repeat="recipe in order track by $index" class="p-2 orderName">{{recipe.name}}</div>
 			</div>
 			<button class="submitOrder justify-content-center mt-4">Submit Order</button>
 	
@@ -38,17 +46,9 @@
 		<fieldset class="recipeContainer col-6 p-4">
 			<legend>Recipe List</legend>
 			<div class=" p-3 recipeList border border-dark">
-	            <div class="recipeObject">
-	                <div class="p-2 recipeName col-3">Mocha Latte</div>
-	                <button class="addToOrder m-2">Add To Order</button>
-	            </div>
-	            <div class="recipeObject">
-	                <div class="p-2 recipeName col-3">Black Coffee</div>
-	                <button class="addToOrder m-2">Add To Order</button>
-	            </div>
-	            <div class="recipeObject">
-	                <div class="p-2 recipeName col-3">Hot Tea</div>
-	                <button class="addToOrder m-2">Add To Order</button>
+	            <div ng-repeat="recipe in recipes" class="recipeObject">
+	                <div class="p-2 recipeName col-3">{{recipe.name}}</div>
+	                <button ng-click="addToOrder(recipe)" class="addToOrder m-2">Add To Order</button>
 	            </div>
 	        </div>
 		</fieldset>
