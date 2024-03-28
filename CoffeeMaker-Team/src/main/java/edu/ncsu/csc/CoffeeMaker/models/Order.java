@@ -53,9 +53,8 @@ public class Order extends DomainObject {
      * @param fulfilled
      *            fulfilled
      */
-    public Order ( final Long id, final String name, @Min ( 0 ) final Integer payment, final boolean fulfilled2,
+    public Order ( final String name, @Min ( 0 ) final Integer payment, final boolean fulfilled2,
             final Recipe recipe ) {
-        setId( id );
         setName( name );
         setPayment( payment );
         setFulfilled( fulfilled2 );
@@ -90,16 +89,6 @@ public class Order extends DomainObject {
     @Override
     public Long getId () {
         return id;
-    }
-
-    /**
-     * set order id
-     *
-     * @param id
-     *            id
-     */
-    private void setId ( final Long id ) {
-        this.id = id;
     }
 
     /**
