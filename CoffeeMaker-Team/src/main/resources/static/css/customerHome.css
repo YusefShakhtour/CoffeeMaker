@@ -1,0 +1,20 @@
+body {
+    display: flex;
+}
+
+.recipeObject {
+    display: flex;
+}
+
+.recipeList {
+    overflow-y: scroll;
+}
+
+.recipeName {
+    display: flex;
+}
+
+.submitOrder {
+    margin-left: 35%;
+
+}
