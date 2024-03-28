@@ -6,5 +6,7 @@ public enum UserType {
     /** Barista */
     BARISTA,
     /** Manager */
-    MANAGER
+    MANAGER,
+    /** Anonymous */
+    ANONYMOUS
 }
