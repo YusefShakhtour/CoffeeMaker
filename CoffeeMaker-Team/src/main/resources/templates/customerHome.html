@@ -9,31 +9,50 @@
 <title>Customer Home</title>
 </head>
 <body>
-	<fieldset class="orderContainer col-6 p-4">
-		<legend>New Order</legend>
-		<div class="newOrder border border-dark">
-			<div class="p-2 orderName">Mocha Latte</div>
-		</div>
-        <button class="submitOrder justify-content-center mt-4">Submit Order</button>
+	<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+	<script>
+		/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+		/*<![CDATA[*/ 
+		var app = angular.module('customerHome', []);
+		app.controller('populateCtrl', function($scope, $http, $q) {
+			
+			
+			
+		});
+		
+		/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+		/*]]>*/
+	</script>
 
-	</fieldset>
-	<fieldset class="recipeContainer col-6 p-4">
-		<legend>Recipe List</legend>
-		<div class=" p-3 recipeList border border-dark">
-            <div class="recipeObject">
-                <div class="p-2 recipeName col-3">Mocha Latte</div>
-                <button class="addToOrder m-2">Add To Order</button>
-            </div>
-            <div class="recipeObject">
-                <div class="p-2 recipeName col-3">Black Coffee</div>
-                <button class="addToOrder m-2">Add To Order</button>
-            </div>
-            <div class="recipeObject">
-                <div class="p-2 recipeName col-3">Hot Tea</div>
-                <button class="addToOrder m-2">Add To Order</button>
-            </div>
-        </div>
-
-	</fieldset>
+	<div layout:fragment="content" ng-app="customerHome" ng-controller="populateCtrl">
+		
+		<fieldset class="orderContainer col-6 p-4">
+			<legend>New Order</legend>
+			<div class="newOrder border border-dark">
+				<div class="p-2 orderName">Mocha Latte</div>
+			</div>
+			<button class="submitOrder justify-content-center mt-4">Submit Order</button>
+	
+		</fieldset>
+		
+		<fieldset class="recipeContainer col-6 p-4">
+			<legend>Recipe List</legend>
+			<div class=" p-3 recipeList border border-dark">
+	            <div class="recipeObject">
+	                <div class="p-2 recipeName col-3">Mocha Latte</div>
+	                <button class="addToOrder m-2">Add To Order</button>
+	            </div>
+	            <div class="recipeObject">
+	                <div class="p-2 recipeName col-3">Black Coffee</div>
+	                <button class="addToOrder m-2">Add To Order</button>
+	            </div>
+	            <div class="recipeObject">
+	                <div class="p-2 recipeName col-3">Hot Tea</div>
+	                <button class="addToOrder m-2">Add To Order</button>
+	            </div>
+	        </div>
+		</fieldset>
+		
+	</div>
 </body>
 </html>
