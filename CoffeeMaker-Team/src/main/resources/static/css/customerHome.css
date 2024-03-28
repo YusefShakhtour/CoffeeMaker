@@ -1,5 +1,31 @@
+
+
+html {
+   margin: 0px;
+   height: 100%;
+   width: 100%;
+}
+
 body {
-    display: flex;
+   margin: 0px;
+   min-height: 100%;
+   min-width: 100%;
+   display:flex;    
+}
+
+.extContainer {
+	display:flex;
+	width:100%;
+	margin-left:auto;
+}
+
+
+.orderContainer {
+	width: 100%;
+}
+
+.recipeContainer {
+	width: 100%;	
 }
 
 .recipeObject {
@@ -8,6 +34,13 @@ body {
 
 .recipeList {
     overflow-y: scroll;
+    width: 600px;
+    height: 200px;
+}
+
+.newOrder {
+	width: 550px;
+	height: 50px
 }
 
 .recipeName {
