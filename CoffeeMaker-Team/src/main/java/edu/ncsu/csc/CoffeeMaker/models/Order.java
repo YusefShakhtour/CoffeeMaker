@@ -1,6 +1,5 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
-import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -55,7 +54,7 @@ public class Order extends DomainObject {
      *            fulfilled
      */
     public Order ( final Long id, final String name, @Min ( 0 ) final Integer payment, final boolean fulfilled2,
-            final List<Recipe> recipes ) {
+            final Recipe recipe ) {
         setId( id );
         setName( name );
         setPayment( payment );
