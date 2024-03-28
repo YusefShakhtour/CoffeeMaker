@@ -1,14 +1,11 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 
 /**
@@ -25,45 +22,71 @@ public class Order extends DomainObject {
     /** Recipe id */
     @Id
     @GeneratedValue
-    private Long               id;
+    private Long    id;
 
     /** name for the order */
-    private String             name;
+    private String  name;
 
     /** Recipe price */
     @Min ( 0 )
-    private Integer            price;
+    private Integer payment;
 
-    /** List of ingredients to recipe **/
-    @OneToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
-    private final List<Recipe> recipes;
+    /** field indicating whether the order has been fulfilled */
+    private boolean fulfilled;
+
+    /** recipe used in the order */
+    private Recipe  recipe;
+    // /** List of ingredients to recipe **/
+    // @OneToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    // private List<Recipe> recipe;
 
     /**
-     * Construct a recipe
+     * creates an order object using info such as name,id,payment,
      *
+     * @param id
+     *            id
      * @param name
-     *            name of recipe
-     * @param price
-     *            price of recipe
+     *            name
+     * @param payment
+     *            payment
+     * @param recipe
+     *            recipe
+     * @param fulfilled
+     *            fulfilled
      */
-    public Recipe ( final String name, final int price ) {
-        this.name = name;
-        this.price = price;
-        this.ingredients = new ArrayList<Ingredient>();
+    public Order ( final Long id, final String name, @Min ( 0 ) final Integer payment, final boolean fulfilled2,
+            final List<Recipe> recipes ) {
+        setId( id );
+        setName( name );
+        setPayment( payment );
+        setFulfilled( fulfilled2 );
+        setRecipe( recipe );
     }
 
     /**
-     * Creates a default recipe for the coffee maker.
-     */
-    public Recipe () {
-        this.name = "";
-        this.ingredients = new ArrayList<Ingredient>();
-    }
-
-    /**
-     * Get the ID of the Recipe
+     * set the status of order
      *
-     * @return the ID
+     * @param fulfilled2
+     *            status
+     */
+    private void setFulfilled ( final boolean fulfilled2 ) {
+        this.fulfilled = fulfilled2;
+
+    }
+
+    /**
+     * return the status of the order. true if fulfilled; otherwise, false
+     *
+     * @return true if fulfilled;otherwise, false
+     */
+    public boolean getFulfilled () {
+        return fulfilled;
+    }
+
+    /**
+     * get order id
+     *
+     * @return id
      */
     @Override
     public Long getId () {
@@ -71,110 +94,76 @@ public class Order extends DomainObject {
     }
 
     /**
-     * Set the ID of the Recipe (Used by Hibernate)
+     * set order id
      *
      * @param id
-     *            the ID
+     *            id
      */
-    @SuppressWarnings ( "unused" )
     private void setId ( final Long id ) {
         this.id = id;
     }
 
     /**
-     * Returns name of the recipe.
+     * get name for the order
      *
-     * @return Returns the name.
+     * @return name for the order
      */
     public String getName () {
         return name;
     }
 
     /**
-     * Sets the recipe name.
+     * set name for the order
      *
      * @param name
-     *            The name to set.
+     *            name
      */
-    public void setName ( final String name ) {
+    private void setName ( final String name ) {
         this.name = name;
     }
 
     /**
-     * Returns the price of the recipe.
+     * get price for the order
      *
-     * @return Returns the price.
+     * @return price
      */
-    public Integer getPrice () {
-        return price;
+    public Integer getPayment () {
+        return payment;
     }
 
     /**
-     * Sets the recipe price.
+     * set price for the order
      *
      * @param price
-     *            The price to set.
+     *            price
      */
-    public void setPrice ( final Integer price ) {
-        this.price = price;
+    private void setPayment ( final Integer payment ) {
+        this.payment = payment;
     }
 
     /**
-     * Add ingredient to list
+     * get the recipe used for the order
      *
-     * @param ingredient
-     *            the ingredient to add
+     * @return recipe
      */
-    public void addIngredient ( final Ingredient ingredient ) {
-        ingredients.add( ingredient );
+    public Recipe getRecipe () {
+        return recipe;
     }
 
     /**
-     * Update units in recipe
+     * set the recipe used for the order
      *
-     * @param ingredient
-     *            ingredient to update
-     * @param units
-     *            to update to
+     * @param recipe2
+     *            recipe
      */
-    public void editUnits ( final Ingredient ingredient, final int units ) {
-        for ( int i = 0; i < ingredients.size(); i++ ) {
-            if ( ingredients.get( i ).equals( ingredient ) ) {
-                ingredients.get( i ).setAmount( units );
-            }
-        }
-    }
+    private void setRecipe ( final Recipe recipe2 ) {
+        this.recipe = recipe2;
 
-    /**
-     * Get the ingredients list
-     *
-     * @return ingredients list
-     */
-    public List<Ingredient> getIngredients () {
-        return ingredients;
-    }
-
-    /**
-     * Returns the name of the recipe.
-     *
-     * @return String
-     */
-    @Override
-    public String toString () {
-        System.out.print( name + " with ingredients [" );
-        for ( int i = 0; i < ingredients.size() - 1; i++ ) {
-            System.out.print( ingredients.get( i ) + ", " );
-        }
-        System.out.print( ingredients.get( ingredients.size() - 1 ) + "]" );
-        return name;
     }
 
     @Override
     public int hashCode () {
-        final int prime = 31;
-        Integer result = 1;
-        result = prime * result + ( ( name == null ) ? 0 : name.hashCode() );
-        return result;
+        return Objects.hash( fulfilled, id, name, payment, recipe );
     }
 
     @Override
@@ -188,16 +177,15 @@ public class Order extends DomainObject {
         if ( getClass() != obj.getClass() ) {
             return false;
         }
-        final Recipe other = (Recipe) obj;
-        if ( name == null ) {
-            if ( other.name != null ) {
-                return false;
-            }
-        }
-        else if ( !name.equals( other.name ) ) {
-            return false;
-        }
-        return true;
+        final Order other = (Order) obj;
+        return fulfilled == other.fulfilled && Objects.equals( id, other.id ) && Objects.equals( name, other.name )
+                && Objects.equals( payment, other.payment ) && Objects.equals( recipe, other.recipe );
+    }
+
+    @Override
+    public String toString () {
+        return "Order [id=" + id + ", name=" + name + ", payment=" + payment + ", fulfilled=" + fulfilled + ", recipe="
+                + recipe + "]";
     }
 
 }
