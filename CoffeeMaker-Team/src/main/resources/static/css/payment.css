@@ -1,0 +1,27 @@
+nav {
+    background-color: rgb(29, 29, 29);
+}
+
+.navbar-brand {
+    color: white;
+
+}
+
+.flexContainer {
+    display: flex;
+}
+
+.userDetails {
+    height: 60vh;
+}
+
+.makePayment {
+    height: 12vh;
+    color:white;
+    background-color: rgb(29, 29, 29);
+    font-size: x-large;
+}
+
+.makePayment:hover {
+    font-weight: bolder;
+}
