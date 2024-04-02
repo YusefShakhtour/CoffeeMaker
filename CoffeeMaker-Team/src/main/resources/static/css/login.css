@@ -7,6 +7,28 @@ height: 1px;
 background: #eee;
 }
 
+img {
+    margin-bottom: 20px;
+}
+
+button {    
+    background-color: rgb(29, 29, 29);
+    color: white;
+    border-radius: 10px;
+    height: 50px;
+    font-size: larger;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(29, 29, 29);
+    color: white;
+    text-align: center;
+ }
+
 .h-custom {
 height: calc(100% - 73px);
 }
@@ -15,4 +37,4 @@ height: calc(100% - 73px);
     .h-custom {
     height: 100%;
     }
-}@charset "ISO-8859-1";
+}
