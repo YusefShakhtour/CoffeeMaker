@@ -1,59 +1,70 @@
-
-
-html {
-   margin: 0px;
-   height: 100%;
-   width: 100%;
+.recipeObject {
+    display: flex;
+    border-bottom: 1px solid black;
 }
 
-body {
-   margin: 0px;
-   min-height: 100%;
-   min-width: 100%;
-   display:flex;    
+.orderObject {
+    border-bottom: 1px solid black;
+}
+
+nav {
+    background-color: rgb(29, 29, 29);
+}
+
+.newOrder {
+    height: 60vh;
+    overflow-y: scroll;
+}
+
+.recipeName {
+    font-size: larger;
+    display: flex;
+   
+}
+
+.navbar-brand {
+    color: white;
+
 }
 
 .extContainer {
-	display:flex;
-	width:100%;
-	margin-left:auto;
-}
-
-
-.orderContainer {
-	width: 100%;
-}
-
-.recipeContainer {
-	width: 100%;	
-}
-
-.recipeObject {
     display: flex;
 }
 
 .recipeList {
     overflow-y: scroll;
-    width: 600px;
-    height: min-height;
+    height: 80vh;
 }
 
-.newOrder {
-	display: flex;
-	flex-direction: column;
-	min-height: 200px;
-}
-
-.recipeName {
+.orderName {
+	font-size: larger;
     display: flex;
+}
+
+.editOrder {
+    background-color: white;
+}
+
+.deleteFromOrder {
+    background-color: rgb(255, 114, 112);
+
+}
+
+.addToOrder {
+    background-color: white;
+}
+
+.addToOrder:hover, .deleteFromOrder:hover, .editOrder:hover {
+    font-weight: bolder;
 }
 
 .submitOrder {
-    margin-left: 35%;
-
+    height: 12vh;
+    color:white;
+    background-color: rgb(29, 29, 29);
+    font-size: x-large;
 }
 
-.orderObject {
-    display: flex;
-    justify-content: center;
+.submitOrder:hover {
+    font-weight: bolder;
 }
