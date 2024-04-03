@@ -27,16 +27,17 @@ class OrderTest {
         r1.addIngredient( new Ingredient( "Coffee", 1 ) );
         r1.addIngredient( new Ingredient( "Sugar", 1 ) );
 
-        final Order o1 = new Order();
-
-        o1.setName( "Order 1" );
-        o1.setPayment( 10 );
+        final Order o1 = new Order( "Order 1", 10, false, r1 );
         service.save( o1 );
 
-        final Order o2 = new Order();
+        final String name2 = "Mocha";
+        final Recipe r2 = new Recipe( name2, 40 );
+        r2.addIngredient( new Ingredient( "Coffee", 1 ) );
+        r2.addIngredient( new Ingredient( "Milk", 2 ) );
+        r2.addIngredient( new Ingredient( "Sugar", 2 ) );
+        r2.addIngredient( new Ingredient( "Chocolate", 1 ) );
 
-        o2.setName( "Order 1" );
-        o2.setPayment( 10 );
+        final Order o2 = new Order( "Order 2", 5, false, r2 );
         service.save( o2 );
 
         final List<Order> orders = service.findAll();
