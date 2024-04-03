@@ -68,3 +68,42 @@ nav {
 .submitOrder:hover {
     font-weight: bolder;
 }
+
+.newOrder {
+    height: 35vh;
+    overflow-y: scroll;
+}
+
+.recipeName {
+    font-size: larger;
+}
+
+.orderStatus {
+    pointer-events: none;
+    font-weight: bold;
+}
+
+.orderList {
+    overflow-y: scroll;
+    height: 23vh;
+    border-bottom: 1px solid black;
+}
+
+.inProgress {
+    background-color: rgb(255, 184, 52);
+}
+
+.ready {
+    background-color: rgb(92, 255, 92);
+}
+
+.orderId {
+    font-size: larger;
+}
+
+.order {
+    display: flex;
+    border-bottom: 1px solid black;
+
+}
+

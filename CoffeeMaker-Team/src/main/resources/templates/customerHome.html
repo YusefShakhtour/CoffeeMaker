@@ -59,7 +59,22 @@
                 	<button class="deleteFromOrder m-2 col-3" ng-click="removeFromOrder($index)">Delete</button>
             	</div>
 			</div>
-        <button class="submitOrder justify-content-center mt-4 col-12">Submit Order</button>	
+        <button class="submitOrder justify-content-center mt-4 col-12">Submit Order</button>
+        		<fieldset class="statusContainer mt-3">
+			<legend>Order Status</legend>
+			<div class="p-3 orderList border border-dark">
+				<div class="p-2 order">
+					<div class="p-2 orderId col-4">Order 212</div>
+					<div class="col-1"></div>
+					<button class="orderStatus inProgress m-2 col-4">In Progress</button>                
+				</div>
+				<div class="p-2 order">
+					<div class="p-2 orderId col-4">Order 214</div>
+					<div class="col-1"></div>
+					<button class="orderStatus ready m-2 col-4">Ready</button>                
+				</div>
+			</div>
+		</fieldset>	
 		</fieldset>
 		
 		<fieldset class="recipeContainer col-6 p-4">
