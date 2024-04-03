@@ -1,19 +1,19 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.Min;
 
 /**
  * This is a persistence class that stores various orders to the database and
- * all the information corrosponding to that order such as the name for the
+ * all the information corresponding to that order such as the name for the
  * order, payment info, whether it is fulfilled or not, and a unique identifier
  * for the order.
  *
- * @author Kush Faldu
+ * @author Kush Faldu, Geigh Neill
  */
 @Entity
 public class Order extends DomainObject {
@@ -21,23 +21,48 @@ public class Order extends DomainObject {
     /** Recipe id */
     @Id
     @GeneratedValue
-    private Long    id;
+    private Long         id;
 
     /** name for the order */
-    private String  name;
+    private String       name;
 
-    /** Recipe price */
-    @Min ( 0 )
-    private Integer payment;
+    /** total cost of order */
+    private Integer      total;
 
     /** field indicating whether the order has been fulfilled */
-    private boolean fulfilled;
+    private boolean      fulfilled;
 
-    /** recipe used in the order */
-    private Recipe  recipe;
-    // /** List of ingredients to recipe **/
-    // @OneToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
-    // private List<Recipe> recipe;
+    /** list of recipes in the order */
+    private List<Recipe> recipes;
+
+    /**
+     * creates an order object using recipe list
+     *
+     * @param recipe
+     *            recipe
+     */
+    public Order ( final List<Recipe> recipes ) {
+        setName( null );
+        setFulfilled( false );
+        setRecipes( recipes );
+        setOrderTotal();
+    }
+
+    /**
+     * creates an order object using info such as name,id,payment,
+     *
+     * @param name
+     *            name
+     * @param payment
+     *            payment
+     * @param recipe
+     *            recipe
+     */
+    public Order ( final String name, final List<Recipe> recipes ) {
+        setName( name );
+        setFulfilled( false );
+        setRecipes( recipes );
+    }
 
     /**
      * creates an order object using info such as name,id,payment,
@@ -53,12 +78,50 @@ public class Order extends DomainObject {
      * @param fulfilled
      *            fulfilled
      */
-    public Order ( final String name, @Min ( 0 ) final Integer payment, final boolean fulfilled2,
-            final Recipe recipe ) {
+    public Order ( final String name, final boolean fulfilled, final List<Recipe> recipes ) {
         setName( name );
-        setPayment( payment );
-        setFulfilled( fulfilled2 );
-        setRecipe( recipe );
+        setFulfilled( fulfilled );
+        setRecipes( recipes );
+    }
+
+    public void editOrder ( final Order order ) {
+        setName( order.getName() );
+        setFulfilled( order.getFulfilled() );
+        setRecipes( order.getRecipes() );
+        setOrderTotal();
+    }
+
+    public void addRecipe ( final Recipe r ) {
+        if ( null == r ) {
+            return;
+        }
+        this.recipes.add( r );
+        this.total += r.getPrice();
+    }
+
+    /**
+     * Gets order total by returning summation of recipe prices
+     *
+     * @return total price of the order
+     */
+    public void setOrderTotal () {
+        if ( this.recipes.isEmpty() ) {
+            this.total = 0;
+        }
+        int sum = 0;
+        for ( final Recipe r : recipes ) {
+            sum += r.getPrice();
+        }
+        this.total = sum;
+    }
+
+    /**
+     * Returns order total
+     *
+     * @return total price of the order
+     */
+    public Integer getTotal () {
+        return this.total;
     }
 
     /**
@@ -67,7 +130,7 @@ public class Order extends DomainObject {
      * @param fulfilled2
      *            status
      */
-    private void setFulfilled ( final boolean fulfilled2 ) {
+    public void setFulfilled ( final boolean fulfilled2 ) {
         this.fulfilled = fulfilled2;
 
     }
@@ -106,27 +169,8 @@ public class Order extends DomainObject {
      * @param name
      *            name
      */
-    private void setName ( final String name ) {
+    public void setName ( final String name ) {
         this.name = name;
-    }
-
-    /**
-     * get price for the order
-     *
-     * @return price
-     */
-    public Integer getPayment () {
-        return payment;
-    }
-
-    /**
-     * set price for the order
-     *
-     * @param price
-     *            price
-     */
-    private void setPayment ( final Integer payment ) {
-        this.payment = payment;
     }
 
     /**
@@ -134,8 +178,8 @@ public class Order extends DomainObject {
      *
      * @return recipe
      */
-    public Recipe getRecipe () {
-        return recipe;
+    public List<Recipe> getRecipes () {
+        return this.recipes;
     }
 
     /**
@@ -144,14 +188,14 @@ public class Order extends DomainObject {
      * @param recipe2
      *            recipe
      */
-    private void setRecipe ( final Recipe recipe2 ) {
-        this.recipe = recipe2;
+    private void setRecipes ( final List<Recipe> recipes ) {
+        this.recipes = recipes;
 
     }
 
     @Override
     public int hashCode () {
-        return Objects.hash( fulfilled, id, name, payment, recipe );
+        return Objects.hash( fulfilled, id, name, recipes );
     }
 
     @Override
@@ -167,13 +211,12 @@ public class Order extends DomainObject {
         }
         final Order other = (Order) obj;
         return fulfilled == other.fulfilled && Objects.equals( id, other.id ) && Objects.equals( name, other.name )
-                && Objects.equals( payment, other.payment ) && Objects.equals( recipe, other.recipe );
+                && Objects.equals( recipes, other.recipes );
     }
 
     @Override
     public String toString () {
-        return "Order [id=" + id + ", name=" + name + ", payment=" + payment + ", fulfilled=" + fulfilled + ", recipe="
-                + recipe + "]";
+        return "Order [id=" + id + ", name=" + name + ", fulfilled=" + fulfilled + ", recipe=" + recipes + "]";
     }
 
 }
