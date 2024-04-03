@@ -1,7 +1,10 @@
 package edu.ncsu.csc.CoffeeMaker.services;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Component;
 
 import edu.ncsu.csc.CoffeeMaker.models.User;
 import edu.ncsu.csc.CoffeeMaker.repositories.UserRepository;
@@ -14,6 +17,8 @@ import edu.ncsu.csc.CoffeeMaker.repositories.UserRepository;
  * @author Zack Martin
  *
  */
+@Component
+@Transactional
 public class UserService extends Service<User, Long> {
 
     /**

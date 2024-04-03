@@ -2,6 +2,7 @@ package edu.ncsu.csc.CoffeeMaker.models;
 
 import java.util.Objects;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -14,6 +15,7 @@ import edu.ncsu.csc.CoffeeMaker.models.enums.UserType;
  *
  * @author Zack Martin
  */
+@Entity
 public class User extends DomainObject {
 
     /** User id */

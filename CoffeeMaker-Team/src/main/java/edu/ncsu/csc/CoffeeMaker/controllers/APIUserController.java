@@ -113,7 +113,7 @@ public class APIUserController extends APIController {
      * @return Success if the user could be deleted; an error if the user does
      *         not exist
      */
-    @DeleteMapping ( BASE_PATH + "/recipes/{name}" )
+    @DeleteMapping ( BASE_PATH + "/users/{name}" )
     public ResponseEntity deleteUser ( @PathVariable final String name ) {
         final User user = userService.findByName( name );
         if ( null == user ) {
