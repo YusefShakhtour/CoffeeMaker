@@ -27,6 +27,11 @@
             }
 
             $scope.order = getOrder();
+            console.log($scope.order);
+            $scope.total = 0
+            for ( i = 0; i < $scope.order.recipes.length; i++) {
+            	$scope.total += $scope.order.recipes[i].price;
+            }
             
             $scope.makePayment = function() {
             	// TODO: check price
@@ -92,6 +97,7 @@
                     </div>
                 </div>
                 <button class="makePayment justify-content-center mt-4 col-12" ng-click="makePayment()">Make Payment</button>
+                <div>${{total}}</div>
             </fieldset>
         </div>
     </div>

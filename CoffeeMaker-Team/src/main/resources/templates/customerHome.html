@@ -20,12 +20,15 @@
 			});
 			
 			$scope.order = [];
+			$scope.total = 0;
 			
 			$scope.addToOrder = function(recipe) {
 				$scope.order.push(recipe);
+				$scope.total += recipe.price;
 			}
 			
 			$scope.removeFromOrder = function(index) {
+				$scope.total -= $scope.order[index].price;
 				$scope.order.splice(index, 1);
 			}
 			
@@ -39,6 +42,7 @@
                     recipes: $scope.order
                 };
                 var encodedOrder = encodeURIComponent(JSON.stringify(newOrder));
+                var encodedTotal = encodeURIComponent(JSON.stringify($scope.total));
                 window.location.href = '/payment?order=' + encodedOrder;
             }
 			
@@ -72,7 +76,7 @@
                 	<button class="deleteFromOrder m-2 col-3" ng-click="removeFromOrder($index)">Delete</button>
             	</div>
 			</div>
-        <button class="submitOrder justify-content-center mt-4 col-12" ng-click="submitOrder()">Submit Order</button>
+        <button class="submitOrder justify-content-center mt-4 col-12" ng-click="submitOrder()">Submit Order - ${{ total }}</button>
         		<fieldset class="statusContainer mt-3">
 			<legend>Order Status</legend>
 			<div class="p-3 orderList border border-dark">
