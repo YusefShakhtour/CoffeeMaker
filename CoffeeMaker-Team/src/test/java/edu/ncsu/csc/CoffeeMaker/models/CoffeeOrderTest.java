@@ -48,9 +48,13 @@ public class CoffeeOrderTest {
         r2.addIngredient( new Ingredient( "Sugar", 2 ) );
 
         final List<Recipe> recipes = List.of( r1, r2 );
+        final List<Recipe> recipes2 = List.of( r1, r2 );
 
         final CoffeeOrder o1 = new CoffeeOrder( "CoffeeOrder 1", recipes );
         service.save( o1 );
+
+        final CoffeeOrder o2 = new CoffeeOrder( "CoffeeOrder 2", recipes2 );
+        service.save( o2 );
 
     }
 
