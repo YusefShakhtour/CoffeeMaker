@@ -48,7 +48,6 @@ public class CoffeeOrder extends DomainObject {
      *            recipe
      */
     public CoffeeOrder ( final List<Recipe> recipes ) {
-        setId( id );
         setName( null );
         setFulfilled( false );
         setRecipes( recipes );
@@ -66,7 +65,6 @@ public class CoffeeOrder extends DomainObject {
      *            recipe
      */
     public CoffeeOrder ( final String name, final List<Recipe> recipes ) {
-        setId( id );
         setName( name );
         setFulfilled( false );
         setRecipes( recipes );
@@ -87,7 +85,6 @@ public class CoffeeOrder extends DomainObject {
      *            fulfilled
      */
     public CoffeeOrder ( final String name, final boolean fulfilled, final List<Recipe> recipes ) {
-        setId( id );
         setName( name );
         setFulfilled( fulfilled );
         setRecipes( recipes );
@@ -214,7 +211,7 @@ public class CoffeeOrder extends DomainObject {
 
     @Override
     public int hashCode () {
-        return Objects.hash( fulfilled, id, name, recipes );
+        return Objects.hash( fulfilled, id, name, total, recipes );
     }
 
     @Override
@@ -230,12 +227,14 @@ public class CoffeeOrder extends DomainObject {
         }
         final CoffeeOrder other = (CoffeeOrder) obj;
         return fulfilled == other.fulfilled && Objects.equals( id, other.id ) && Objects.equals( name, other.name )
-                && Objects.equals( recipes, other.recipes );
+                && Objects.equals( total, other.total ) && Objects.equals( recipes, other.recipes );
     }
 
     @Override
     public String toString () {
-        return "CoffeeOrder [id=" + id + ", name=" + name + ", fulfilled=" + fulfilled + ", recipe=" + recipes + "]";
+
+        return "Order [id=" + id + ", name=" + name + ", total=" + total + ", fulfilled=" + fulfilled + ", recipes="
+                + recipes.toString() + "]";
     }
 
 }
