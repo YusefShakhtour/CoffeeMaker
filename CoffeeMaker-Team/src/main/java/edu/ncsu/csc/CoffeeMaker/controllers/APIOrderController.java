@@ -1,5 +1,7 @@
 package edu.ncsu.csc.CoffeeMaker.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +51,19 @@ public class APIOrderController extends APIController {
         return null == order
                 ? new ResponseEntity( errorResponse( "No order found with id " + id ), HttpStatus.NOT_FOUND )
                 : new ResponseEntity( order, HttpStatus.OK );
+    }
+
+    /**
+     * REST API method to provide GET access to a specific order, as indicated
+     * by the path variable provided (the id of the order desired)
+     *
+     * @param name
+     *            user name
+     * @return response to the request
+     */
+    @GetMapping ( BASE_PATH + "/orders" )
+    public List<Order> getOrders () {
+        return orderService.findAll();
     }
 
     /**
