@@ -59,8 +59,10 @@ public class OrderTest {
 
         final List<Order> orders = service.findAll();
         Assertions.assertEquals( 2, orders.size(), "Creating two orders should result in two orders in the database" );
-        Assertions.assertEquals( 2, orders.get( 0 ).getName(), "Order 1" );
-        Assertions.assertEquals( 2, orders.get( 1 ).getName(), "Order 2" );
+        Assertions.assertEquals( orders.get( 0 ).getName(), "Order 1" );
+        Assertions.assertEquals( orders.get( 1 ).getName(), "Order 2" );
+        Assertions.assertFalse( orders.get( 0 ).getFulfilled() );
+        Assertions.assertFalse( orders.get( 1 ).getFulfilled() );
 
     }
 
