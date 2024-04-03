@@ -52,6 +52,9 @@ public class CoffeeOrderTest {
         final CoffeeOrder o1 = new CoffeeOrder( "CoffeeOrder 1", recipes );
         service.save( o1 );
 
+        final CoffeeOrder o2 = new CoffeeOrder( "CoffeeOrder 2", recipes );
+        service.save( o2 );
+
     }
 
     @Test
