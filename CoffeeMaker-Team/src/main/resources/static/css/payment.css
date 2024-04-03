@@ -25,3 +25,29 @@ nav {
 .makePayment:hover {
     font-weight: bolder;
 }
+
+.recipeList {
+    overflow-y: scroll;
+    height: 30vh;
+}
+
+.recipeName {
+    display: flex;
+    font-size: larger;
+}
+
+.recipePrice {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.recipeObject {
+    display: flex;
+    border-bottom: 1px solid black;
+}
+
+.total {
+    font-size: larger;
+    font-weight: bolder;
+    text-align: right;
+}

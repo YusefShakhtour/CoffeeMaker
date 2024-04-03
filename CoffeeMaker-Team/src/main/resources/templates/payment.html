@@ -4,7 +4,7 @@
     <meta charset="ISO-8859-1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="css/payment.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/payment.css" />
     <title>Payment</title>
 </head>
 <body>
@@ -88,7 +88,28 @@
                     </div>
                 </div>
             </fieldset>
-            <fieldset class="paymentContainer col-6 p-4">
+            <fieldset class="cartContainer col-6 p-4">
+				<legend>Cart</legend>
+				<div class="p-3 recipeList border border-dark">
+		            <div class="p-2 recipeObject">
+		                <div class="p-2 recipeName col-3">Mocha Latte</div>
+		                <div class="p-2 col-2 recipePrice">$4</div>
+		            </div>
+		            <div class="p-2 recipeObject">
+		                <div class="p-2 recipeName col-3">Black Coffee</div>
+		                <div class="p-2 col-2 recipePrice">$2</div>
+		            </div>
+		            <div class="p-2 recipeObject">
+		                <div class="p-2 recipeName col-3">Hot Tea</div>
+		                <div class="p-2 col-2 recipePrice">$1</div>
+		            </div>
+		            <div class="p-2 recipeObject">
+		                <div class="p-2 recipeName col-3">Hot Tea</div>
+		                <div class="p-2 col-2 recipePrice">$1</div>
+		            </div>
+		        </div>
+		        <div class="total p-2">Total: $8.00</div>
+            <fieldset class="paymentContainer">
                 <legend>Payment</legend>
                 <div class="p-3 payment border border-dark">
                     <div class="inField my-4">
@@ -96,8 +117,8 @@
                         <input type="number" id="paymentAmount" class="form-control" ng-model="amount">
                     </div>
                 </div>
+			</fieldset>
                 <button class="makePayment justify-content-center mt-4 col-12" ng-click="makePayment()">Make Payment</button>
-                <div>${{total}}</div>
             </fieldset>
         </div>
     </div>
