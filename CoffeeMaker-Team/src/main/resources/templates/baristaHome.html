@@ -22,6 +22,10 @@
                 });
             }
         	
+        	$scope.newRecipe = function() {
+        		window.location.href = '/addrecipe';
+        	}
+        	
             $scope.deleteRecipe = function(recipe) {
                 $http.delete("/api/v1/recipes/" + recipe)
                     .then(
@@ -77,7 +81,7 @@
 		                <button class="deleteRecipe m-2 col-3" ng-click="deleteRecipe(recipe.name)">Delete Recipe</button>
 		            </div>
 		        </div>
-		        <button class="createButton col-12 mt-3">Create New Recipe</button>
+		        <button class="createButton col-12 mt-3" ng-click="newRecipe()">Create New Recipe</button>
 		
 			</fieldset>
 		    <fieldset class="orderContainer col-6 p-4">
