@@ -55,7 +55,7 @@ public class CoffeeOrder extends DomainObject {
     }
 
     /**
-     * creates an order object using info such as name,id,payment,
+     * creates an order object using info such as name and beverages ordered.
      *
      * @param name
      *            name
@@ -71,7 +71,7 @@ public class CoffeeOrder extends DomainObject {
     }
 
     /**
-     * creates an order object using info such as name,id,payment,
+     * creates an order object using info such as name,and beverages used
      *
      * @param id
      *            id
