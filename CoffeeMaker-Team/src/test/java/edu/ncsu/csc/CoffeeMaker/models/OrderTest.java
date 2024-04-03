@@ -66,7 +66,7 @@ public class OrderTest {
 
     @Test
     @Transactional
-    void test () {
+    void testEditOrder () {
         final List<Recipe> recipes = new ArrayList<>();
         Assertions.assertEquals( 0, service.findAll().size(), "There should be no Orders in the CoffeeMaker" );
 
@@ -94,6 +94,15 @@ public class OrderTest {
 
         final List<Order> orders = service.findAll();
         Assertions.assertEquals( 2, orders.size(), "Creating two orders should result in two orders in the database" );
+        Assertions.assertEquals( 2, orders.get( 0 ).getName(), "Order 1" );
+        Assertions.assertEquals( 2, orders.get( 1 ).getName(), "Order 2" );
+
+        // swap orders using edit order
+        final Order o3 = o1;
+        o1.editOrder( o2 );
+        o2.editOrder( o3 );
+        Assertions.assertEquals( 2, orders.get( 0 ).getName(), "Order 2" );
+        Assertions.assertEquals( 2, orders.get( 1 ).getName(), "Order 1" );
 
     }
 
