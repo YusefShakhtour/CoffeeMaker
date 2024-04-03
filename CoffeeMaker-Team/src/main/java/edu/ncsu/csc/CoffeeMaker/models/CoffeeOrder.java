@@ -106,7 +106,7 @@ public class CoffeeOrder extends DomainObject {
     }
 
     /**
-     * Gets order total by returning summation of recipe prices
+     * Gets order total by returning summation of recipe prices.
      *
      * @return total price of the order
      */
