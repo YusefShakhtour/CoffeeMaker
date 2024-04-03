@@ -26,7 +26,7 @@ public class OrderTest {
 
     @BeforeEach
     public void setup () {
-        service.deleteAll();
+        // service.deleteAll();
     }
 
     @Test

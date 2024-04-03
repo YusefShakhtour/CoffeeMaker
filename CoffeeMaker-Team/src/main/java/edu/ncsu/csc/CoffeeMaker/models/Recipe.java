@@ -46,6 +46,7 @@ public class Recipe extends DomainObject {
      *            price of recipe
      */
     public Recipe ( final String name, final int price ) {
+        setId( id );
         this.name = name;
         this.price = price;
         this.ingredients = new ArrayList<Ingredient>();
@@ -55,6 +56,7 @@ public class Recipe extends DomainObject {
      * Creates a default recipe for the coffee maker.
      */
     public Recipe () {
+        setId( id );
         this.name = "";
         this.ingredients = new ArrayList<Ingredient>();
     }
@@ -75,7 +77,6 @@ public class Recipe extends DomainObject {
      * @param id
      *            the ID
      */
-    @SuppressWarnings ( "unused" )
     private void setId ( final Long id ) {
         this.id = id;
     }
