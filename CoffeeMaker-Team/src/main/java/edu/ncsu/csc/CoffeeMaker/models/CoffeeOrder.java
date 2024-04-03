@@ -71,7 +71,7 @@ public class CoffeeOrder extends DomainObject {
     }
 
     /**
-     * creates an order object using info such as name,and beverages used
+     * creates an order object using info such as name,and beverages used.
      *
      * @param id
      *            id
