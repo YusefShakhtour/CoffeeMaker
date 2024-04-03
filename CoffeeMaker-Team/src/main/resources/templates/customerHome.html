@@ -4,7 +4,7 @@
 <meta charset="ISO-8859-1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="../static/css/customerHome.css" />
+<link rel="stylesheet" href="css/customerHome.css" />
 <title>Customer Home</title>
 </head>
 <body>
@@ -28,6 +28,19 @@
 			$scope.removeFromOrder = function(index) {
 				$scope.order.splice(index, 1);
 			}
+			
+			$scope.submitOrder = function() {
+				// TODO: Check order length
+                var newOrder = {
+                    id: null,
+                    name: null,
+                    payment: null,
+                    fulfilled: false,
+                    recipes: $scope.order
+                };
+                var encodedOrder = encodeURIComponent(JSON.stringify(newOrder));
+                window.location.href = '/payment?order=' + encodedOrder;
+            }
 			
 		});
 		
@@ -59,7 +72,7 @@
                 	<button class="deleteFromOrder m-2 col-3" ng-click="removeFromOrder($index)">Delete</button>
             	</div>
 			</div>
-        <button class="submitOrder justify-content-center mt-4 col-12">Submit Order</button>
+        <button class="submitOrder justify-content-center mt-4 col-12" ng-click="submitOrder()">Submit Order</button>
         		<fieldset class="statusContainer mt-3">
 			<legend>Order Status</legend>
 			<div class="p-3 orderList border border-dark">
