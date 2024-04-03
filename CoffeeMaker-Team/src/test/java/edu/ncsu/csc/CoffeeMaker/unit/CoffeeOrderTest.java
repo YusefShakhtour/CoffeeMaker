@@ -1,4 +1,4 @@
-package edu.ncsu.csc.CoffeeMaker.models;
+package edu.ncsu.csc.CoffeeMaker.unit;
 
 import java.util.List;
 
@@ -13,6 +13,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.ncsu.csc.CoffeeMaker.TestConfig;
+import edu.ncsu.csc.CoffeeMaker.models.CoffeeOrder;
+import edu.ncsu.csc.CoffeeMaker.models.Ingredient;
+import edu.ncsu.csc.CoffeeMaker.models.Recipe;
+import edu.ncsu.csc.CoffeeMaker.models.User;
+import edu.ncsu.csc.CoffeeMaker.models.enums.UserType;
 import edu.ncsu.csc.CoffeeMaker.services.CoffeeOrderService;
 
 @ExtendWith ( SpringExtension.class )
@@ -33,6 +38,8 @@ public class CoffeeOrderTest {
     void testCreateOrder () {
         Assertions.assertEquals( 0, service.findAll().size(), "There should be no Orders in the CoffeeMaker" );
 
+        final User user1 = new User( "Andrew", "pass", UserType.CUSTOMER );
+
         final String name1 = "Coffee";
         final Recipe r1 = new Recipe( name1, 15 );
         r1.addIngredient( new Ingredient( "Chocolate", 1 ) );
@@ -50,17 +57,41 @@ public class CoffeeOrderTest {
         final List<Recipe> recipes = List.of( r1, r2 );
         final List<Recipe> recipes2 = List.of( r1, r2 );
 
-        final CoffeeOrder o1 = new CoffeeOrder( "CoffeeOrder 1", recipes );
+        final CoffeeOrder o1 = new CoffeeOrder();
+        o1.setUser( user1 );
+        o1.setRecipes( recipes );
         service.save( o1 );
 
-        final CoffeeOrder o2 = new CoffeeOrder( "CoffeeOrder 2", recipes2 );
+        final CoffeeOrder o2 = new CoffeeOrder();
+        o2.setUser( user1 );
+        o2.setRecipes( recipes2 );
         service.save( o2 );
 
     }
 
+    /**
+     * Tests the to string method for recipe
+     */
     @Test
     @Transactional
-    void testEditOrder () {
+    public void testToString () {
+
+    }
+
+    /**
+     * Tests the hashcode method for CoffeeOrder
+     */
+    @Test
+    void testHashCode () {
+
+    }
+
+    /**
+     * Tests the equals object for CoffeeOrder
+     */
+    @Test
+    @Transactional
+    void testEqualsObject () {
 
     }
 

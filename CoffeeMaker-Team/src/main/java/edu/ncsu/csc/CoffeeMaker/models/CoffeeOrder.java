@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 
 /**
@@ -27,8 +28,9 @@ public class CoffeeOrder extends DomainObject {
     @GeneratedValue
     private Long         id;
 
-    /** name for the order */
-    private String       name;
+    /** User for the order */
+    @ManyToOne ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    private User         user;
 
     /** total cost of order */
     @Min ( 0 )
@@ -42,13 +44,24 @@ public class CoffeeOrder extends DomainObject {
     private List<Recipe> recipes;
 
     /**
+     * creates an order object
+     *
+     * @param recipe
+     *            recipe
+     */
+    public CoffeeOrder () {
+        setUser( new User() );
+        setFulfilled( false );
+    }
+
+    /**
      * creates an order object using recipe list
      *
      * @param recipe
      *            recipe
      */
     public CoffeeOrder ( final List<Recipe> recipes ) {
-        setName( null );
+        setUser( new User() );
         setFulfilled( false );
         setRecipes( recipes );
         setOrderTotal();
@@ -64,46 +77,27 @@ public class CoffeeOrder extends DomainObject {
      * @param recipe
      *            recipe
      */
-    public CoffeeOrder ( final String name, final List<Recipe> recipes ) {
-        setName( name );
+    public CoffeeOrder ( final User user, final List<Recipe> recipes ) {
+        setUser( user );
         setFulfilled( false );
         setRecipes( recipes );
-    }
-
-    /**
-     * creates an order object using info such as name,and beverages used.
-     *
-     * @param id
-     *            id
-     * @param name
-     *            name
-     * @param payment
-     *            payment
-     * @param recipe
-     *            recipe
-     * @param fulfilled
-     *            fulfilled
-     */
-    public CoffeeOrder ( final String name, final boolean fulfilled, final List<Recipe> recipes ) {
-        setName( name );
-        setFulfilled( fulfilled );
-        setRecipes( recipes );
+        setOrderTotal();
     }
 
     public void editOrder ( final CoffeeOrder order ) {
-        setName( order.getName() );
+        setUser( order.getUser() );
         setFulfilled( order.getFulfilled() );
         setRecipes( order.getRecipes() );
         setOrderTotal();
     }
 
-    public void addRecipe ( final Recipe r ) {
-        if ( null == r ) {
-            return;
-        }
-        this.recipes.add( r );
-        this.total += r.getPrice();
-    }
+    // public void addRecipe ( final Recipe r ) {
+    // if ( null == r ) {
+    // return;
+    // }
+    // this.recipes.add( r );
+    // this.total += r.getPrice();
+    // }
 
     /**
      * Gets order total by returning summation of recipe prices.
@@ -175,8 +169,8 @@ public class CoffeeOrder extends DomainObject {
      *
      * @return name for the order
      */
-    public String getName () {
-        return name;
+    public User getUser () {
+        return user;
     }
 
     /**
@@ -185,8 +179,8 @@ public class CoffeeOrder extends DomainObject {
      * @param name
      *            name
      */
-    public void setName ( final String name ) {
-        this.name = name;
+    public void setUser ( final User user ) {
+        this.user = user;
     }
 
     /**
@@ -204,14 +198,14 @@ public class CoffeeOrder extends DomainObject {
      * @param recipe2
      *            recipe
      */
-    private void setRecipes ( final List<Recipe> recipes ) {
+    public void setRecipes ( final List<Recipe> recipes ) {
         this.recipes = recipes;
 
     }
 
     @Override
     public int hashCode () {
-        return Objects.hash( fulfilled, id, name, total, recipes );
+        return Objects.hash( fulfilled, id, user, total, recipes );
     }
 
     @Override
@@ -226,15 +220,15 @@ public class CoffeeOrder extends DomainObject {
             return false;
         }
         final CoffeeOrder other = (CoffeeOrder) obj;
-        return fulfilled == other.fulfilled && Objects.equals( id, other.id ) && Objects.equals( name, other.name )
+        return fulfilled == other.fulfilled && Objects.equals( id, other.id ) && Objects.equals( user, other.user )
                 && Objects.equals( total, other.total ) && Objects.equals( recipes, other.recipes );
     }
 
     @Override
     public String toString () {
 
-        return "Order [id=" + id + ", name=" + name + ", total=" + total + ", fulfilled=" + fulfilled + ", recipes="
-                + recipes.toString() + "]";
+        return "Order [id=" + id + ", user=" + user.toString() + ", total=" + total + ", fulfilled=" + fulfilled
+                + ", recipes=" + recipes.toString() + "]";
     }
 
 }
