@@ -33,7 +33,6 @@ public class UserTest {
     @Test
     @Transactional
     public void testAddUser () {
-
         final User u1 = new User( "Barista", "123", UserType.BARISTA );
         userService.save( u1 );
         final User u2 = new User( "Customer", "456", UserType.CUSTOMER );
@@ -41,6 +40,23 @@ public class UserTest {
 
         final List<User> users = userService.findAll();
         Assertions.assertEquals( 2, users.size(), "Creating two users should result in two users in the database" );
+
+        Assertions.assertEquals( u1, users.get( 0 ), "The retrieved user should match the created one" );
+    }
+
+    @Test
+    @Transactional
+    public void testEditUser () {
+        final User u1 = new User( "Barista", "123", UserType.BARISTA );
+        userService.save( u1 );
+
+        final List<User> users = userService.findAll();
+        Assertions.assertEquals( 1, users.size(), "Creating a user should result in one user in the database" );
+
+        Assertions.assertEquals( u1, users.get( 0 ), "The retrieved user should match the created one" );
+
+        u1.editUser( new User( "Customer", "123", UserType.CUSTOMER ) );
+        Assertions.assertEquals( 1, users.size(), "Creating a user should result in one user in the database" );
 
         Assertions.assertEquals( u1, users.get( 0 ), "The retrieved user should match the created one" );
     }

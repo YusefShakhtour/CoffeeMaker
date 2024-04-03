@@ -56,8 +56,6 @@ public class APIUserController extends APIController {
      * create a new User by automatically converting the JSON RequestBody
      * provided to a User object. Invalid JSON will fail.
      *
-     * @param name
-     *            The name of the user to delete
      * @param user
      *            The valid user to be saved.
      * @return ResponseEntity indicating success if the user could be saved, or
@@ -79,6 +77,8 @@ public class APIUserController extends APIController {
      * update a user by automatically converting the JSON RequestBody provided
      * to a User object. Invalid JSON will fail.
      *
+     * @param name
+     *            The name of the user to delete
      * @param user
      *            The valid user to be saved.
      * @return ResponseEntity indicating success if the user could be saved, or
