@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Min;
 
 /**
  * This is a persistence class that stores various orders to the database and
@@ -19,7 +20,7 @@ import javax.persistence.OneToMany;
  * @author Kush Faldu, Geigh Neill
  */
 @Entity
-public class Order extends DomainObject {
+public class CoffeeOrder extends DomainObject {
 
     /** Recipe id */
     @Id
@@ -30,6 +31,7 @@ public class Order extends DomainObject {
     private String       name;
 
     /** total cost of order */
+    @Min ( 0 )
     private Integer      total;
 
     /** field indicating whether the order has been fulfilled */
@@ -45,7 +47,8 @@ public class Order extends DomainObject {
      * @param recipe
      *            recipe
      */
-    public Order ( final List<Recipe> recipes ) {
+    public CoffeeOrder ( final List<Recipe> recipes ) {
+        setId( id );
         setName( null );
         setFulfilled( false );
         setRecipes( recipes );
@@ -62,7 +65,8 @@ public class Order extends DomainObject {
      * @param recipe
      *            recipe
      */
-    public Order ( final String name, final List<Recipe> recipes ) {
+    public CoffeeOrder ( final String name, final List<Recipe> recipes ) {
+        setId( id );
         setName( name );
         setFulfilled( false );
         setRecipes( recipes );
@@ -82,13 +86,14 @@ public class Order extends DomainObject {
      * @param fulfilled
      *            fulfilled
      */
-    public Order ( final String name, final boolean fulfilled, final List<Recipe> recipes ) {
+    public CoffeeOrder ( final String name, final boolean fulfilled, final List<Recipe> recipes ) {
+        setId( id );
         setName( name );
         setFulfilled( fulfilled );
         setRecipes( recipes );
     }
 
-    public void editOrder ( final Order order ) {
+    public void editOrder ( final CoffeeOrder order ) {
         setName( order.getName() );
         setFulfilled( order.getFulfilled() );
         setRecipes( order.getRecipes() );
@@ -159,6 +164,16 @@ public class Order extends DomainObject {
     }
 
     /**
+     * Set the generated id
+     *
+     * @param id
+     *            id
+     */
+    public void setId ( final Long id ) {
+        this.id = id;
+    }
+
+    /**
      * get name for the order
      *
      * @return name for the order
@@ -213,14 +228,14 @@ public class Order extends DomainObject {
         if ( getClass() != obj.getClass() ) {
             return false;
         }
-        final Order other = (Order) obj;
+        final CoffeeOrder other = (CoffeeOrder) obj;
         return fulfilled == other.fulfilled && Objects.equals( id, other.id ) && Objects.equals( name, other.name )
                 && Objects.equals( recipes, other.recipes );
     }
 
     @Override
     public String toString () {
-        return "Order [id=" + id + ", name=" + name + ", fulfilled=" + fulfilled + ", recipe=" + recipes + "]";
+        return "CoffeeOrder [id=" + id + ", name=" + name + ", fulfilled=" + fulfilled + ", recipe=" + recipes + "]";
     }
 
 }

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 
-import edu.ncsu.csc.CoffeeMaker.models.Order;
-import edu.ncsu.csc.CoffeeMaker.repositories.OrderRepository;
+import edu.ncsu.csc.CoffeeMaker.models.CoffeeOrder;
+import edu.ncsu.csc.CoffeeMaker.repositories.CoffeeOrderRepository;
 
 /**
  * The UserService is used to handle CRUD operations on the Order model. In
@@ -19,18 +19,18 @@ import edu.ncsu.csc.CoffeeMaker.repositories.OrderRepository;
  */
 @Component
 @Transactional
-public class OrderService extends Service<Order, Long> {
+public class CoffeeOrderService extends Service<CoffeeOrder, Long> {
 
     /**
      * UserRepository, to be autowired in by Spring and provide CRUD operations
      * on User model.
      */
     @Autowired
-    private OrderRepository orderRepository;
+    private CoffeeOrderRepository coffeeOrderRepository;
 
     @Override
-    protected JpaRepository<Order, Long> getRepository () {
-        return orderRepository;
+    protected JpaRepository<CoffeeOrder, Long> getRepository () {
+        return coffeeOrderRepository;
     }
 
     /**
@@ -40,7 +40,7 @@ public class OrderService extends Service<Order, Long> {
      *            Name of the user to find
      * @return found user, null if none
      */
-    public Order findOrder ( final Long id ) {
-        return orderRepository.findById( id ).orElse( null );
+    public CoffeeOrder findOrder ( final Long id ) {
+        return coffeeOrderRepository.findById( id ).orElse( null );
     }
 }
