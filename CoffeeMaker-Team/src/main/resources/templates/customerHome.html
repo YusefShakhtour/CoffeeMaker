@@ -70,7 +70,7 @@
 			<legend>New Order</legend>
 			<div class="newOrder border border-dark p-4">
 		        <div class="pt-2 pb-2 orderObject d-flex" ng-repeat="recipe in order track by $index">
-                	<div class="p-2 orderName col-3">{{recipe.name}}</div>
+                	<div class="p-2 orderName col-3">{{recipe.name}} (${{recipe.price}})</div>
                 	<div class="col-2"></div>
                 	<button class="editOrder m-2 col-3">Edit</button>
                 	<button class="deleteFromOrder m-2 col-3" ng-click="removeFromOrder($index)">Delete</button>
@@ -98,7 +98,7 @@
 			<legend>Recipe List</legend>
 			<div class=" p-3 recipeList border border-dark">
 	            <div ng-repeat="recipe in recipes" class="recipeObject">
-	                <div class="p-2 recipeName col-3">{{recipe.name}}</div>
+	                <div class="p-2 recipeName col-3">{{recipe.name}} - ${{recipe.price}}</div>
 					<div class="col-2"></div>
 	                <button ng-click="addToOrder(recipe)" class="addToOrder m-2">Add To Order</button>
 	            </div>
