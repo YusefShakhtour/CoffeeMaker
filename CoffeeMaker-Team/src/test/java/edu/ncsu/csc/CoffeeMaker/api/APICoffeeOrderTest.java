@@ -28,8 +28,6 @@ import edu.ncsu.csc.CoffeeMaker.common.TestUtils;
 import edu.ncsu.csc.CoffeeMaker.models.CoffeeOrder;
 import edu.ncsu.csc.CoffeeMaker.models.Ingredient;
 import edu.ncsu.csc.CoffeeMaker.models.Recipe;
-import edu.ncsu.csc.CoffeeMaker.models.User;
-import edu.ncsu.csc.CoffeeMaker.models.enums.UserType;
 import edu.ncsu.csc.CoffeeMaker.services.CoffeeOrderService;
 
 @SpringBootTest
@@ -64,8 +62,6 @@ class APICoffeeOrderTest {
     public void ensureCoffeeOrder () throws Exception {
         service.deleteAll();
 
-        final User user1 = new User( "Andrew", "pass", UserType.CUSTOMER );
-
         final String name1 = "Coffee";
         final Recipe r1 = new Recipe( name1, 15 );
         r1.addIngredient( new Ingredient( "Chocolate", 1 ) );
@@ -82,9 +78,7 @@ class APICoffeeOrderTest {
 
         final List<Recipe> recipes = List.of( r1, r2 );
 
-        final CoffeeOrder o1 = new CoffeeOrder();
-        o1.setUser( user1 );
-        o1.setRecipes( recipes );
+        final CoffeeOrder o1 = new CoffeeOrder( recipes );
 
         mvc.perform( post( "/api/v1/orders" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( o1 ) ) ).andExpect( status().isOk() );
@@ -97,8 +91,6 @@ class APICoffeeOrderTest {
 
         service.deleteAll();
 
-        final User user1 = new User( "Andrew", "pass", UserType.CUSTOMER );
-
         final String name1 = "Coffee";
         final Recipe r1 = new Recipe( name1, 15 );
         r1.addIngredient( new Ingredient( "Chocolate", 1 ) );
@@ -115,10 +107,7 @@ class APICoffeeOrderTest {
 
         final List<Recipe> recipes = List.of( r1, r2 );
 
-        final CoffeeOrder o1 = new CoffeeOrder();
-        o1.setUser( user1 );
-        o1.setRecipes( recipes );
-
+        final CoffeeOrder o1 = new CoffeeOrder( recipes );
         mvc.perform( post( "/api/v1/orders" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( o1 ) ) ).andExpect( status().isOk() );
 
@@ -140,8 +129,6 @@ class APICoffeeOrderTest {
 
         service.deleteAll();
 
-        final User user1 = new User( "Andrew", "pass", UserType.CUSTOMER );
-
         final String name1 = "Coffee";
         final Recipe r1 = new Recipe( name1, 15 );
         r1.addIngredient( new Ingredient( "Chocolate", 1 ) );
@@ -158,9 +145,7 @@ class APICoffeeOrderTest {
 
         final List<Recipe> recipes = List.of( r1, r2 );
 
-        final CoffeeOrder o1 = new CoffeeOrder();
-        o1.setUser( user1 );
-        o1.setRecipes( recipes );
+        final CoffeeOrder o1 = new CoffeeOrder( recipes );
 
         mvc.perform( post( "/api/v1/orders" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( o1 ) ) ).andExpect( status().isOk() );
@@ -184,8 +169,6 @@ class APICoffeeOrderTest {
 
         service.deleteAll();
 
-        final User user1 = new User( "Andrew", "pass", UserType.CUSTOMER );
-
         final String name1 = "Coffee";
         final Recipe r1 = new Recipe( name1, 15 );
         r1.addIngredient( new Ingredient( "Chocolate", 1 ) );
@@ -202,9 +185,7 @@ class APICoffeeOrderTest {
 
         final List<Recipe> recipes = List.of( r1, r2 );
 
-        final CoffeeOrder o1 = new CoffeeOrder();
-        o1.setUser( user1 );
-        o1.setRecipes( recipes );
+        final CoffeeOrder o1 = new CoffeeOrder( recipes );
 
         mvc.perform( post( "/api/v1/orders" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( o1 ) ) ).andExpect( status().isOk() );
@@ -226,8 +207,6 @@ class APICoffeeOrderTest {
 
         service.deleteAll();
 
-        final User user1 = new User( "Andrew", "pass", UserType.CUSTOMER );
-
         final String name1 = "Coffee";
         final Recipe r1 = new Recipe( name1, 15 );
         r1.addIngredient( new Ingredient( "Chocolate", 1 ) );
@@ -244,9 +223,7 @@ class APICoffeeOrderTest {
 
         final List<Recipe> recipes = List.of( r1, r2 );
 
-        final CoffeeOrder o1 = new CoffeeOrder();
-        o1.setUser( user1 );
-        o1.setRecipes( recipes );
+        final CoffeeOrder o1 = new CoffeeOrder( recipes );
 
         mvc.perform( post( "/api/v1/orders" ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( o1 ) ) ).andExpect( status().isOk() );

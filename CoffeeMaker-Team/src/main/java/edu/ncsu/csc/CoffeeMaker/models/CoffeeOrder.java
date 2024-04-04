@@ -43,6 +43,12 @@ public class CoffeeOrder extends DomainObject {
     private List<Recipe>  recipes;
 
     /**
+     * default constructor for order
+     */
+    public CoffeeOrder () {
+    }
+
+    /**
      * creates an order object using recipe list
      *
      * @param recipes
