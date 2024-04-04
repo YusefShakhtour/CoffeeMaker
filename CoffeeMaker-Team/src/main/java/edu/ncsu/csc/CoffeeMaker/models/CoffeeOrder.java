@@ -1,5 +1,6 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,7 +10,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 
 /**
@@ -26,30 +26,26 @@ public class CoffeeOrder extends DomainObject {
     /** Recipe id */
     @Id
     @GeneratedValue
-    private Long         id;
-
-    /** User for the order */
-    @ManyToOne ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
-    private User         user;
+    private Long          id;
 
     /** total cost of order */
     @Min ( 0 )
-    private Integer      total;
+    private Integer       total;
 
     /** field indicating whether the order has been fulfilled */
-    private boolean      fulfilled;
+    private boolean       fulfilled;
+
+    /** Time of order construction in UTC */
+    private LocalDateTime timestamp;
 
     /** list of recipes in the order */
     @ManyToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
-    private List<Recipe> recipes;
+    private List<Recipe>  recipes;
 
     /**
-     * creates an order object
-     *
+     * default constructor for order
      */
     public CoffeeOrder () {
-        setUser( new User() );
-        setFulfilled( false );
     }
 
     /**
@@ -59,25 +55,30 @@ public class CoffeeOrder extends DomainObject {
      *            list of recipes in order
      */
     public CoffeeOrder ( final List<Recipe> recipes ) {
-        setUser( new User() );
         setFulfilled( false );
         setRecipes( recipes );
         setOrderTotal();
+        setTimeStamp( LocalDateTime.now() );
     }
 
     /**
-     * creates an order object using info such as name and beverages ordered.
+     * creates an order object using recipe list
      *
-     * @param user
-     *            the order's assigned user
      * @param recipes
      *            list of recipes in order
+     * @param fulfilled
+     *            order fulfilled boolean
+     * @param total
+     *            total of recipes
+     * @param stamp
+     *            the time stamp of creation
      */
-    public CoffeeOrder ( final User user, final List<Recipe> recipes ) {
-        setUser( user );
-        setFulfilled( false );
-        setRecipes( recipes );
-        setOrderTotal();
+    public CoffeeOrder ( final List<Recipe> recipes, final boolean fulfilled, final Integer total,
+            final LocalDateTime stamp ) {
+        this.recipes = recipes;
+        this.fulfilled = fulfilled;
+        this.total = total;
+        this.timestamp = stamp;
     }
 
     /**
@@ -87,7 +88,6 @@ public class CoffeeOrder extends DomainObject {
      *            the order to change to
      */
     public void editOrder ( final CoffeeOrder order ) {
-        setUser( order.getUser() );
         setFulfilled( order.getFulfilled() );
         setRecipes( order.getRecipes() );
         setOrderTotal();
@@ -157,22 +157,22 @@ public class CoffeeOrder extends DomainObject {
     }
 
     /**
-     * get name for the order
+     * Get the time stamp of order creation
      *
-     * @return name for the order
+     * @return time of creation
      */
-    public User getUser () {
-        return user;
+    public LocalDateTime getTimeStamp () {
+        return this.timestamp;
     }
 
     /**
-     * set name for the order
+     * Set the time stamp of order creation
      *
-     * @param user
-     *            user
+     * @param stamp
+     *            The date of creation
      */
-    public void setUser ( final User user ) {
-        this.user = user;
+    public void setTimeStamp ( final LocalDateTime stamp ) {
+        this.timestamp = stamp;
     }
 
     /**
@@ -181,7 +181,7 @@ public class CoffeeOrder extends DomainObject {
      * @return recipes in order
      */
     public List<Recipe> getRecipes () {
-        return this.recipes;
+        return recipes;
     }
 
     /**
@@ -197,7 +197,7 @@ public class CoffeeOrder extends DomainObject {
 
     @Override
     public int hashCode () {
-        return Objects.hash( fulfilled, id, user, total, recipes );
+        return Objects.hash( fulfilled, id, total, recipes );
     }
 
     @Override
@@ -212,15 +212,15 @@ public class CoffeeOrder extends DomainObject {
             return false;
         }
         final CoffeeOrder other = (CoffeeOrder) obj;
-        return fulfilled == other.fulfilled && Objects.equals( id, other.id ) && Objects.equals( user, other.user )
-                && Objects.equals( total, other.total ) && Objects.equals( recipes, other.recipes );
+        return fulfilled == other.fulfilled && Objects.equals( id, other.id ) && Objects.equals( total, other.total )
+                && Objects.equals( recipes, other.recipes );
     }
 
     @Override
     public String toString () {
 
-        return "Order [id=" + id + ", user=" + user.toString() + ", total=" + total + ", fulfilled=" + fulfilled
-                + ", recipes=" + recipes.toString() + "]";
+        return "Order [id=" + id + ", total=" + total + ", fulfilled=" + fulfilled + ", recipes=" + recipes.toString()
+                + "]";
     }
 
 }
