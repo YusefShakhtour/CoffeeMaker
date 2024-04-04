@@ -19,31 +19,32 @@
 				$scope.recipes = response.data;
 			});
 			
-			$scope.order = [];
+			$scope.newOrder = [];
 			$scope.total = 0;
 			
 			$scope.addToOrder = function(recipe) {
-				$scope.order.push(recipe);
+				$scope.newOrder.push(recipe);
 				$scope.total += recipe.price;
 			}
 			
 			$scope.removeFromOrder = function(index) {
-				$scope.total -= $scope.order[index].price;
-				$scope.order.splice(index, 1);
+				$scope.total -= $scope.newOrder[index].price;
+				$scope.newOrder.splice(index, 1);
 			}
 			
 			$scope.submitOrder = function() {
-				// TODO: Check order length
-                var newOrder = {
-                    id: null,
-                    name: null,
-                    payment: null,
-                    fulfilled: false,
-                    recipes: $scope.order
-                };
-                var encodedOrder = encodeURIComponent(JSON.stringify(newOrder));
-                var encodedTotal = encodeURIComponent(JSON.stringify($scope.total));
-                window.location.href = '/payment?order=' + encodedOrder;
+				if ( $scope.newOrder.length > 0 ) {
+	                var newOrder = {
+	                    id: null,
+	                    name: null,
+	                    payment: null,
+	                    fulfilled: false,
+	                    recipes: $scope.order
+	                };
+	                var encodedOrder = encodeURIComponent(JSON.stringify(newOrder));
+	                var encodedTotal = encodeURIComponent(JSON.stringify($scope.total));
+	                window.location.href = '/payment?order=' + encodedOrder;
+				}
             }
 			
 		});
@@ -69,7 +70,7 @@
 		<fieldset class="orderContainer col-6 p-4">
 			<legend>New Order</legend>
 			<div class="newOrder border border-dark p-4">
-		        <div class="pt-2 pb-2 orderObject d-flex" ng-repeat="recipe in order track by $index">
+		        <div class="pt-2 pb-2 orderObject d-flex" ng-repeat="recipe in newOrder track by $index">
                 	<div class="p-2 orderName col-3">{{recipe.name}} (${{recipe.price}})</div>
                 	<div class="col-2"></div>
                 	<button class="editOrder m-2 col-3">Edit</button>
