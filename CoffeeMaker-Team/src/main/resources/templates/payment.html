@@ -34,18 +34,34 @@
             }
             
             $scope.makePayment = function() {
-            	// TODO: check price
+
             	var input = document.getElementById("paymentAmount");
                 if ($scope.amount < 1) {
                     input.setCustomValidity('Please enter a non-negative integer quantity');
                     input.reportValidity();
-                    return false;
+                    return;
                 } else {
                     input.setCustomValidity('');
                 }
-            	$scope.order['payment'] = $scope.amount;
+                
+                if ($scope.amount < $scope.total) {
+                	return;
+                }
+                $scope.order['total'] = $scope.total;
+                $scope.order['user'] = {
+                	    "id": null,
+                	    "name": "",
+                	    "userType": "CUSTOMER",
+                	    "password": ""
+                	  }
             	console.log($scope.order);
-            	// TODO: submit order api
+            	$http.post("/api/v1/orders", $scope.order).then(
+                        function(success) {
+                            $scope.success = true;
+                            window.location.href = '/customerHome';
+                        }, function(rejection) {
+                            console.error("Error while adding order");
+                        });
             }
         });
      

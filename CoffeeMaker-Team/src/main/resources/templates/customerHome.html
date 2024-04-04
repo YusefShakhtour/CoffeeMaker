@@ -19,6 +19,10 @@
 				$scope.recipes = response.data;
 			});
 			
+			$http.get("/api/v1/orders").then(function(response) {
+                $scope.orders = response.data;
+            });
+			
 			$scope.newOrder = [];
 			$scope.total = 0;
 			
@@ -36,10 +40,10 @@
 				if ( $scope.newOrder.length > 0 ) {
 	                var newOrder = {
 	                    id: null,
-	                    name: null,
-	                    payment: null,
+	                    user: null,
+	                    total: null,
 	                    fulfilled: false,
-	                    recipes: $scope.order
+	                    recipes: $scope.newOrder
 	                };
 	                var encodedOrder = encodeURIComponent(JSON.stringify(newOrder));
 	                var encodedTotal = encodeURIComponent(JSON.stringify($scope.total));
@@ -81,15 +85,10 @@
         		<fieldset class="statusContainer mt-3">
 			<legend>Order Status</legend>
 			<div class="p-3 orderList border border-dark">
-				<div class="p-2 order">
-					<div class="p-2 orderId col-4">Order 212</div>
+				<div ng-repeat="order in orders" class="p-2 order">
+					<div class="p-2 orderId col-4">Order {{order.id}}</div>
 					<div class="col-1"></div>
-					<button class="orderStatus inProgress m-2 col-4">In Progress</button>                
-				</div>
-				<div class="p-2 order">
-					<div class="p-2 orderId col-4">Order 214</div>
-					<div class="col-1"></div>
-					<button class="orderStatus ready m-2 col-4">Ready</button>                
+					<button class="orderStatus {{ order.fufilled ? ready : inProgress }} m-2 col-4">{{ order.fufilled ? Ready : In Progress }}</button>                
 				</div>
 			</div>
 		</fieldset>	
