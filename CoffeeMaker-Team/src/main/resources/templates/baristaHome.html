@@ -22,8 +22,46 @@
                 });
             }
         	
+        	$http.get("/api/v1/orders").then(function(response) {
+                $scope.orders = response.data;
+            });
+        	
+        	$scope.fulfill = function(order) {
+        		
+        		for ( i = 0; i < order.recipes.length; i++ ) {
+                    var amtPaid = order.total;
+                    var name = order.recipes[i].name;
+                    $scope.submissionFailure = false;
+                    $scope.submissionSuccess = false;
+                    $http.post("/api/v1/makecoffee/" + name, amtPaid).then(
+                            function(response) {
+                                $scope.change = response.data.message;
+                                $scope.submissionSuccess = true;
+                            }, function(errResponse) {
+                                console.log(errResponse);
+                                $scope.submissionFailure = true;
+                                return;
+                                $scope.error = "Error while making recipe";
+                            });
+        		}
+        		
+        		order.fulfilled = true;
+        		$http.put("/api/v1/orders/" + order.id, order).then(function(response) {
+                    $scope.change = response.data.message;
+                    $scope.submissionSuccess = true;
+                }, function(errResponse) {
+                    console.log(errResponse);
+                    $scope.submissionFailure = true;
+                    $scope.error = "Error while changing order";
+                });
+        	}
+        	
         	$scope.newRecipe = function() {
         		window.location.href = '/addrecipe';
+        	}
+        	
+        	$scope.editRecipe = function(recipe) {
+        		window.location.href = '/editrecipe?=' + recipe.name;
         	}
         	
             $scope.deleteRecipe = function(recipe) {
@@ -42,7 +80,6 @@
                         
                         $scope.submissionSuccess=false; 
                         
-                        // Update recipe list
                         $http.get("/api/v1/recipes").then(function (response) {
                             $scope.recipes = response.data;
                         });
@@ -77,7 +114,7 @@
 		                <div class="p-2 recipeName col-3">{{recipe.name}}</div>
 		                <div class="col-2"></div>
 		                
-		                <button class="editRecipe m-2 col-3">Edit Recipe</button>
+		                <button class="editRecipe m-2 col-3" ng-click="editRecipe(recipe)" >Edit Recipe</button>
 		                <button class="deleteRecipe m-2 col-3" ng-click="deleteRecipe(recipe.name)">Delete Recipe</button>
 		            </div>
 		        </div>
@@ -87,16 +124,10 @@
 		    <fieldset class="orderContainer col-6 p-4">
 				<legend>Orders In Progress</legend>
 				<div class="currentOrder border border-dark p-4">
-		            <div class="orderName d-flex pt-2 pb-2">
-		                <div class="p-2 recipeName col-3">Mocha Latte</div>
+		            <div ng-repeat="order in orders" ng-if="!order.fulfilled" class="orderName d-flex pt-2 pb-2">
+		                <div class="p-2 recipeName col-3">Order {{order.id}}</div>
 		                <div class="col-2"></div>
-		                <button class="fulfillOrder m-2 col-3">Fulfill</button>
-		                <button class="cancelOrder m-2 col-3">Cancel</button>
-		            </div>
-		            <div class="orderName d-flex pt-2 pb-2">
-		                <div class="p-2 recipeName col-3">Mocha Latte</div>
-		                <div class="col-2"></div>
-		                <button class="fulfillOrder m-2 col-3">Fulfill</button>
+		                <button ng-click="fulfill(order)" class="fulfillOrder m-2 col-3">Fulfill</button>
 		                <button class="cancelOrder m-2 col-3">Cancel</button>
 		            </div>
 				</div>
