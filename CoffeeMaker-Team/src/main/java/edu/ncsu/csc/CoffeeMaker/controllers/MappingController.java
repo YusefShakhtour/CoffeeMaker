@@ -106,16 +106,4 @@ public class MappingController {
         return "addIngredient";
     }
 
-    /**
-     * On a GET request to /baristaHome, it will return the barista home page.
-     *
-     * @param model
-     *            underlying UI model
-     * @return contents of the page
-     */
-    @GetMapping ( { "/baristaHome", "/baristaHome.html" } )
-    public String baristaHomePage ( final Model model ) {
-        return "baristaHome";
-    }
-
 }
