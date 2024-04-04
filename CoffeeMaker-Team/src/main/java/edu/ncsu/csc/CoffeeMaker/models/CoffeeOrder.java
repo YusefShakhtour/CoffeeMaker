@@ -170,7 +170,6 @@ public class CoffeeOrder extends DomainObject {
      *
      * @param stamp
      *            The date of creation
-     * @return time of creation
      */
     public void setTimeStamp ( final LocalDateTime stamp ) {
         this.timestamp = stamp;
