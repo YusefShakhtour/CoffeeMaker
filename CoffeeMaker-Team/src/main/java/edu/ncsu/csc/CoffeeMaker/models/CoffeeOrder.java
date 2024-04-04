@@ -44,6 +44,7 @@ public class CoffeeOrder extends DomainObject {
 
     public CoffeeOrder () {
         // Default constructor
+    }
 
     /**
      * creates an order object using recipe list
