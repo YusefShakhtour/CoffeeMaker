@@ -44,7 +44,6 @@ public class CoffeeOrder extends DomainObject {
 
     public CoffeeOrder () {
         // Default constructor
-    }
 
     /**
      * creates an order object using recipe list
@@ -168,7 +167,6 @@ public class CoffeeOrder extends DomainObject {
      *
      * @param stamp
      *            The date of creation
-     * @return time of creation
      */
     public void setTimeStamp ( final LocalDateTime stamp ) {
         this.timestamp = stamp;
@@ -180,7 +178,7 @@ public class CoffeeOrder extends DomainObject {
      * @return recipes in order
      */
     public List<Recipe> getRecipes () {
-        return this.recipes;
+        return recipes;
     }
 
     /**

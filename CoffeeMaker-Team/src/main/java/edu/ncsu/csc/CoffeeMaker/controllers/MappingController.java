@@ -120,7 +120,7 @@ public class MappingController {
     }
 
     /**
-     * On a GET request to /payment, the RecipeController will return
+     * On a GET request to /payment, the Controller will return
      * /src/main/resources/templates/payment.html.
      *
      * @param model
@@ -130,6 +130,19 @@ public class MappingController {
     @GetMapping ( { "/payment", "/payment.html" } )
     public String paymentPage ( final Model model ) {
         return "payment";
+    }
+
+    /**
+     * On a GET request to /privacypolicy, the Controller will return
+     * /src/main/resources/templates/privacypolicy.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/privacypolicy", "/privacypolicy.html" } )
+    public String privacyPolicyPage ( final Model model ) {
+        return "privacyPolicy";
     }
 
 }
