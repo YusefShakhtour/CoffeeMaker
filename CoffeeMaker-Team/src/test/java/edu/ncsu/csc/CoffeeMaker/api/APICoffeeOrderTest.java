@@ -29,6 +29,7 @@ import edu.ncsu.csc.CoffeeMaker.models.CoffeeOrder;
 import edu.ncsu.csc.CoffeeMaker.models.Ingredient;
 import edu.ncsu.csc.CoffeeMaker.models.Recipe;
 import edu.ncsu.csc.CoffeeMaker.services.CoffeeOrderService;
+import edu.ncsu.csc.CoffeeMaker.services.RecipeService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -46,6 +47,9 @@ class APICoffeeOrderTest {
 
     @Autowired
     private CoffeeOrderService    service;
+
+    @Autowired
+    private RecipeService         rservice;
 
     /**
      * Sets up the tests.
@@ -76,6 +80,9 @@ class APICoffeeOrderTest {
         r2.addIngredient( new Ingredient( "Coffee", 1 ) );
         r2.addIngredient( new Ingredient( "Sugar", 2 ) );
 
+        rservice.save( r1 );
+        rservice.save( r2 );
+
         final List<Recipe> recipes = List.of( r1, r2 );
 
         final CoffeeOrder o1 = new CoffeeOrder( recipes );
@@ -104,6 +111,9 @@ class APICoffeeOrderTest {
         r2.addIngredient( new Ingredient( "Milk", 2 ) );
         r2.addIngredient( new Ingredient( "Coffee", 1 ) );
         r2.addIngredient( new Ingredient( "Sugar", 2 ) );
+
+        rservice.save( r1 );
+        rservice.save( r2 );
 
         final List<Recipe> recipes = List.of( r1, r2 );
 
@@ -142,6 +152,9 @@ class APICoffeeOrderTest {
         r2.addIngredient( new Ingredient( "Milk", 2 ) );
         r2.addIngredient( new Ingredient( "Coffee", 1 ) );
         r2.addIngredient( new Ingredient( "Sugar", 2 ) );
+
+        rservice.save( r1 );
+        rservice.save( r2 );
 
         final List<Recipe> recipes = List.of( r1, r2 );
 
@@ -183,6 +196,9 @@ class APICoffeeOrderTest {
         r2.addIngredient( new Ingredient( "Coffee", 1 ) );
         r2.addIngredient( new Ingredient( "Sugar", 2 ) );
 
+        rservice.save( r1 );
+        rservice.save( r2 );
+
         final List<Recipe> recipes = List.of( r1, r2 );
 
         final CoffeeOrder o1 = new CoffeeOrder( recipes );
@@ -220,6 +236,8 @@ class APICoffeeOrderTest {
         r2.addIngredient( new Ingredient( "Milk", 2 ) );
         r2.addIngredient( new Ingredient( "Coffee", 1 ) );
         r2.addIngredient( new Ingredient( "Sugar", 2 ) );
+        rservice.save( r1 );
+        rservice.save( r2 );
 
         final List<Recipe> recipes = List.of( r1, r2 );
 

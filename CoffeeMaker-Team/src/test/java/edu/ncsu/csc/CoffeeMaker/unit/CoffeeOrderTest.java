@@ -21,6 +21,7 @@ import edu.ncsu.csc.CoffeeMaker.models.CoffeeOrder;
 import edu.ncsu.csc.CoffeeMaker.models.Ingredient;
 import edu.ncsu.csc.CoffeeMaker.models.Recipe;
 import edu.ncsu.csc.CoffeeMaker.services.CoffeeOrderService;
+import edu.ncsu.csc.CoffeeMaker.services.RecipeService;
 
 @ExtendWith ( SpringExtension.class )
 @EnableAutoConfiguration
@@ -29,6 +30,9 @@ public class CoffeeOrderTest {
 
     @Autowired
     private CoffeeOrderService service;
+
+    @Autowired
+    private RecipeService      rservice;
 
     @BeforeEach
     public void setup () {
@@ -48,11 +52,13 @@ public class CoffeeOrderTest {
         r1.addIngredient( new Ingredient( "Sugar", 1 ) );
         final String name2 = "Mocha";
         final Recipe r2 = new Recipe( name2, 15 );
-
         r2.addIngredient( new Ingredient( "Chocolate", 2 ) );
         r2.addIngredient( new Ingredient( "Milk", 2 ) );
         r2.addIngredient( new Ingredient( "Coffee", 1 ) );
         r2.addIngredient( new Ingredient( "Sugar", 2 ) );
+
+        rservice.save( r1 );
+        rservice.save( r2 );
 
         final List<Recipe> recipes = List.of( r1, r2 );
         final List<Recipe> recipes2 = List.of( r1, r2 );
@@ -223,6 +229,9 @@ public class CoffeeOrderTest {
         r2.addIngredient( new Ingredient( "Milk", 2 ) );
         r2.addIngredient( new Ingredient( "Coffee", 1 ) );
         r2.addIngredient( new Ingredient( "Sugar", 2 ) );
+
+        rservice.save( r1 );
+        rservice.save( r2 );
 
         final List<Recipe> recipes = List.of( r1, r2 );
         final List<Recipe> recipes2 = List.of( r1, r2 );
