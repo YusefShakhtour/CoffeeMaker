@@ -42,6 +42,9 @@ public class CoffeeOrder extends DomainObject {
     @ManyToMany ( cascade = CascadeType.MERGE, fetch = FetchType.EAGER )
     private List<Recipe>  recipes;
 
+    /**
+     * Creates an order object
+     */
     public CoffeeOrder () {
         // Default constructor
     }
