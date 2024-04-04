@@ -36,22 +36,6 @@ public class APIUserController extends APIController {
     private UserService userService;
 
     /**
-     * REST API method to provide GET access to a specific user, as indicated by
-     * the path variable provided (the name of the user desired)
-     *
-     * @param name
-     *            user name
-     * @return response to the request
-     */
-    @GetMapping ( BASE_PATH + "/users/{name}" )
-    public ResponseEntity getUser ( @PathVariable ( "name" ) final String name ) {
-        final User user = userService.findByName( name );
-        return null == user
-                ? new ResponseEntity( errorResponse( "No user found with name " + name ), HttpStatus.NOT_FOUND )
-                : new ResponseEntity( user, HttpStatus.OK );
-    }
-
-    /**
      * REST API method to provide POST access to the User model. This is used to
      * create a new User by automatically converting the JSON RequestBody
      * provided to a User object. Invalid JSON will fail.
@@ -67,9 +51,25 @@ public class APIUserController extends APIController {
             return new ResponseEntity( errorResponse( "User with the name " + user.getName() + " already exists" ),
                     HttpStatus.CONFLICT );
         }
-        userService.save( user );
+        userService.encodeUser( user );
         return new ResponseEntity( successResponse( user.getName() + " successfully created" ), HttpStatus.OK );
 
+    }
+
+    /**
+     * REST API method to provide GET access to a specific user, as indicated by
+     * the path variable provided (the name of the user desired)
+     *
+     * @param name
+     *            user name
+     * @return response to the request
+     */
+    @GetMapping ( BASE_PATH + "/users/{name}" )
+    public ResponseEntity getUser ( @PathVariable ( "name" ) final String name ) {
+        final User user = userService.findByName( name );
+        return null == user
+                ? new ResponseEntity( errorResponse( "No user found with name " + name ), HttpStatus.NOT_FOUND )
+                : new ResponseEntity( user, HttpStatus.OK );
     }
 
     /**
@@ -95,7 +95,7 @@ public class APIUserController extends APIController {
 
         try {
             u.editUser( user );
-            userService.save( u );
+            userService.encodeUser( u );
             return new ResponseEntity( successResponse( name + " user type was updated to " + u.getUserType() ),
                     HttpStatus.OK );
         }
