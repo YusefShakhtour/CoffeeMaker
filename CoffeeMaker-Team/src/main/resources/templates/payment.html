@@ -47,14 +47,11 @@
                 if ($scope.amount < $scope.total) {
                 	return;
                 }
+                
                 $scope.order['total'] = $scope.total;
-                $scope.order['user'] = {
-                	    "id": null,
-                	    "name": "",
-                	    "userType": "CUSTOMER",
-                	    "password": ""
-                	  }
+                $scope.order['timestamp'] = new Date();
             	console.log($scope.order);
+            	
             	$http.post("/api/v1/orders", $scope.order).then(
                         function(success) {
                             $scope.success = true;
