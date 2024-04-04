@@ -36,18 +36,11 @@ public class CoffeeOrder extends DomainObject {
     private boolean       fulfilled;
 
     /** Time of order construction in UTC */
-    private LocalDateTime utcTimeStamp;
+    private LocalDateTime timestamp;
 
     /** list of recipes in the order */
     @ManyToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     private List<Recipe>  recipes;
-
-    /**
-     * creates a default order object; MAKE SURE TO SET ORDER TOTAL LAST
-     *
-     */
-    public CoffeeOrder () {
-    }
 
     /**
      * creates an order object using recipe list
@@ -62,12 +55,24 @@ public class CoffeeOrder extends DomainObject {
         setTimeStamp( LocalDateTime.now() );
     }
 
+    /**
+     * creates an order object using recipe list
+     *
+     * @param recipes
+     *            list of recipes in order
+     * @param fulfilled
+     *            order fulfilled boolean
+     * @param total
+     *            total of recipes
+     * @param stamp
+     *            the time stamp of creation
+     */
     public CoffeeOrder ( final List<Recipe> recipes, final boolean fulfilled, final Integer total,
             final LocalDateTime stamp ) {
         this.recipes = recipes;
         this.fulfilled = fulfilled;
         this.total = total;
-        this.utcTimeStamp = stamp;
+        this.timestamp = stamp;
     }
 
     /**
@@ -151,7 +156,7 @@ public class CoffeeOrder extends DomainObject {
      * @return time of creation
      */
     public LocalDateTime getTimeStamp () {
-        return this.utcTimeStamp;
+        return this.timestamp;
     }
 
     /**
@@ -162,7 +167,7 @@ public class CoffeeOrder extends DomainObject {
      * @return time of creation
      */
     public void setTimeStamp ( final LocalDateTime stamp ) {
-        this.utcTimeStamp = stamp;
+        this.timestamp = stamp;
     }
 
     /**
