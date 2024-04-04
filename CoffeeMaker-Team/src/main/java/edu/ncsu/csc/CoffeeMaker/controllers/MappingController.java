@@ -166,4 +166,17 @@ public class MappingController {
         return "baristaHome";
     }
 
+    /**
+     * On a GET request to /privacypolicy, it will return the privacy policy
+     * page.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/privacypolicy", "/privacypolicy.html" } )
+    public String privacypolicyPage ( final Model model ) {
+        return "privacypolicy";
+    }
+
 }
