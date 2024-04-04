@@ -57,8 +57,6 @@ public class APICoffeeOrderController extends APIController {
      * REST API method to provide GET access to a specific order, as indicated
      * by the path variable provided (the id of the order desired)
      *
-     * @param name
-     *            user name
      * @return response to the request
      */
     @GetMapping ( BASE_PATH + "/orders" )
@@ -78,7 +76,7 @@ public class APICoffeeOrderController extends APIController {
      */
     @PostMapping ( BASE_PATH + "/orders" )
     public ResponseEntity createOrder ( @RequestBody final CoffeeOrder order ) {
-        if ( null != orderService.findOrder( order.getId() ) ) {
+        if ( null != order.getId() && null != orderService.findOrder( order.getId() ) ) {
             return new ResponseEntity( errorResponse( "Order with same id " + order.getId() + " already exists" ),
                     HttpStatus.CONFLICT );
         }
@@ -98,7 +96,7 @@ public class APICoffeeOrderController extends APIController {
      *         an error if it could not be
      */
     @PutMapping ( BASE_PATH + "/orders/{id}" )
-    public ResponseEntity updateOrder ( @PathVariable ( "id" ) final Long id, @RequestBody final CoffeeOrder order ) {
+    public ResponseEntity updateOrder ( @PathVariable final Long id, @RequestBody final CoffeeOrder order ) {
 
         final CoffeeOrder o = orderService.findOrder( id );
 
@@ -129,7 +127,7 @@ public class APICoffeeOrderController extends APIController {
      *         not exist
      */
     @DeleteMapping ( BASE_PATH + "/orders/{id}" )
-    public ResponseEntity deleteOrder ( @PathVariable ( "id" ) final Long id ) {
+    public ResponseEntity deleteOrder ( @PathVariable final Long id ) {
         final CoffeeOrder order = orderService.findOrder( id );
         if ( null == order ) {
             return new ResponseEntity( errorResponse( "No order found with id " + id ), HttpStatus.NOT_FOUND );
