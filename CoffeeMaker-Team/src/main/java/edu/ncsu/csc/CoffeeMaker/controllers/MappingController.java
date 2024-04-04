@@ -105,4 +105,5 @@ public class MappingController {
     public String addIngredientPage ( final Model model ) {
         return "addIngredient";
     }
+
 }

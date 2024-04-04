@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 
 import edu.ncsu.csc.CoffeeMaker.TestConfig;
 import edu.ncsu.csc.CoffeeMaker.models.User;
@@ -20,44 +19,61 @@ import edu.ncsu.csc.CoffeeMaker.services.UserService;
 @ExtendWith ( SpringExtension.class )
 @EnableAutoConfiguration
 @SpringBootTest ( classes = TestConfig.class )
-public class UserTest {
+class UserTest {
 
     @Autowired
-    private UserService userService;
+    private UserService service;
 
     @BeforeEach
     public void setup () {
-        userService.deleteAll();
+        service.deleteAll();
     }
 
     @Test
-    @Transactional
-    public void testAddUser () {
-        final User u1 = new User( "Barista", "123", UserType.BARISTA );
-        userService.save( u1 );
-        final User u2 = new User( "Customer", "456", UserType.CUSTOMER );
-        userService.save( u2 );
+    void testCreateUser () {
 
-        final List<User> users = userService.findAll();
-        Assertions.assertEquals( 2, users.size(), "Creating two users should result in two users in the database" );
+        final User u1 = new User( "User01", "password", UserType.CUSTOMER );
+        service.save( u1 );
+
+        final User u2 = new User( "User02", "password", UserType.CUSTOMER );
+        service.save( u2 );
+
+        final List<User> users = service.findAll();
+
+        Assertions.assertEquals( 2, users.size(), "Creating two recipes should result in two users in the database" );
 
         Assertions.assertEquals( u1, users.get( 0 ), "The retrieved user should match the created one" );
     }
 
     @Test
-    @Transactional
-    public void testEditUser () {
-        final User u1 = new User( "Barista", "123", UserType.BARISTA );
-        userService.save( u1 );
+    void testEditUser () {
 
-        final List<User> users = userService.findAll();
-        Assertions.assertEquals( 1, users.size(), "Creating a user should result in one user in the database" );
+        final User u1 = new User();
+        service.save( u1 );
 
-        Assertions.assertEquals( u1, users.get( 0 ), "The retrieved user should match the created one" );
+        final User u2 = new User( "User02", "password", UserType.CUSTOMER );
+        service.save( u2 );
 
-        u1.editUser( new User( "Customer", "123", UserType.CUSTOMER ) );
-        Assertions.assertEquals( 1, users.size(), "Creating a user should result in one user in the database" );
+        final User u3 = new User( "User01", "password", UserType.CUSTOMER );
 
-        Assertions.assertEquals( u1, users.get( 0 ), "The retrieved user should match the created one" );
+        u1.editUser( u3 );
+
+        service.save( u1 );
+        final List<User> users = service.findAll();
+
+        Assertions.assertEquals( 2, users.size() );
+
+        Assertions.assertEquals( "User01", users.get( 0 ).getName() );
+
     }
+
+    @Test
+    void testToString () {
+
+        final User u1 = new User();
+
+        Assertions.assertEquals( "User [id=null, name=, pass=, userType=ANONYMOUS]", u1.toString() );
+
+    }
+
 }
