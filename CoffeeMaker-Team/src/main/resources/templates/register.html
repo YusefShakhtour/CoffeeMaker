@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="css/register.css" />
+    
+    <title>Register</title>
+</head>
+<script
+    src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<body>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        var app = angular.module('myApp', []);
+        app.controller('registerCtrl', function($scope, $http, $q) {
+            
+        });
+
+        /*]]>*/
+    </script>
+    <div layout:fragment="content" class="generic-container ng-cloak"
+        ng-app="myApp" ng-controller="registerCtrl">
+	    <section class="vh-100 bg-image">
+	    
+	    <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+	      <div class="container h-100">
+	        <div class="row d-flex justify-content-center align-items-center h-100">
+	          <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+	            <div class="card" style="border-radius: 15px;">
+	              <div class="card-body p-5">
+	                <h2 class="text-uppercase text-center mb-5">Create an account</h2>
+	  
+	                <form>
+	  
+	                  <div class="firstName mb-2">
+	                    <input type="text" id="firstName" class="form-control form-control-lg" />
+	                    <label class="form-label" for="firstName">First Name</label>
+	                  </div>
+	                  <div class="lastName mb-2">
+	                    <input type="text" id="lastName" class="form-control form-control-lg" />
+	                    <label class="form-label" for="lastName">Last Name</label>
+	                  </div>
+	  
+	                  <div class="email mb-2">
+	                    <input type="email" id="email" class="form-control form-control-lg" />
+	                    <label class="form-label" for="email">Email</label>
+	                  </div>
+	  
+	                  <div class="password mb-2">
+	                    <input type="password" id="password" class="form-control form-control-lg" />
+	                    <label class="form-label" for="password">Password</label>
+	                  </div>
+	  
+	                  <div class="repeatPassword mb-2">
+	                    <input type="password" id="repeatPassword" class="form-control form-control-lg" />
+	                    <label class="form-label" for="repeatPassword">Repeat your password</label>
+	                  </div>
+	  
+	                  <div class="form-check d-flex justify-content-center mb-5">
+	                    <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3cg" />
+	                    <label class="form-check-label" for="form2Example3g">
+	                      I agree all statements in <a href="#!" class="text-body"><u>Privacy Policy</u></a>
+	                    </label>
+	                  </div>
+	  
+	                  <div class="d-flex justify-content-center">
+	                    <button type="button"
+	                      class="registerBtn btn-lg">Register</button>
+	                  </div>
+	  
+	                  <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="./login.html"
+	                      class="fw-bold text-body"><u>Login here</u></a></p>
+	  
+	                </form>
+	  
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </section>
+    </div>
+</body>
+</html>
