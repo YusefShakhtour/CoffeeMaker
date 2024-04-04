@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="css/customerHome.css" />
+<title>Customer Home</title>
+</head>
+<body>
+	<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+	<script>
+		/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+		/*<![CDATA[*/ 
+		var app = angular.module('customerHome', []);
+		app.controller('populateCtrl', function($scope, $http, $q) {
+			
+			$http.get("/api/v1/recipes").then(function(response) {
+				$scope.recipes = response.data;
+			});
+			
+			$http.get("/api/v1/orders").then(function(response) {
+                $scope.orders = response.data;
+                console.log($scope.orders);
+            });
+			
+			$scope.newOrder = [];
+			$scope.total = 0;
+			
+			$scope.addToOrder = function(recipe) {
+				var newRecipe = recipe;
+				$scope.newOrder.push(newRecipe);
+				$scope.total += newRecipe.price;
+			}
+			
+			$scope.removeFromOrder = function(index) {
+				$scope.total -= $scope.newOrder[index].price;
+				$scope.newOrder.splice(index, 1);
+			}
+			
+			$scope.submitOrder = function() {
+				if ( $scope.newOrder.length > 0 ) {
+
+					var newOrder = {
+	                    id: null,
+	                    total: null,
+	                    timestamp: null,
+	                    fulfilled: false,
+	                    recipes: $scope.newOrder
+	                };
+	                
+	                var encodedOrder = encodeURIComponent(JSON.stringify(newOrder));
+	                window.location.href = '/payment?order=' + encodedOrder;
+				}
+            }
+			
+		});
+		
+		/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+		/*]]>*/
+	</script>
+
+	<div layout:fragment="content" ng-app="customerHome" ng-controller="populateCtrl">
+		<nav class="navbar navbar-expand-sm flex-sm-nowrap flex-wrap">
+	        <div class="container-fluid">
+	            <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar5">
+	                <span class="navbar-toggler-icon"></span>
+	            </button>
+	            <a class="navbar-brand" href="#">CoffeeMaker</a>
+	            <div class="justify-content-center navbar-collapse collapse" id="navbar5">
+	                <ul class="navbar-nav">
+	                </ul>
+	            </div>
+	        </div>
+    	</nav>
+		<div class="extContainer">
+		<fieldset class="orderContainer col-6 p-4">
+			<legend>New Order</legend>
+			<div class="newOrder border border-dark p-4">
+		        <div class="pt-2 pb-2 orderObject d-flex" ng-repeat="recipe in newOrder track by $index">
+                	<div class="p-2 orderName col-3">{{recipe.name}} (${{recipe.price}})</div>
+                	<div class="col-2"></div>
+                	<button class="editOrder m-2 col-3">Edit</button>
+                	<button class="deleteFromOrder m-2 col-3" ng-click="removeFromOrder($index)">Delete</button>
+            	</div>
+			</div>
+        <button class="submitOrder justify-content-center mt-4 col-12" ng-click="submitOrder()">Submit Order - ${{ total }}</button>
+        		<fieldset class="statusContainer mt-3">
+			<legend>Order Status</legend>
+			<div class="p-3 orderList border border-dark">
+				<div ng-repeat="order in orders" class="p-2 order">
+					<div class="p-2 orderId col-4">Order {{order.id}}</div>
+					<div class="col-1"></div>
+					<button class="orderStatus {{ order.fulfilled ? 'ready' : 'inProgress' }} m-2 col-4">{{ order.fulfilled ? 'Ready' : 'In Progress' }}</button>                
+				</div>
+			</div>
+		</fieldset>	
+		</fieldset>
+		
+		<fieldset class="recipeContainer col-6 p-4">
+			<legend>Recipe List</legend>
+			<div class=" p-3 recipeList border border-dark">
+	            <div ng-repeat="recipe in recipes" class="recipeObject">
+	                <div class="p-2 recipeName col-3">{{recipe.name}} - ${{recipe.price}}</div>
+					<div class="col-2"></div>
+	                <button ng-click="addToOrder(recipe)" class="addToOrder m-2">Add To Order</button>
+	            </div>
+	        </div>
+		</fieldset>
+		</div>
+	</div>
+</body>
+</html>

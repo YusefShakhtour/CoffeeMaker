@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="css/payment.css" />
+    <title>Payment</title>
+</head>
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+    <script>
+        /* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+        /*<![CDATA[*/ 
+        var app = angular.module('payment', []);
+        app.controller('paymentCtrl', function($scope, $http, $q) {
+        	
+            function getOrder() {
+            	var queryString = window.location.search.substring(1);
+                var params = {};
+                var pairs = queryString.split('&');
+                for (var i = 0; i < pairs.length; i++) {
+                    var pair = pairs[i].split('=');
+                    params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+                }
+                return params.order ? JSON.parse(params.order) : null;
+            }
+
+            $scope.order = getOrder();
+            console.log($scope.order);
+            $scope.total = 0
+            for ( i = 0; i < $scope.order.recipes.length; i++) {
+            	$scope.total += $scope.order.recipes[i].price;
+            }
+            
+            $scope.makePayment = function() {
+
+            	var input = document.getElementById("paymentAmount");
+                if ($scope.amount < 1) {
+                    input.setCustomValidity('Please enter a non-negative integer quantity');
+                    input.reportValidity();
+                    return;
+                } else {
+                    input.setCustomValidity('');
+                }
+                
+                if ($scope.amount < $scope.total) {
+                	return;
+                }
+                
+                $scope.order['total'] = $scope.total;
+                $scope.order['timestamp'] = new Date();
+            	console.log($scope.order);
+            	
+            	$http.post("/api/v1/orders", $scope.order).then(
+                        function(success) {
+                            $scope.success = true;
+                            window.location.href = '/customerHome';
+                        }, function(rejection) {
+                            console.error("Error while adding order");
+                        });
+            }
+        });
+     
+        /* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+        /*]]>*/
+    </script>
+
+    <div layout:fragment="content" ng-app="payment" ng-controller="paymentCtrl">
+        <nav class="navbar navbar-expand-sm flex-sm-nowrap flex-wrap">
+            <div class="container-fluid">
+                <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar5">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand" href="#">CoffeeMaker</a>
+                <div class="justify-content-center navbar-collapse collapse" id="navbar5">
+                    <ul class="navbar-nav">
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="flexContainer">
+            <fieldset class="detialContainer p-4">
+                <legend>User Details</legend>
+                <div class="row userDetails border border-dark px-4">
+                    <div class="inField my-4">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="input" id="firstName" class="form-control">
+                    </div>
+                    <div class="inField my-4">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="input" id="lastName" class="form-control">
+                    </div>
+                    <div class="inField my-4">
+                        <label for="mobile" class="form-label">Mobile</label>
+                        <input type="input" id="mobile" class="form-control">
+                    </div>
+                    <div class="inField my-4">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="input" id="email" class="form-control">
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="cartContainer col-6 p-4">
+				<legend>Cart</legend>
+				<div class="p-3 recipeList border border-dark">
+		            <div ng-repeat="recipe in order.recipes track by $index" class="p-2 recipeObject">
+		                <div class="p-2 recipeName col-3">{{recipe.name}}</div>
+		                <div class="p-2 col-2 recipePrice">${{recipe.price}}</div>
+		            </div>
+		        </div>
+		        <div class="total p-2">Total: ${{total}}</div>
+            <fieldset class="paymentContainer">
+                <legend>Payment</legend>
+                <div class="p-3 payment border border-dark">
+                    <div class="inField my-4">
+                        <label for="payment" class="form-label">How much money are you paying with?</label>
+                        <input type="number" id="paymentAmount" class="form-control" ng-model="amount">
+                    </div>
+                </div>
+			</fieldset>
+                <button class="makePayment justify-content-center mt-4 col-12" ng-click="makePayment()">Make Payment</button>
+            </fieldset>
+        </div>
+    </div>
+</body>
+</html>
