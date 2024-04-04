@@ -28,7 +28,7 @@ import edu.ncsu.csc.CoffeeMaker.services.CoffeeOrderService;
  */
 @SuppressWarnings ( { "unchecked", "rawtypes" } )
 @RestController
-public class APIOrderController extends APIController {
+public class APICoffeeOrderController extends APIController {
 
     /**
      * CoffeeOrderService object, to be autowired in by Spring to allow for

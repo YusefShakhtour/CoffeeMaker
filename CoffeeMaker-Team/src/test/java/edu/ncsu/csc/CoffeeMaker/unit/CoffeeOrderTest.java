@@ -1,5 +1,8 @@
 package edu.ncsu.csc.CoffeeMaker.unit;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
@@ -128,7 +131,25 @@ public class CoffeeOrderTest {
     @Test
     @Transactional
     public void testToString () {
+        final User user1 = new User( "Andrew", "pass", UserType.CUSTOMER );
 
+        final String name1 = "Coffee";
+        final Recipe r1 = new Recipe( name1, 15 );
+        r1.addIngredient( new Ingredient( "Chocolate", 1 ) );
+        r1.addIngredient( new Ingredient( "Milk", 3 ) );
+        final String name2 = "Mocha";
+        final Recipe r2 = new Recipe( name2, 15 );
+        r2.addIngredient( new Ingredient( "Coffee", 1 ) );
+        r2.addIngredient( new Ingredient( "Sugar", 2 ) );
+
+        final List<Recipe> recipes = List.of( r1, r2 );
+
+        final CoffeeOrder o1 = new CoffeeOrder();
+        o1.setUser( user1 );
+        o1.setRecipes( recipes );
+
+        assertEquals( "Order [id=null, user=User [id=null, name=Andrew, pass=pass, userType=CUSTOMER], total=null,"
+                + " fulfilled=false, recipes=[Coffee, Mocha]]", o1.toString() );
     }
 
     /**
@@ -136,7 +157,36 @@ public class CoffeeOrderTest {
      */
     @Test
     void testHashCode () {
+        final User user1 = new User( "Andrew", "pass", UserType.CUSTOMER );
 
+        final String name1 = "Coffee";
+        final Recipe r1 = new Recipe( name1, 15 );
+        r1.addIngredient( new Ingredient( "Chocolate", 1 ) );
+        r1.addIngredient( new Ingredient( "Milk", 3 ) );
+        r1.addIngredient( new Ingredient( "Coffee", 2 ) );
+        r1.addIngredient( new Ingredient( "Sugar", 1 ) );
+        final String name2 = "Mocha";
+        final Recipe r2 = new Recipe( name2, 15 );
+
+        r2.addIngredient( new Ingredient( "Chocolate", 2 ) );
+        r2.addIngredient( new Ingredient( "Milk", 2 ) );
+        r2.addIngredient( new Ingredient( "Coffee", 1 ) );
+        r2.addIngredient( new Ingredient( "Sugar", 2 ) );
+
+        final List<Recipe> recipes = List.of( r1, r2 );
+        final List<Recipe> recipes2 = List.of( r2, r1 );
+
+        final CoffeeOrder o1 = new CoffeeOrder();
+        o1.setUser( user1 );
+        o1.setRecipes( recipes );
+
+        final User user2 = new User( "Yusef", "word", UserType.BARISTA );
+
+        final CoffeeOrder o2 = new CoffeeOrder();
+        o2.setUser( user2 );
+        o2.setRecipes( recipes2 );
+
+        assertNotEquals( o1.hashCode(), o2.hashCode() );
     }
 
     /**
