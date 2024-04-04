@@ -91,7 +91,7 @@
 				<div ng-repeat="order in orders" class="p-2 order">
 					<div class="p-2 orderId col-4">Order {{order.id}}</div>
 					<div class="col-1"></div>
-					<button class="orderStatus {{ order.fufilled ? ready : inProgress }} m-2 col-4">{{ order.fufilled ? Ready : 'In Progress' }}</button>                
+					<button class="orderStatus {{ order.fulfilled ? 'ready' : 'inProgress' }} m-2 col-4">{{ order.fulfilled ? 'Ready' : 'In Progress' }}</button>                
 				</div>
 			</div>
 		</fieldset>	
