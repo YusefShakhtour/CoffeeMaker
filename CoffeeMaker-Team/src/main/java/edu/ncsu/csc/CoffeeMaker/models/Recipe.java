@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Min;
 
 /**
@@ -34,7 +34,7 @@ public class Recipe extends DomainObject {
     private Integer                price;
 
     /** List of ingredients to recipe **/
-    @OneToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @ManyToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     private final List<Ingredient> ingredients;
 
     /**
@@ -67,17 +67,6 @@ public class Recipe extends DomainObject {
     @Override
     public Long getId () {
         return id;
-    }
-
-    /**
-     * Set the ID of the Recipe (Used by Hibernate)
-     *
-     * @param id
-     *            the ID
-     */
-    @SuppressWarnings ( "unused" )
-    private void setId ( final Long id ) {
-        this.id = id;
     }
 
     /**
