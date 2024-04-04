@@ -106,4 +106,30 @@ public class MappingController {
         return "addIngredient";
     }
 
+    /**
+     * On a GET request to /customerHome, the RecipeController will return
+     * /src/main/resources/templates/customerHome.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/customerHome", "/customerHome.html" } )
+    public String customerHomePage ( final Model model ) {
+        return "customerHome";
+    }
+
+    /**
+     * On a GET request to /payment, the RecipeController will return
+     * /src/main/resources/templates/payment.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/payment", "/payment.html" } )
+    public String paymentPage ( final Model model ) {
+        return "payment";
+    }
+
 }
