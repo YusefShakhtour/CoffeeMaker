@@ -106,7 +106,7 @@
 						$http.post("/api/v1/recipes", newRecipe).then(
 								function(success) {
 									$scope.success = true;
-									window.location.reload();
+									window.location.href = '/baristaHome';
 								}, function(rejection) {
 									if ( rejection.status == 507 ) {
 										alert("There is not enough space in the recipe book.");

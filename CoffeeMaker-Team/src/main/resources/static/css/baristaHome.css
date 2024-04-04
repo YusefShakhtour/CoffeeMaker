@@ -1,0 +1,87 @@
+li:hover {
+    background-color: rgb(230, 230, 230);
+}
+
+nav a {
+    margin-left: 10px;
+    margin-right: 10px;
+
+}
+
+nav {
+    background-color: rgb(29, 29, 29);
+}
+
+.navbar-brand {
+    color: white;
+
+}
+
+.flexContainer {
+    display: flex;
+}
+.recipeName {
+    font-size: larger;
+}
+
+.recipeObject {
+    display: flex;
+    border-bottom: 1px solid black;
+}
+
+.createButton {
+    height: 14vh;
+}
+
+.orderName {
+    border-bottom: 1px solid black;
+}
+
+.currentOrder {
+    overflow-y: scroll;
+    height: 80vh;
+}
+
+.recipeList {
+    overflow-y: scroll;
+    height: 60vh;
+}
+
+.recipeName {
+    display: flex;
+}
+
+
+.fulfillOrder {
+    background-color: rgb(92, 255, 92);
+}
+
+.cancelOrder {
+    background-color: rgb(255, 114, 112);
+}
+
+.editRecipe {
+    background-color: white;
+}
+
+.deleteRecipe {
+    background-color: rgb(255, 114, 112);
+}
+
+.fulfillOrder:hover, .cancelOrder:hover, .editRecipe:hover, .deleteRecipe:hover {
+    font-weight: bolder;
+}
+
+.createButton {
+    background-color: rgb(29, 29, 29);
+    color: white;
+    font-size: xx-large;
+}
+
+.createButton:hover {
+    transition: .1s;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    font-weight: bolder;
+}
+
