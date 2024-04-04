@@ -106,6 +106,11 @@ public class MappingController {
         return "addIngredient";
     }
 
+    @GetMapping ( { "/login", "/login.html" } )
+    public String loginPage ( final Model model ) {
+        return "login";
+    }
+
     /**
      * On a GET request to /customerHome, the RecipeController will return
      * /src/main/resources/templates/customerHome.html.

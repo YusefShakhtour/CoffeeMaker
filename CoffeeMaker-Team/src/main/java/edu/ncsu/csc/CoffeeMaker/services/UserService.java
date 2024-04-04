@@ -66,6 +66,7 @@ public class UserService extends Service<User, Long> implements UserDetailsServi
 
     @Override
     public UserDetails loadUserByUsername ( final String name ) {
+        System.out.println( "LOAD" );
         try {
             final User user = userRepository.findByName( name );
             return new org.springframework.security.core.userdetails.User( user.getName(), user.getPassword(),
@@ -80,4 +81,13 @@ public class UserService extends Service<User, Long> implements UserDetailsServi
     private Collection< ? extends GrantedAuthority> getAuthorities ( final User user ) {
         return Collections.singletonList( new SimpleGrantedAuthority( "ROLE_" + user.getUserType().name() ) );
     }
+
+    public boolean authenticate ( final String username, final String password ) {
+        final User user = userRepository.findByName( username );
+        if ( user != null && passwordEncoder.matches( password, user.getPassword() ) ) {
+            return true;
+        }
+        return false;
+    }
+
 }

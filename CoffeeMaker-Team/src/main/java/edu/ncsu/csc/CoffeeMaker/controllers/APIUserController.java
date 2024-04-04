@@ -35,6 +35,18 @@ public class APIUserController extends APIController {
     @Autowired
     private UserService userService;
 
+    @PostMapping ( BASE_PATH + "/login" )
+    public ResponseEntity loginUser ( @RequestBody final User user ) {
+        System.out.println( "HERE" );
+        final boolean isAuthenticated = userService.authenticate( user.getName(), user.getPassword() );
+        if ( isAuthenticated ) {
+            return ResponseEntity.ok().body( "User successfully authenticated" );
+        }
+        else {
+            return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "Invalid credentials" );
+        }
+    }
+
     /**
      * REST API method to provide POST access to the User model. This is used to
      * create a new User by automatically converting the JSON RequestBody
