@@ -46,8 +46,6 @@ public class CoffeeOrder extends DomainObject {
     /**
      * creates an order object
      *
-     * @param recipe
-     *            recipe
      */
     public CoffeeOrder () {
         setUser( new User() );
@@ -57,8 +55,8 @@ public class CoffeeOrder extends DomainObject {
     /**
      * creates an order object using recipe list
      *
-     * @param recipe
-     *            recipe
+     * @param recipes
+     *            list of recipes in order
      */
     public CoffeeOrder ( final List<Recipe> recipes ) {
         setUser( new User() );
@@ -70,12 +68,10 @@ public class CoffeeOrder extends DomainObject {
     /**
      * creates an order object using info such as name and beverages ordered.
      *
-     * @param name
-     *            name
-     * @param payment
-     *            payment
-     * @param recipe
-     *            recipe
+     * @param user
+     *            the order's assigned user
+     * @param recipes
+     *            list of recipes in order
      */
     public CoffeeOrder ( final User user, final List<Recipe> recipes ) {
         setUser( user );
@@ -84,6 +80,12 @@ public class CoffeeOrder extends DomainObject {
         setOrderTotal();
     }
 
+    /**
+     * edits current order to become like param order
+     *
+     * @param order
+     *            the order to change to
+     */
     public void editOrder ( final CoffeeOrder order ) {
         setUser( order.getUser() );
         setFulfilled( order.getFulfilled() );
@@ -186,7 +188,7 @@ public class CoffeeOrder extends DomainObject {
     /**
      * get the recipe used for the order
      *
-     * @return recipe
+     * @return recipes in order
      */
     public List<Recipe> getRecipes () {
         return this.recipes;
@@ -195,8 +197,8 @@ public class CoffeeOrder extends DomainObject {
     /**
      * set the recipe used for the order
      *
-     * @param recipe2
-     *            recipe
+     * @param recipes
+     *            list of recipes in order
      */
     public void setRecipes ( final List<Recipe> recipes ) {
         this.recipes = recipes;

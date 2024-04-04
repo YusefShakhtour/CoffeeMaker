@@ -41,8 +41,8 @@ public class APICoffeeOrderController extends APIController {
      * REST API method to provide GET access to a specific order, as indicated
      * by the path variable provided (the id of the order desired)
      *
-     * @param name
-     *            user name
+     * @param id
+     *            order id
      * @return response to the request
      */
     @GetMapping ( BASE_PATH + "/orders/{id}" )
@@ -69,8 +69,8 @@ public class APICoffeeOrderController extends APIController {
      * used to create a new CoffeeOrder by automatically converting the JSON
      * RequestBody provided to a CoffeeOrder object. Invalid JSON will fail.
      *
-     * @param user
-     *            The valid user to be saved.
+     * @param order
+     *            The valid order to be saved.
      * @return ResponseEntity indicating success if the user could be saved, or
      *         an error if it could not be
      */
@@ -90,7 +90,9 @@ public class APICoffeeOrderController extends APIController {
      * used to update a user by automatically converting the JSON RequestBody
      * provided to a CoffeeOrder object. Invalid JSON will fail.
      *
-     * @param user
+     * @param id
+     *            The id of the order
+     * @param order
      *            The valid order to be saved.
      * @return ResponseEntity indicating success if the order could be saved, or
      *         an error if it could not be
