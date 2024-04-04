@@ -36,8 +36,8 @@ public class CoffeeOrderService extends Service<CoffeeOrder, Long> {
     /**
      * Find a user with the provided name
      *
-     * @param name
-     *            Name of the user to find
+     * @param id
+     *            Id of the order to find
      * @return found user, null if none
      */
     public CoffeeOrder findOrder ( final Long id ) {

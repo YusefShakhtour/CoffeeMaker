@@ -93,18 +93,8 @@ public class CoffeeOrder extends DomainObject {
         setOrderTotal();
     }
 
-    // public void addRecipe ( final Recipe r ) {
-    // if ( null == r ) {
-    // return;
-    // }
-    // this.recipes.add( r );
-    // this.total += r.getPrice();
-    // }
-
     /**
      * Gets order total by returning summation of recipe prices.
-     *
-     * @return total price of the order
      */
     public void setOrderTotal () {
         if ( this.recipes.isEmpty() ) {
@@ -178,8 +168,8 @@ public class CoffeeOrder extends DomainObject {
     /**
      * set name for the order
      *
-     * @param name
-     *            name
+     * @param user
+     *            user
      */
     public void setUser ( final User user ) {
         this.user = user;
