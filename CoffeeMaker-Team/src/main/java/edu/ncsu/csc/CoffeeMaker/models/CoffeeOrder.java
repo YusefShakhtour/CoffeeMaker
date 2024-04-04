@@ -176,7 +176,7 @@ public class CoffeeOrder extends DomainObject {
      * @return recipes in order
      */
     public List<Recipe> getRecipes () {
-        return this.recipes;
+        return recipes;
     }
 
     /**
