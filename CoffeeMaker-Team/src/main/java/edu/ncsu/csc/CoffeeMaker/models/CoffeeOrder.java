@@ -39,8 +39,12 @@ public class CoffeeOrder extends DomainObject {
     private LocalDateTime timestamp;
 
     /** list of recipes in the order */
-    @ManyToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+    @ManyToMany ( cascade = CascadeType.MERGE, fetch = FetchType.EAGER )
     private List<Recipe>  recipes;
+
+    public CoffeeOrder () {
+        // Default constructor
+    }
 
     /**
      * creates an order object using recipe list
