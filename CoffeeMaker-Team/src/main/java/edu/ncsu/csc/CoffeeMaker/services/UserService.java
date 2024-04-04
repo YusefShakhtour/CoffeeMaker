@@ -12,7 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import edu.ncsu.csc.CoffeeMaker.models.User;
@@ -31,10 +31,10 @@ import edu.ncsu.csc.CoffeeMaker.repositories.UserRepository;
 public class UserService extends Service<User, Long> implements UserDetailsService {
 
     @Autowired
-    private UserRepository  userRepository;
+    private UserRepository        userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     protected JpaRepository<User, Long> getRepository () {
