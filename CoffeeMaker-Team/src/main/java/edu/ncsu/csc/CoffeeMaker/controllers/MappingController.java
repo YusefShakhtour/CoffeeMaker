@@ -105,28 +105,4 @@ public class MappingController {
     public String addIngredientPage ( final Model model ) {
         return "addIngredient";
     }
-
-    /**
-     * On a GET request to /login, it will return the login page.
-     *
-     * @param model
-     *            underlying UI model
-     * @return contents of the page
-     */
-    @GetMapping ( { "/login", "/login.html" } )
-    public String loginPage ( final Model model ) {
-        return "login";
-    }
-
-    /**
-     * On a GET request to /register, it will return the register page.
-     *
-     * @param model
-     *            underlying UI model
-     * @return contents of the page
-     */
-    @GetMapping ( { "/register", "/register.html" } )
-    public String registerPage ( final Model model ) {
-        return "register";
-    }
 }
