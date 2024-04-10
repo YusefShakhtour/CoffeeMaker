@@ -30,9 +30,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure ( final HttpSecurity http ) throws Exception {
-        http.csrf().disable().authorizeRequests().antMatchers( "/api/v1/login", "/api/v1/users" ).permitAll()
-                .anyRequest().authenticated().and().formLogin().loginPage( "/login" ).permitAll().and().logout()
-                .permitAll();
+        // http.csrf().disable().authorizeRequests().antMatchers(
+        // "/api/v1/login", "/api/v1/users", "api/v1/current" )
+        // .permitAll().anyRequest().authenticated().and().formLogin().loginPage(
+        // "/login" ).permitAll().and()
+        // .logout().permitAll().and().sessionManagement()
+        // .sessionCreationPolicy( SessionCreationPolicy.IF_REQUIRED ) // or
+        // // as
+        // // needed
+        // .sessionFixation().migrateSession() // or change to another
+        // // strategy
+        // .and().rememberMe() // Enable remember me functionality
+        // .tokenValiditySeconds( 604800 ) // Set remember me token
+        // // validity (e.g., 7 days)
+        // .rememberMeCookieName( "remember-me-cookie" ) // Set custom
+        // // remember me
+        // // cookie name
+        // .and().httpBasic(); // Add HTTP Basic authentication if needed
+
+        // http.csrf().disable().authorizeRequests().antMatchers(
+        // "/api/v1/login", "/api/v1/users" ).permitAll()
+        // .anyRequest().authenticated().and().formLogin().loginPage( "/login"
+        // ).permitAll().and().logout()
+        // .permitAll();
     }
 
     @Autowired

@@ -1,6 +1,10 @@
 package edu.ncsu.csc.CoffeeMaker.controllers;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,11 +40,24 @@ public class APIUserController extends APIController {
     private UserService userService;
 
     @PostMapping ( BASE_PATH + "/login" )
-    public ResponseEntity loginUser ( @RequestBody final User user ) {
+    public ResponseEntity<String> loginUser ( @RequestBody final User user ) {
         System.out.println( "HERE" );
+        System.out.println( user.toString() );
+
         final boolean isAuthenticated = userService.authenticate( user.getName(), user.getPassword() );
         if ( isAuthenticated ) {
-            return ResponseEntity.ok().body( "User successfully authenticated" );
+            final User current = userService.findByName( user.getName() );
+            final Cookie cookie = new Cookie( "userId", String.valueOf( current.getId() ) );
+            cookie.setHttpOnly( true );
+            cookie.setSecure( true );
+            cookie.setPath( "/" );
+            final String cookieString = cookie.getName() + "=" + cookie.getValue() + "; HttpOnly; Secure; Path="
+                    + cookie.getPath();
+
+            final HttpHeaders headers = new HttpHeaders();
+            headers.add( HttpHeaders.SET_COOKIE, cookieString );
+            return new ResponseEntity( successResponse( user.getName() + " successfully logged in" ), headers,
+                    HttpStatus.OK );
         }
         else {
             return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "Invalid credentials" );
@@ -59,6 +76,7 @@ public class APIUserController extends APIController {
      */
     @PostMapping ( BASE_PATH + "/users" )
     public ResponseEntity createUser ( @RequestBody final User user ) {
+        System.out.println( user.toString() );
         if ( null != userService.findByName( user.getName() ) ) {
             return new ResponseEntity( errorResponse( "User with the name " + user.getName() + " already exists" ),
                     HttpStatus.CONFLICT );
@@ -82,6 +100,47 @@ public class APIUserController extends APIController {
         return null == user
                 ? new ResponseEntity( errorResponse( "No user found with name " + name ), HttpStatus.NOT_FOUND )
                 : new ResponseEntity( user, HttpStatus.OK );
+    }
+
+    /**
+     * REST API method to provide GET access to the currently authenticated user
+     *
+     * @return response to the request
+     */
+    @GetMapping ( BASE_PATH + "/current" )
+    public ResponseEntity getCurrent ( final HttpServletRequest request ) {
+        System.out.println( "test" );
+        // Retrieve cookies from the request
+        final Cookie[] cookies = request.getCookies();
+        System.out.println( cookies );
+        System.out.println( cookies[1] );
+        System.out.println( cookies[1].getValue() );
+        // if ( cookies != null ) {
+        // // Loop through the cookies to find the one with name "userId"
+        // for ( final Cookie cookie : cookies ) {
+        // if ( cookie.getName().equals( "userId" ) ) {
+        // // Extract the user ID from the cookie
+        // final String userId = cookie.getValue();
+        // // Now you have the user ID, you can use it to retrieve the
+        // // user from the database
+        // final User user = userService.findById( Long.parseLong( userId ) );
+        // if ( user != null ) {
+        // System.out.println( user.getName() );
+        // // Return the user details if found
+        // return new ResponseEntity( successResponse( "Current user: " +
+        // user.getName() ),
+        // HttpStatus.OK );
+        // }
+        // else {
+        // // Handle case where user is not found
+        // return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( "User not
+        // found" );
+        // }
+        // }
+        // }
+        // }
+        // Handle case where "userId" cookie is not found
+        return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "User not authenticated" );
     }
 
     /**

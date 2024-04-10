@@ -5,46 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>    
-    <link rel="stylesheet" type="text/css" href="css/login.css" />
-    <title>Login</title>
+<!--     <link rel="stylesheet" type="text/css" href="css/login.css" />
+ -->    <title>Login</title>
 </head>
 <script
     src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 <body>
     <script th:inline="javascript">
         /*<![CDATA[*/
-
+        	
         var app = angular.module('myApp', []);
-        app.controller('loginCtrl', function($scope, $http) {
-            $scope.user = {
-            		"name": "",
-            		"pass": "",
-            		"userType": 0
-            		};
+        app.controller('loginCtrl', function($scope, $http, $q) {
+        	let userInput = document.querySelector("#username");
+        	let passInput = document.querySelector("#password");
+        	
+        	
+        	$scope.register = function() {
 
-            $scope.login = function() {
-            	console.log($scope.user);
-            	$http.post("/api/v1/login", $scope.user).then(function(success) {
-                    console.log('Login successful', success);
-                    // Redirect to another page or show a success message
-                }, function(error) {
-                    console.log('Login failed', error);
-                    // Show an error message
-                });
-            };
-            
-            $scope.register = function() {
-            	console.log($scope.user);
-            	$http.post("/api/v1/users", $scope.user).then(function(success) {
+				let user = {};
+				user['name'] = userInput.value;
+				user['password'] = passInput.value;
+				user['userType'] = "CUSTOMER";
+        		
+            	$http.post("/api/v1/users", JSON.stringify(user))
+            	.then(function(success) {
                     console.log('Register successful', success);
                     // Redirect to another page or show a success message
                 }, function(error) {
                     console.log('Register failed', error);
                     // Show an error message
                 });
-            };
-        });
+        	}
+        	
+            $scope.continueGuest = function() {
+            	$http.get("/api/v1/current")
+            	.then(res => {
+                    console.log('Current user: ', res);
+            	})
+            	.catch(error => {
+                    console.log('Request failed ', error);
+            	});
+				
+            	// TODO: anon user api
+            	
+            }
+            
+            $scope.login = function() {
+				
+				let user = {};
+ 				user['name'] = userInput.value;
+				user['password'] = passInput.value;
+				user['userType'] = "CUSTOMER";
 
+				console.log(user);
+            	console.log(JSON.stringify(user));
+            	$http.post("/api/v1/login", JSON.stringify(user))
+            	.then(res => {
+                    console.log('Login successful ', res);
+            	})
+            	.catch(error => {
+                    console.log('Request failed ', error);
+            	});
+            }
+           
+            
+            
+            
+        });
 
         /*]]>*/
     </script>
@@ -59,14 +86,29 @@
 	            </div>
 	            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
 	              <form>
-	                <input type="text" id="form3Example3" class="form-control form-control-lg"
-					    placeholder="Enter a valid username" ng-model="user.name" />
-					<input type="password" id="form3Example4" class="form-control form-control-lg"
-					    placeholder="Enter password" ng-model="user.pass" />
-					<button type="button" class="loginBtn" ng-click="login()"
-					    style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-					<button type="button" class="registerBtn" ng-click="register()"
-					    style="padding-left: 2.5rem; padding-right: 2.5rem;">Register</button>
+	                <!-- Email input -->
+	                <div class="form-outline mb-4">
+	                  <input type="text" id="username" class="form-control form-control-lg"
+	                    placeholder="Enter a valid username" />
+	                  <label class="form-label" for="form3Example3">Username</label>
+	                </div>
+	      
+	                <!-- Password input -->
+	                <div class="form-outline mb-3">
+	                  <input type="password" id="password" class="form-control form-control-lg"
+	                    placeholder="Enter password" />
+	                  <label class="form-label" for="form3Example4">Password</label>
+	                </div>
+	      
+	                <div class="text-center text-lg-start mt-4 pt-2">
+	                    <button type="button" class="loginBtn" ng-click="login()"
+	                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
+	                    <button type="button" class="m-3 newaccBtn " ng-click="register()"
+	                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Create Account</button>
+	                    <button type="button" class="guestBtn" ng-click="continueGuest()"
+	                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Continue As Guest</button>
+	                </div>
+	      
 	              </form>
 	            </div>
 	          </div>

@@ -84,6 +84,8 @@ public class UserService extends Service<User, Long> implements UserDetailsServi
 
     public boolean authenticate ( final String username, final String password ) {
         final User user = userRepository.findByName( username );
+        final boolean match = passwordEncoder.matches( password, user.getPassword() );
+        System.out.println( "Passwords match:" + match );
         if ( user != null && passwordEncoder.matches( password, user.getPassword() ) ) {
             return true;
         }
