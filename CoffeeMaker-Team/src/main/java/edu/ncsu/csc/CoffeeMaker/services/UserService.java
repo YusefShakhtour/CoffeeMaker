@@ -82,11 +82,15 @@ public class UserService extends Service<User, Long> implements UserDetailsServi
         return Collections.singletonList( new SimpleGrantedAuthority( "ROLE_" + user.getUserType().name() ) );
     }
 
-    public boolean authenticate ( final String username, final String password ) {
-        final User user = userRepository.findByName( username );
-        if ( user != null && passwordEncoder.matches( password, user.getPassword() ) ) {
-            return true;
+    public boolean authenticate ( final User user ) {
+        final User u = userRepository.findByName( user.getName() );
+        if ( u != null ) {
+            if ( passwordEncoder.matches( user.getPassword(), u.getPassword() ) ) {
+                // System.out.println( "Login Success" );
+                return true;
+            }
         }
+        // System.out.println( "Login Failure" );
         return false;
     }
 

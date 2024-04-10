@@ -18,7 +18,7 @@
         app.controller('loginCtrl', function($scope, $http) {
             $scope.user = {
             		"name": "",
-            		"pass": "",
+            		"password": "",
             		"userType": 0
             		};
 
@@ -62,7 +62,7 @@
 	                <input type="text" id="form3Example3" class="form-control form-control-lg"
 					    placeholder="Enter a valid username" ng-model="user.name" />
 					<input type="password" id="form3Example4" class="form-control form-control-lg"
-					    placeholder="Enter password" ng-model="user.pass" />
+					    placeholder="Enter password" ng-model="user.password" />
 					<button type="button" class="loginBtn" ng-click="login()"
 					    style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
 					<button type="button" class="registerBtn" ng-click="register()"

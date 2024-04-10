@@ -35,15 +35,23 @@ public class APIUserController extends APIController {
     @Autowired
     private UserService userService;
 
+    /**
+     * REST API method to login a user.
+     *
+     * @param user
+     *            user
+     * @return ResponseEntity indicating success if the user could be logged in,
+     *         or an error if it could not be
+     */
     @PostMapping ( BASE_PATH + "/login" )
     public ResponseEntity loginUser ( @RequestBody final User user ) {
-        System.out.println( "HERE" );
-        final boolean isAuthenticated = userService.authenticate( user.getName(), user.getPassword() );
+        final boolean isAuthenticated = userService.authenticate( user );
         if ( isAuthenticated ) {
-            return ResponseEntity.ok().body( "User successfully authenticated" );
+            return new ResponseEntity( successResponse( user.getName() + " successfully logged in" ), HttpStatus.OK );
         }
         else {
-            return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "Invalid credentials" );
+            return new ResponseEntity( errorResponse( user.getName() + " failed to logged in" ),
+                    HttpStatus.UNAUTHORIZED );
         }
     }
 
