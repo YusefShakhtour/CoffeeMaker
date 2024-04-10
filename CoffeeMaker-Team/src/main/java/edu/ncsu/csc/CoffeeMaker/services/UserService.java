@@ -30,12 +30,19 @@ import edu.ncsu.csc.CoffeeMaker.repositories.UserRepository;
 @Transactional
 public class UserService extends Service<User, Long> implements UserDetailsService {
 
+    /** User repository */
     @Autowired
     private UserRepository        userRepository;
 
+    /** Hashing enoder */
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    /**
+     * Return user repo
+     *
+     * @return user repo
+     */
     @Override
     protected JpaRepository<User, Long> getRepository () {
         return userRepository;
@@ -64,9 +71,15 @@ public class UserService extends Service<User, Long> implements UserDetailsServi
         return userRepository.save( user );
     }
 
+    /**
+     * Loads user based on username
+     *
+     * @param name
+     *            username
+     * @return user details
+     */
     @Override
     public UserDetails loadUserByUsername ( final String name ) {
-        System.out.println( "LOAD" );
         try {
             final User user = userRepository.findByName( name );
             return new org.springframework.security.core.userdetails.User( user.getName(), user.getPassword(),
@@ -78,10 +91,24 @@ public class UserService extends Service<User, Long> implements UserDetailsServi
 
     }
 
+    /**
+     * Get's user permissions
+     *
+     * @param user
+     *            user
+     * @return user permissions
+     */
     private Collection< ? extends GrantedAuthority> getAuthorities ( final User user ) {
         return Collections.singletonList( new SimpleGrantedAuthority( "ROLE_" + user.getUserType().name() ) );
     }
 
+    /**
+     * Authenticates user by comparing passwords
+     *
+     * @param user
+     *            user to compare
+     * @return true if authenticated, otherwise false
+     */
     public boolean authenticate ( final User user ) {
         final User u = userRepository.findByName( user.getName() );
         if ( u != null ) {

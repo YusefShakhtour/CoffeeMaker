@@ -106,6 +106,14 @@ public class MappingController {
         return "addIngredient";
     }
 
+    /**
+     * On a GET request to /lggin, it will return the login page.
+     * 
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+
     @GetMapping ( { "/login", "/login.html" } )
     public String loginPage ( final Model model ) {
         return "login";
