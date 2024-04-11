@@ -1,10 +1,15 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
+import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+// import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import edu.ncsu.csc.CoffeeMaker.models.enums.UserType;
 
@@ -21,16 +26,20 @@ public class User extends DomainObject {
     /** User id */
     @Id
     @GeneratedValue
-    private Long     id;
+    private Long              id;
 
     /** Name */
-    private String   name;
+    private String            name;
 
     /** Password */
-    private String   password;
+    private String            password;
 
     /** User type */
-    private UserType userType;
+    private UserType          userType;
+
+    /** list of orders for this user */
+    @OneToMany ( cascade = CascadeType.MERGE, fetch = FetchType.EAGER )
+    private List<CoffeeOrder> orders;
 
     /**
      * User constructor
@@ -46,6 +55,7 @@ public class User extends DomainObject {
         setName( name );
         setPassword( pass );
         setUserType( userType );
+
     }
 
     /**
@@ -127,6 +137,25 @@ public class User extends DomainObject {
         setName( user.getName() );
         setPassword( user.getPassword() );
         setUserType( user.getUserType() );
+    }
+
+    /**
+     * add a new order to the list of orders for this user
+     *
+     * @param order
+     *            new order
+     */
+    public void addOrder ( final CoffeeOrder order ) {
+        orders.add( order );
+    }
+
+    /**
+     * return the list of orders for the current user
+     *
+     * @return list of all orders for the user
+     */
+    public List<CoffeeOrder> getOrders () {
+        return orders;
     }
 
     @Override
