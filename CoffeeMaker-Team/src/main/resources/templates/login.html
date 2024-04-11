@@ -14,30 +14,63 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         	
-        var app = angular.module('myApp', []);
-        app.controller('loginCtrl', function($scope, $http, $q) {
-            
-            $scope.login = function() {
-				
-                  let user = {};
-                  user['name'] = userInput.value;
-                  user['password'] = passInput.value;
-                  user['userType'] = "CUSTOMER";
-
-                  console.log(user);
-                  console.log(JSON.stringify(user));
-                  $http.post("/api/v1/login", JSON.stringify(user))
-                  .then(res => {
-                        console.log('Login successful ', res);
-                        window.location.href = "./customerHome.html";
-                  })
-                  .catch(error => {
-                        console.log('Request failed ', error);
-                  });
-            }
+		var app = angular.module('myApp', []);
+		app.controller('loginCtrl', function($scope, $http, $q) {
+			
+			var manager = {
+				id: 1,
+				name: "manager",
+				password: "password",
+				userType: "MANAGER"
+			}
+			
+			var barista = {
+				id: 2,
+                name: "barista",
+                password: "password",
+                userType: "BARISTA"
+			}
+			
+			$http.post("/api/v1/users", JSON.stringify(manager))
+            .then(res => {
+                console.log('Register successful', res);
+            }) 
+            .catch(error => {
+            });
+			
+			$http.post("/api/v1/users", JSON.stringify(barista))
+            .then(res => {
+                console.log('Register successful', res);
+            }) 
+            .catch(error => {
+            });
+		    
+		    $scope.login = function() {
+			    var user = {
+		    		name: $scope.userInput,
+	                password: $scope.passInput
+			    };
+			
+			    $http.post("/api/v1/login", JSON.stringify(user))
+			    .then(res => {
+			    	console.log(res.data.message);
+			        if (res.data.message == "CUSTOMER") {
+			        	window.location.href = "/customerHome";
+			        }
+			        else if (res.data.message == "MANAGER") {
+			        	window.location.href = "/managerHome";
+			        }
+			        else if (res.data.message == "BARISTA") {
+			        	window.location.href = "/baristaHome";
+			        }
+			    })
+			    .catch(error => {
+			          console.log('Request failed ', error);
+			    });
+		    }
           
-        	  $scope.register = function() {
-                window.location.href = '/register';
+            $scope.register = function() {
+               window.location.href = '/register';
             }
         	
             $scope.continueGuest = function() {
@@ -45,18 +78,26 @@
             		id: null,
             		name: "",
             		pass: "",
-            		userType: "CUSTOMER"
+            		userType: "ANONYMOUS"
                 };
             	
-            	$http.post("/api/v1/users", user).then(function(response) {
-                    $scope.change = response.data.message;
-                    $scope.submissionSuccess = true;
-                    window.location.href = '/customerHome';
-                }, function(errResponse) {
-                    console.log(errResponse);
-                    $scope.submissionFailure = true;
-                    $scope.error = "Error while changing order";
+            	$http.post("/api/v1/login", JSON.stringify(user))
+                .then(res => {
+                    console.log(res);
+                	window.location.href = '/customerHome';
+                })
+                .catch(error => {
+                	$http.post("/api/v1/users", user).then(function(response) {
+                        $scope.change = response.data.message;
+                        $scope.submissionSuccess = true;
+                        window.location.href = '/customerHome';
+                    }, function(errResponse) {
+                        console.log(errResponse);
+                        $scope.submissionFailure = true;
+                        $scope.error = "Error while changing order";
+                    });
                 });
+            	
             }
         });
 
@@ -75,14 +116,14 @@
 	              <form>
 	                <!-- Email input -->
 	                <div class="form-outline mb-4">
-	                  <input type="text" id="username" class="form-control form-control-lg"
+	                  <input type="text" id="username" ng-model="userInput" class="form-control form-control-lg"
 	                    placeholder="Enter a valid username" />
 	                  <label class="form-label" for="form3Example3">Username</label>
 	                </div>
 	      
 	                <!-- Password input -->
 	                <div class="form-outline mb-3">
-	                  <input type="password" id="password" class="form-control form-control-lg"
+	                  <input type="password" id="password" ng-model="passInput" class="form-control form-control-lg"
 	                    placeholder="Enter password" />
 	                  <label class="form-label" for="form3Example4">Password</label>
 	                </div>

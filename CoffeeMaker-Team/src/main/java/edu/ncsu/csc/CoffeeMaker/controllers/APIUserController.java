@@ -56,8 +56,7 @@ public class APIUserController extends APIController {
 
             final HttpHeaders headers = new HttpHeaders();
             headers.add( HttpHeaders.SET_COOKIE, cookieString );
-            return new ResponseEntity( successResponse( user.getName() + " successfully logged in" ), headers,
-                    HttpStatus.OK );
+            return new ResponseEntity( successResponse( current.getUserType().toString() ), headers, HttpStatus.OK );
         }
         else {
             return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "Invalid credentials" );
