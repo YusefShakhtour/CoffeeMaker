@@ -16,46 +16,48 @@
         	
         var app = angular.module('myApp', []);
         app.controller('loginCtrl', function($scope, $http, $q) {
-        	let userInput = document.querySelector("#username");
-        	let passInput = document.querySelector("#password");
-        	
-        	
-        	$scope.register = function() {
-				window.location.href = "/register.html"
-        	}
-        	
-            $scope.continueGuest = function() {
-				
-            	// TODO: anon user api
-            	$http.get("/api/v1/current")
-            	.then(res => {
-                    console.log('Current user: ', res);
-            	})
-            	.catch(error => {
-                    console.log('Request failed ', error);
-            	});
-            	
-            }
             
             $scope.login = function() {
 				
-				let user = {};
- 				user['name'] = userInput.value;
-				user['password'] = passInput.value;
-				user['userType'] = "CUSTOMER";
+                  let user = {};
+                  user['name'] = userInput.value;
+                  user['password'] = passInput.value;
+                  user['userType'] = "CUSTOMER";
 
-				console.log(user);
-            	console.log(JSON.stringify(user));
-            	$http.post("/api/v1/login", JSON.stringify(user))
-            	.then(res => {
-                    console.log('Login successful ', res);
-                    window.location.href = "./customerHome.html";
-            	})
-            	.catch(error => {
-                    console.log('Request failed ', error);
-            	});
+                  console.log(user);
+                  console.log(JSON.stringify(user));
+                  $http.post("/api/v1/login", JSON.stringify(user))
+                  .then(res => {
+                        console.log('Login successful ', res);
+                        window.location.href = "./customerHome.html";
+                  })
+                  .catch(error => {
+                        console.log('Request failed ', error);
+                  });
             }
-            
+          
+        	  $scope.register = function() {
+                window.location.href = '/register';
+            }
+        	
+            $scope.continueGuest = function() {
+            	var user = {
+            		id: null,
+            		name: "",
+            		pass: "",
+            		userType: "CUSTOMER"
+                };
+            	
+            	$http.post("/api/v1/users", user).then(function(response) {
+                    $scope.change = response.data.message;
+                    $scope.submissionSuccess = true;
+                    window.location.href = '/customerHome';
+                }, function(errResponse) {
+                    console.log(errResponse);
+                    $scope.submissionFailure = true;
+                    $scope.error = "Error while changing order";
+                });
+            }
         });
 
         /*]]>*/
