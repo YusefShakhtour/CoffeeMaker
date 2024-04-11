@@ -22,14 +22,22 @@
             }
         	
             $scope.continueGuest = function() {
-            	
             	var user = {
-            		
+            		id: null,
+            		name: "",
+            		pass: "",
+            		userType: "CUSTOMER"
                 };
             	
-            	// TODO: anon user api
-            	
-            	window.location.href = '/customerHome';
+            	$http.post("/api/v1/users", user).then(function(response) {
+                    $scope.change = response.data.message;
+                    $scope.submissionSuccess = true;
+                    window.location.href = '/customerHome';
+                }, function(errResponse) {
+                    console.log(errResponse);
+                    $scope.submissionFailure = true;
+                    $scope.error = "Error while changing order";
+                });
             }
             
         });
