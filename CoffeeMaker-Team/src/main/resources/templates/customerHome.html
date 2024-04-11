@@ -15,6 +15,16 @@
 		var app = angular.module('customerHome', []);
 		app.controller('populateCtrl', function($scope, $http, $q) {
 			
+        	$http.get("/api/v1/current")
+        	.then(res => {
+                console.log('Current user: ', res);
+                localStorage.setItem("user", res.data.message.substring(14));
+        	})
+        	.catch(error => {
+                console.log('Request failed ', error);
+        	});
+			
+			
 			$http.get("/api/v1/recipes").then(function(response) {
 				$scope.recipes = response.data;
 			});

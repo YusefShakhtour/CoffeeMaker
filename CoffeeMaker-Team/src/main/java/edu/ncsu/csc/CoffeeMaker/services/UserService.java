@@ -1,9 +1,18 @@
 package edu.ncsu.csc.CoffeeMaker.services;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import edu.ncsu.csc.CoffeeMaker.models.User;
@@ -19,14 +28,13 @@ import edu.ncsu.csc.CoffeeMaker.repositories.UserRepository;
  */
 @Component
 @Transactional
-public class UserService extends Service<User, Long> {
+public class UserService extends Service<User, Long> implements UserDetailsService {
 
-    /**
-     * UserRepository, to be autowired in by Spring and provide CRUD operations
-     * on User model.
-     */
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository        userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     protected JpaRepository<User, Long> getRepository () {
@@ -43,4 +51,45 @@ public class UserService extends Service<User, Long> {
     public User findByName ( final String name ) {
         return userRepository.findByName( name );
     }
+
+    /**
+     * Encrypts user password and saves the user to the database
+     *
+     * @param user
+     *            user to encode
+     * @return database save
+     */
+    public User encodeUser ( final User user ) {
+        user.setPassword( passwordEncoder.encode( user.getPassword() ) );
+        return userRepository.save( user );
+    }
+
+    @Override
+    public UserDetails loadUserByUsername ( final String name ) {
+        System.out.println( "LOAD" );
+        try {
+            final User user = userRepository.findByName( name );
+            return new org.springframework.security.core.userdetails.User( user.getName(), user.getPassword(),
+                    getAuthorities( user ) );
+        }
+        catch ( final Exception ex ) {
+            throw new UsernameNotFoundException( "User not found with username: " + name );
+        }
+
+    }
+
+    private Collection< ? extends GrantedAuthority> getAuthorities ( final User user ) {
+        return Collections.singletonList( new SimpleGrantedAuthority( "ROLE_" + user.getUserType().name() ) );
+    }
+
+    public boolean authenticate ( final String username, final String password ) {
+        final User user = userRepository.findByName( username );
+        final boolean match = passwordEncoder.matches( password, user.getPassword() );
+        System.out.println( "Passwords match:" + match );
+        if ( user != null && passwordEncoder.matches( password, user.getPassword() ) ) {
+            return true;
+        }
+        return false;
+    }
+
 }
