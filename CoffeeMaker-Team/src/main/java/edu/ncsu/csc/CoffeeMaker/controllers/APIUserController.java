@@ -74,6 +74,9 @@ public class APIUserController extends APIController {
      * @return ResponseEntity indicating success if the user could be saved, or
      *         an error if it could not be
      */
+
+    // TODO Need validation to prevent empty users to be made. (No
+    // username/password etc.)
     @PostMapping ( BASE_PATH + "/users" )
     public ResponseEntity createUser ( @RequestBody final User user ) {
         System.out.println( user.toString() );
@@ -113,32 +116,28 @@ public class APIUserController extends APIController {
         // Retrieve cookies from the request
         final Cookie[] cookies = request.getCookies();
         System.out.println( cookies );
-        System.out.println( cookies[1] );
-        System.out.println( cookies[1].getValue() );
-        // if ( cookies != null ) {
-        // // Loop through the cookies to find the one with name "userId"
-        // for ( final Cookie cookie : cookies ) {
-        // if ( cookie.getName().equals( "userId" ) ) {
-        // // Extract the user ID from the cookie
-        // final String userId = cookie.getValue();
-        // // Now you have the user ID, you can use it to retrieve the
-        // // user from the database
-        // final User user = userService.findById( Long.parseLong( userId ) );
-        // if ( user != null ) {
-        // System.out.println( user.getName() );
-        // // Return the user details if found
-        // return new ResponseEntity( successResponse( "Current user: " +
-        // user.getName() ),
-        // HttpStatus.OK );
-        // }
-        // else {
-        // // Handle case where user is not found
-        // return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( "User not
-        // found" );
-        // }
-        // }
-        // }
-        // }
+        if ( cookies != null ) {
+            // Loop through the cookies to find the one with name "userId"
+            for ( final Cookie cookie : cookies ) {
+                if ( cookie.getName().equals( "userId" ) ) {
+                    System.out.println( "Found userId cookie" );
+                    // Extract the user ID from the cookie
+                    final String userId = cookie.getValue();
+                    // Now you have the user ID, you can use it to retrieve the
+                    // user from the database
+                    final User user = userService.findById( Long.parseLong( userId ) );
+                    if ( user != null ) {
+                        System.out.println( user.getName() );
+                        // Return the user details if found
+                        return new ResponseEntity( successResponse( "Current user: " + user.getId() ), HttpStatus.OK );
+                    }
+                    else {
+                        // Handle case where user is not found
+                        return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( "User not found" );
+                    }
+                }
+            }
+        }
         // Handle case where "userId" cookie is not found
         return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "User not authenticated" );
     }
