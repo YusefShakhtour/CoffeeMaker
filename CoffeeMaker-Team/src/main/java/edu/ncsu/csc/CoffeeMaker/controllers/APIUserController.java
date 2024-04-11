@@ -36,19 +36,23 @@ public class APIUserController extends APIController {
     private UserService userService;
 
     /**
-     * REST API method to provide GET access to a specific user, as indicated by
-     * the path variable provided (the name of the user desired)
+     * REST API method to login a user.
      *
-     * @param name
-     *            user name
-     * @return response to the request
+     * @param user
+     *            user
+     * @return ResponseEntity indicating success if the user could be logged in,
+     *         or an error if it could not be
      */
-    @GetMapping ( BASE_PATH + "/users/{name}" )
-    public ResponseEntity getUser ( @PathVariable ( "name" ) final String name ) {
-        final User user = userService.findByName( name );
-        return null == user
-                ? new ResponseEntity( errorResponse( "No user found with name " + name ), HttpStatus.NOT_FOUND )
-                : new ResponseEntity( user, HttpStatus.OK );
+    @PostMapping ( BASE_PATH + "/login" )
+    public ResponseEntity loginUser ( @RequestBody final User user ) {
+        final boolean isAuthenticated = userService.authenticate( user );
+        if ( isAuthenticated ) {
+            return new ResponseEntity( successResponse( user.getName() + " successfully logged in" ), HttpStatus.OK );
+        }
+        else {
+            return new ResponseEntity( errorResponse( user.getName() + " failed to logged in" ),
+                    HttpStatus.UNAUTHORIZED );
+        }
     }
 
     /**
@@ -67,9 +71,25 @@ public class APIUserController extends APIController {
             return new ResponseEntity( errorResponse( "User with the name " + user.getName() + " already exists" ),
                     HttpStatus.CONFLICT );
         }
-        userService.save( user );
+        userService.encodeUser( user );
         return new ResponseEntity( successResponse( user.getName() + " successfully created" ), HttpStatus.OK );
 
+    }
+
+    /**
+     * REST API method to provide GET access to a specific user, as indicated by
+     * the path variable provided (the name of the user desired)
+     *
+     * @param name
+     *            user name
+     * @return response to the request
+     */
+    @GetMapping ( BASE_PATH + "/users/{name}" )
+    public ResponseEntity getUser ( @PathVariable ( "name" ) final String name ) {
+        final User user = userService.findByName( name );
+        return null == user
+                ? new ResponseEntity( errorResponse( "No user found with name " + name ), HttpStatus.NOT_FOUND )
+                : new ResponseEntity( user, HttpStatus.OK );
     }
 
     /**
@@ -95,7 +115,7 @@ public class APIUserController extends APIController {
 
         try {
             u.editUser( user );
-            userService.save( u );
+            userService.encodeUser( u );
             return new ResponseEntity( successResponse( name + " user type was updated to " + u.getUserType() ),
                     HttpStatus.OK );
         }

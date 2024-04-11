@@ -33,10 +33,10 @@ class UserTest {
     void testCreateUser () {
 
         final User u1 = new User( "User01", "password", UserType.CUSTOMER );
-        service.save( u1 );
+        service.encodeUser( u1 );
 
         final User u2 = new User( "User02", "password", UserType.CUSTOMER );
-        service.save( u2 );
+        service.encodeUser( u2 );
 
         final List<User> users = service.findAll();
 
@@ -49,16 +49,16 @@ class UserTest {
     void testEditUser () {
 
         final User u1 = new User();
-        service.save( u1 );
+        service.encodeUser( u1 );
 
         final User u2 = new User( "User02", "password", UserType.CUSTOMER );
-        service.save( u2 );
+        service.encodeUser( u2 );
 
         final User u3 = new User( "User01", "password", UserType.CUSTOMER );
 
         u1.editUser( u3 );
 
-        service.save( u1 );
+        service.encodeUser( u1 );
         final List<User> users = service.findAll();
 
         Assertions.assertEquals( 2, users.size() );

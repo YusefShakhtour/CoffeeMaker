@@ -27,7 +27,7 @@ public class User extends DomainObject {
     private String   name;
 
     /** Password */
-    private String   pass;
+    private String   password;
 
     /** User type */
     private UserType userType;
@@ -85,7 +85,7 @@ public class User extends DomainObject {
      * @return password
      */
     public String getPassword () {
-        return pass;
+        return password;
     }
 
     /**
@@ -95,7 +95,7 @@ public class User extends DomainObject {
      *            new password
      */
     public void setPassword ( final String pass ) {
-        this.pass = pass;
+        this.password = pass;
     }
 
     /**
@@ -131,7 +131,7 @@ public class User extends DomainObject {
 
     @Override
     public int hashCode () {
-        return Objects.hash( id, name, pass, userType );
+        return Objects.hash( id, name, password, userType );
     }
 
     @Override
@@ -147,12 +147,12 @@ public class User extends DomainObject {
         }
         final User other = (User) obj;
         return Objects.equals( id, other.id ) && Objects.equals( name, other.name )
-                && Objects.equals( pass, other.pass ) && userType == other.userType;
+                && Objects.equals( password, other.password ) && userType == other.userType;
     }
 
     @Override
     public String toString () {
-        return "User [id=" + id + ", name=" + name + ", pass=" + pass + ", userType=" + userType + "]";
+        return "User [id=" + id + ", name=" + name + ", pass=" + password + ", userType=" + userType + "]";
     }
 
 }
