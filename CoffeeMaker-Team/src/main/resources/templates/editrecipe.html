@@ -18,8 +18,16 @@
 				
 				/* Logic that handles controlling your page goes here */
 				
-				$http.get("/api/v1/recipes").then(function(response) {
-					$scope.recipes = response.data;
+				var name = window.location.search.substring(2);
+				
+				$http.get("/api/v1/recipes/" + name).then(function(response) {
+					$scope.recipe = response.data;
+					$scope.rprice = $scope.recipe.price;
+					for (i = 0; i < $scope.recipe.ingredients.length; i++ ) {
+	                    $scope.idivs.push({ ingredient: $scope.recipe.ingredients[i].ingredient});
+	                    $scope.idivs[i].units = $scope.recipe.ingredients[i].amount;
+	                }
+					console.log($scope.recipe);
 				});
 				
 				$http.get("/api/v1/inventory").then(function(response) {
@@ -50,17 +58,6 @@
 					} else {
 						$scope.newidivs = [];
 					}
-				}
-				
-				$scope.changeSelection = function() {
-					$scope.idivs = [];
-					
-					$scope.rprice = $scope.rselection.price;
-					for (i = 0; i < $scope.rselection.ingredients.length; i++ ) {
-						$scope.idivs.push({ ingredient: $scope.rselection.ingredients[i].ingredient});
-						$scope.idivs[i].units = $scope.rselection.ingredients[i].amount;
-					}
-					
 				}
 				
 				$scope.filteri = function(item) {
@@ -128,7 +125,7 @@
 						
 						var newRecipe = {};
 						newRecipe['id'] = null;
-						newRecipe['name'] = $scope.rselection.name;
+						newRecipe['name'] = $scope.recipe.name;
 						newRecipe['price'] = $scope.rprice;
 						newRecipe['ingredients'] = [];
 						for (var i = 0; i < $scope.idivs.length; i++) {
@@ -146,12 +143,12 @@
 							newRecipe['ingredients'].push(newIngredient);
 						}
 						
-						$http.delete("/api/v1/recipes/" + $scope.rselection.name).then(
+						$http.delete("/api/v1/recipes/" + $scope.recipe.name).then(
 							function(success) {
 								$http.post("/api/v1/recipes", newRecipe).then(
 										function(success) {
 											$scope.success = true;
-											window.location.reload();
+											window.location.href = '/baristaHome';
 										}, function(rejection) {
 											console.error("Error while adding recipe");
 										});
@@ -171,7 +168,7 @@
 
 			<!--- Various HTML elements, with extra tags telling Angular how to work with them, go here -->
 			<nav>
-				<a href="/index">Home</a>
+				<a href="/baristaHome">Home</a>
 				<div class="title">Edit A Recipe</div>
 			</nav>
 			<main>
@@ -179,17 +176,8 @@
 				
 					<legend>Recipe</legend>
 					<div class="inputs">
-						<div class="name">Select Recipe</div>
-						<select 
-							name="recipe"
-							class="label3" 
-							ng-model="rselection"
-							ng-click="checkValidity()"
-							ng-change="changeSelection()"
-							ng-options="item as item.name for item in recipes"
-							required="true"
-						>
-						</select>
+						<div class="name">Name</div>
+						<div class="label3">{{recipe.name}}</div>
 						<div class="price">Price</div>
 						<input id="rprice" type="number" ng-click="checkValidity()" ng-change="checkValidity()" ng-model="rprice" required="true" />
 					</div>

@@ -106,14 +106,32 @@ public class MappingController {
         return "addIngredient";
     }
 
+    /**
+     * On a GET request to /login, it will return the login page.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
     @GetMapping ( { "/login", "/login.html" } )
     public String loginPage ( final Model model ) {
         return "login";
     }
 
     /**
-     * On a GET request to /customerHome, the RecipeController will return
-     * /src/main/resources/templates/customerHome.html.
+     * On a GET request to /register, it will return the register page.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/register", "/register.html" } )
+    public String registerPage ( final Model model ) {
+        return "register";
+    }
+
+    /**
+     * On a GET request to /customerHome, it will return the login page.
      *
      * @param model
      *            underlying UI model
@@ -125,8 +143,7 @@ public class MappingController {
     }
 
     /**
-     * On a GET request to /payment, the Controller will return
-     * /src/main/resources/templates/payment.html.
+     * On a GET request to /payment, it will return the payment page.
      *
      * @param model
      *            underlying UI model
@@ -138,16 +155,28 @@ public class MappingController {
     }
 
     /**
-     * On a GET request to /privacypolicy, the Controller will return
-     * /src/main/resources/templates/privacypolicy.html.
+     * On a GET request to /baristaHome, it will return the baristaHome page.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/baristaHome", "/baristaHome.html" } )
+    public String baristaHomePage ( final Model model ) {
+        return "baristaHome";
+    }
+
+    /**
+     * On a GET request to /privacypolicy, it will return the privacy policy
+     * page.
      *
      * @param model
      *            underlying UI model
      * @return contents of the page
      */
     @GetMapping ( { "/privacypolicy", "/privacypolicy.html" } )
-    public String privacyPolicyPage ( final Model model ) {
-        return "privacyPolicy";
+    public String privacypolicyPage ( final Model model ) {
+        return "privacypolicy";
     }
 
 }
