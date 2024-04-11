@@ -21,14 +21,16 @@
 			
 			$http.get("/api/v1/orders").then(function(response) {
                 $scope.orders = response.data;
+                console.log($scope.orders);
             });
 			
 			$scope.newOrder = [];
 			$scope.total = 0;
 			
 			$scope.addToOrder = function(recipe) {
-				$scope.newOrder.push(recipe);
-				$scope.total += recipe.price;
+				var newRecipe = recipe;
+				$scope.newOrder.push(newRecipe);
+				$scope.total += newRecipe.price;
 			}
 			
 			$scope.removeFromOrder = function(index) {
@@ -38,15 +40,16 @@
 			
 			$scope.submitOrder = function() {
 				if ( $scope.newOrder.length > 0 ) {
-	                var newOrder = {
+
+					var newOrder = {
 	                    id: null,
-	                    user: null,
 	                    total: null,
+	                    timestamp: null,
 	                    fulfilled: false,
 	                    recipes: $scope.newOrder
 	                };
+	                
 	                var encodedOrder = encodeURIComponent(JSON.stringify(newOrder));
-	                var encodedTotal = encodeURIComponent(JSON.stringify($scope.total));
 	                window.location.href = '/payment?order=' + encodedOrder;
 				}
             }
@@ -88,7 +91,7 @@
 				<div ng-repeat="order in orders" class="p-2 order">
 					<div class="p-2 orderId col-4">Order {{order.id}}</div>
 					<div class="col-1"></div>
-					<button class="orderStatus {{ order.fufilled ? ready : inProgress }} m-2 col-4">{{ order.fufilled ? Ready : In Progress }}</button>                
+					<button class="orderStatus {{ order.fulfilled ? 'ready' : 'inProgress' }} m-2 col-4">{{ order.fulfilled ? 'Ready' : 'In Progress' }}</button>                
 				</div>
 			</div>
 		</fieldset>	
