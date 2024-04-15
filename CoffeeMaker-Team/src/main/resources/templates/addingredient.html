@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+
 	<link rel="stylesheet" href="css/addingredient.css" />
-    <title>Document</title>
+    <title>Add Ingredient</title>
 </head>
 <body>
 		<div layout:fragment="content">
@@ -82,19 +85,35 @@
 
 		
 	<div ng-app="addIngredient" ng-controller="populateCtrl">
-    <nav>
-        <a href="/index">Home</a>
-        <div class="header">Add an Ingredient</div>
-    </nav>
+		<nav class="navbar navbar-expand-sm flex-sm-nowrap flex-wrap">
+	        <div class="container-fluid">
+	            <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar5">
+	                <span class="navbar-toggler-icon"></span>
+	            </button>
+	            <a class="navbar-brand" href="./managerHome.html">CoffeeMaker</a>
+	            <div class="navbar-collapse collapse" id="navbar5">
+	                <ul class="navbar-nav">
+                  		<a href="./login.html" class="logoutBtn">Logout</a>
+	                </ul>
+	            </div>
+	        </div>
+    	</nav>
         <div class="container">
         <fieldset class="add">
-            <legend>Add Ingredient</legend>
-            <div class="label1">Name</div>
-            <input type="text" ng-model="name" required class="in1" id="nameIn"/>
+<!--             <div class="label1">Name</div>
+            <input type="text" ng-model="name" required class="in1" id="nameIn"/> -->
+			<div class="mb-3">
+			  <label for="nameIn" class="form-label">Name</label>
+			  <input type="input" ng-model="name" class="form-control" id="nameIn">
+			</div>
             <br><br>
-            <div class="label2">Quantity</div>
-            <input type="text" ng-model="quantity" pattern="^[1-9]+[0-9]*$" required class="in2" id="amtIn"/>
-            <button ng-click="submit()">Submit</button>
+<!--             <div class="label2">Quantity</div>
+            <input type="text" ng-model="quantity" pattern="^[1-9]+[0-9]*$" required class="in2" id="amtIn"/> -->
+			<div class="mb-3">
+			  <label for="amtIn" class="form-label">Quantity</label>
+			  <input type="input" ng-model="quantity" class="form-control" id="amtIn">
+			</div>
+            <button class="submit" ng-click="submit()">Submit</button>
         </fieldset>
         <fieldset class="list">
             <legend>Ingredients List</legend>
