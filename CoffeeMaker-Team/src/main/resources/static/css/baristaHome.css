@@ -85,3 +85,22 @@ nav {
     font-weight: bolder;
 }
 
+#navbar5 {
+    justify-content: end;
+}
+
+.logoutBtn {
+    margin-right: 2vw;
+    text-decoration: none;
+}
+
+.logoutBtn:hover {
+    font-size: larger;
+    color: white;
+    text-decoration: underline;
+}
+
+.logoutBtn {
+    color: white;
+}
+

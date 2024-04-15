@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="css/managerHome.css" />
+    
+    <title>Manager Home</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm flex-sm-nowrap flex-wrap">
+        <div class="container-fluid">
+            <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar5">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="./managerHome.html">CoffeeMaker</a>
+            <div class="navbar-collapse collapse" id="navbar5">
+                <ul class="navbar-nav">
+                  <a href="./login.html" class="logoutBtn">Logout</a>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="justify-content-center mt-4 d-flex">
+      <div class="dates col-5">
+        <label class="startLabel col-2">Start Date:</label>
+        <input type="date">
+        <br>
+        <label class="endLabel col-2">End Date:</label>
+        <input type="date">
+      </div>
+
+        <div class="btn-group col-5" role="group">
+            <button type="button" class="btn btn-outline-dark">Order History</button>
+            <button type="button" class="btn btn-outline-dark">Revenue</button>
+            <button type="button" class="btn btn-outline-dark">Add Inventory</button>
+          </div>
+        </div>
+
+
+        <br>
+        <div class="tableContainer">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                  <th scope="col">Order ID</th>
+                  <th scope="col">Timestamp</th>
+                  <th scope="col">User</th>
+                  <th scope="col">Recipe</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>        
+              <tbody class="table-group-divider">
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Time</td>
+                  <td>student</td>
+                  <td>Mocha Latte</td>
+                  <td>Fulfilled</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                    <td>Time</td>
+                    <td>graduate</td>
+                    <td>Black Coffee</td>
+                    <td>In Progress</td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+
+</body>
+</html>

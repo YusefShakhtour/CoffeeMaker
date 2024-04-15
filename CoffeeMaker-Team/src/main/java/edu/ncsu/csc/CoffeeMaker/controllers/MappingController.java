@@ -69,6 +69,20 @@ public class MappingController {
     }
 
     /**
+     * Handles a GET request for managerHome. The GET request provides a view to
+     * the client that includes permissions of the manager such as adding to
+     * inventory, viewing revenue, and viewing order history
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/managerHome", "/managerHome.html" } )
+    public String managerForm ( final Model model ) {
+        return "managerHome";
+    }
+
+    /**
      * On a GET request to /makecoffee, the MakeCoffeeController will return
      * /src/main/resources/templates/makecoffee.html.
      *
@@ -100,9 +114,9 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
-    @GetMapping ( { "/index", "/", "/login.html" } )
+    @GetMapping ( { "/index", "login", "/", "/login.html" } )
     public String loginPage ( final Model model ) {
-        return "login.html";
+        return "login";
     }
 
     /**

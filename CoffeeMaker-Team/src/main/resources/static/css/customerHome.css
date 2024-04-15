@@ -7,10 +7,6 @@
     border-bottom: 1px solid black;
 }
 
-nav {
-    background-color: rgb(29, 29, 29);
-}
-
 .newOrder {
     height: 60vh;
     overflow-y: scroll;
@@ -20,11 +16,6 @@ nav {
     font-size: larger;
     display: flex;
    
-}
-
-.navbar-brand {
-    color: white;
-
 }
 
 .extContainer {
@@ -106,4 +97,30 @@ nav {
     border-bottom: 1px solid black;
 
 }
+#navbar5 {
+    justify-content: end;
+}
 
+.logoutBtn {
+    margin-right: 2vw;
+    text-decoration: none;
+}
+
+.logoutBtn:hover {
+    font-size: larger;
+    color: white;
+    text-decoration: underline;
+}
+
+.logoutBtn {
+    color: white;
+}
+
+nav {
+    background-color: rgb(29, 29, 29);
+}
+
+.navbar-brand {
+    color: white;
+
+}

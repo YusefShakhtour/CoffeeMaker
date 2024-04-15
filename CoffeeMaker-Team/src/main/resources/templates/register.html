@@ -30,7 +30,7 @@
             	$http.post("/api/v1/users", JSON.stringify(user))
             	.then(res => {
                     console.log('Register successful', res);
-                    window.location.href = "/login"
+                    window.location.href = "/login.html"
                     // Redirect to another page or show a success message
                 }) 
                 .catch(error => {
