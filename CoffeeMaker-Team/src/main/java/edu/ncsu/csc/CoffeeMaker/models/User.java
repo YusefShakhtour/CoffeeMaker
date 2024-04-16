@@ -1,5 +1,6 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,20 +27,20 @@ public class User extends DomainObject {
     /** User id */
     @Id
     @GeneratedValue
-    private Long              id;
+    private Long                    id;
 
     /** Name */
-    private String            name;
+    private String                  name;
 
     /** Password */
-    private String            password;
+    private String                  password;
 
     /** User type */
-    private UserType          userType;
+    private UserType                userType;
 
     /** list of orders for this user */
     @OneToMany ( cascade = CascadeType.MERGE, fetch = FetchType.EAGER )
-    private List<CoffeeOrder> orders;
+    private final List<CoffeeOrder> orders;
 
     /**
      * User constructor
@@ -56,6 +57,7 @@ public class User extends DomainObject {
         setPassword( pass );
         setUserType( userType );
 
+        this.orders = new ArrayList<>();
     }
 
     /**
