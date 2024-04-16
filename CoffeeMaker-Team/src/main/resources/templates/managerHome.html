@@ -9,69 +9,83 @@
     
     <title>Manager Home</title>
 </head>
+<script
+    src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 <body>
-    <nav class="navbar navbar-expand-sm flex-sm-nowrap flex-wrap">
-        <div class="container-fluid">
-            <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar5">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="./managerHome.html">CoffeeMaker</a>
-            <div class="navbar-collapse collapse" id="navbar5">
-                <ul class="navbar-nav">
-                  <a href="./login.html" class="logoutBtn">Logout</a>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
 
-    <div class="justify-content-center mt-4 d-flex">
-      <div class="dates col-5">
-        <label class="startLabel col-2">Start Date:</label>
-        <input type="date">
-        <br>
-        <label class="endLabel col-2">End Date:</label>
-        <input type="date">
-      </div>
+        var app = angular.module('myApp', []);
+        app.controller('managerCtrl', function($scope, $http, $q) {
+        	$http.get("/api/v1/orders").then(function(response) {
+                $scope.orders = response.data;
+                console.log($scope.orders);
+            });
+        });
 
-        <div class="btn-group col-5" role="group">
-            <a type="button" class="btn btn-outline-dark">Order History</a>
-            <a type="button" class="btn btn-outline-dark">Revenue</a>
-            <a href="./addinventory" type="button" class="btn btn-outline-dark">Add Inventory</a>
-            <a href="./addingredient.html" type="button" class="btn btn-outline-dark">Add Ingredient</a>
-          </div>
-        </div>
-
-
-        <br>
-        <div class="tableContainer">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                  <th scope="col">Order ID</th>
-                  <th scope="col">Timestamp</th>
-                  <th scope="col">User</th>
-                  <th scope="col">Recipe</th>
-                  <th scope="col">Status</th>
-                </tr>
-              </thead>        
-              <tbody class="table-group-divider">
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Time</td>
-                  <td>student</td>
-                  <td>Mocha Latte</td>
-                  <td>Fulfilled</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                    <td>Time</td>
-                    <td>graduate</td>
-                    <td>Black Coffee</td>
-                    <td>In Progress</td>
-                </tr>
-              </tbody>
-            </table>
-        </div>
-
+        /*]]>*/
+    </script>
+    <div layout:fragment="content" class="generic-container ng-cloak"
+        ng-app="myApp" ng-controller="managerCtrl">
+	    <nav class="navbar navbar-expand-sm flex-sm-nowrap flex-wrap">
+	        <div class="container-fluid">
+	            <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar5">
+	                <span class="navbar-toggler-icon"></span>
+	            </button>
+	            <a class="navbar-brand" href="./managerHome.html">CoffeeMaker</a>
+	            <div class="navbar-collapse collapse" id="navbar5">
+	                <ul class="navbar-nav">
+	                  <a href="./login.html" class="logoutBtn">Logout</a>
+	                </ul>
+	            </div>
+	        </div>
+	    </nav>
+	
+	    <div class="justify-content-center mt-4 d-flex">
+	      <div class="dates col-5">
+	        <label class="startLabel col-2">Start Date:</label>
+	        <input type="date">
+	        <br>
+	        <label class="endLabel col-2">End Date:</label>
+	        <input type="date">
+	      </div>
+	
+	        <div class="btn-group col-5" role="group">
+	            <a type="button" class="btn btn-outline-dark">Order History</a>
+	            <a type="button" class="btn btn-outline-dark">Revenue</a>
+	            <a href="./addinventory" type="button" class="btn btn-outline-dark">Add Inventory</a>
+	            <a href="./addingredient.html" type="button" class="btn btn-outline-dark">Add Ingredient</a>
+	          </div>
+	        </div>
+	
+	
+	        <br>
+	        <div class="tableContainer">
+	        <table class="table table-striped">
+	            <thead>
+	                <tr>
+	                  <th scope="col">Order ID</th>
+	                  <th scope="col">Timestamp</th>
+	                  <th scope="col">User</th>
+	                  <th scope="col">Recipe</th>
+	                  <th scope="col">Status</th>
+	                </tr>
+	              </thead>        
+	              <tbody class="table-group-divider">
+	                <tr ng-repeat="order in orders">
+	                  <th scope="row">{{order.id}}</th>
+	                  <td>{{order.time}}</td>
+	                  <td>student</td>
+	                  <td>
+				          <span ng-repeat="recipe in order.recipes">
+				              {{recipe.name}}<span ng-if="!$last">, </span>
+				          </span>
+				      </td>
+	                  <td>{{ order.fulfilled ? 'Ready' : 'In Progress' }}</td>
+	                </tr>
+	              </tbody>
+	            </table>
+	        </div>
+    </div>
 </body>
 </html>
