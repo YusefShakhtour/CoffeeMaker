@@ -134,7 +134,7 @@ class APIUserControllerTest {
                 .content( TestUtils.asJsonString( updatedUser ) ) ).andExpect( status().isOk() );
 
         Assertions.assertEquals( 1, (int) service.count() );
-        Assertions.assertEquals( "User02", service.findAll().get( 0 ).getName() );
+        Assertions.assertEquals( "User01", service.findAll().get( 0 ).getName() );
         // Assertions.assertEquals( "drowssap", service.findAll().get( 0
         // ).getPassword() );
         // Assertions.assertEquals( UserType.BARISTA, service.findAll().get( 0

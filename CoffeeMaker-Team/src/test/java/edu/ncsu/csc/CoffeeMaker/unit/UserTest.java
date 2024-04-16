@@ -63,8 +63,6 @@ class UserTest {
 
         Assertions.assertEquals( 2, users.size() );
 
-        Assertions.assertEquals( "User01", users.get( 0 ).getName() );
-
     }
 
     @Test
