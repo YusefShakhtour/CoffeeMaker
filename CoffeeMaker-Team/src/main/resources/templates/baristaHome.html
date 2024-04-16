@@ -87,6 +87,23 @@
                 );
             }
             
+            $scope.cancelOrder = function(order) {
+                $http.delete("/api/v1/orders/" + order.id).then(function (response) {
+                    console.log('Order cancelled:', response.data);
+                    const index = $scope.orders.indexOf(order);
+                    if (index !== -1) {
+                        $scope.orders.splice(index, 1);
+                    }
+                    $scope.submissionSuccess = true;
+                }, function(errResponse) {
+                    console.error('Failed to cancel order', errResponse);
+                    $scope.error = "Error while cancelling order";
+                    $scope.submissionFailure = true;
+                });
+            }
+
+
+            
             updateRecipes();
         });
 
@@ -129,7 +146,7 @@
 		                <div class="p-2 recipeName col-3">Order {{order.id}}</div>
 		                <div class="col-2"></div>
 		                <button ng-click="fulfill(order)" class="fulfillOrder m-2 col-3">Fulfill</button>
-		                <button class="cancelOrder m-2 col-3">Cancel</button>
+		                <button ng-click="cancelOrder(order)" class="cancelOrder m-2 col-3">Cancel</button>
 		            </div>
 				</div>
 			</fieldset>
