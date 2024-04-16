@@ -20,14 +20,28 @@ import edu.ncsu.csc.CoffeeMaker.services.UserService;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /** User service */
     @Autowired
     private UserService userService;
 
+    /**
+     * Returns hashing encoder
+     *
+     * @return hashing encoder
+     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder () {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Global configuration for hashing encoder
+     *
+     * @param auth
+     *            authentication builder
+     * @throws Exception
+     *             exception
+     */
     @Override
     protected void configure ( final HttpSecurity http ) throws Exception {
         http.csrf().disable().authorizeRequests().antMatchers( "/api/v1/login", "/api/v1/users", "api/v1/current" )

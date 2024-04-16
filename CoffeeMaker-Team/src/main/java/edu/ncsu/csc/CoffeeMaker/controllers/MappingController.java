@@ -114,6 +114,7 @@ public class MappingController {
      *            underlying UI model
      * @return contents of the page
      */
+
     @GetMapping ( { "/index", "login", "/", "/login.html" } )
     public String loginPage ( final Model model ) {
         return "login";

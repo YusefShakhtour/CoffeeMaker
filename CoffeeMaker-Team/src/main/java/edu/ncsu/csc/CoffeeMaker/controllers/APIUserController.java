@@ -39,6 +39,7 @@ public class APIUserController extends APIController {
     @Autowired
     private UserService userService;
 
+
     @PostMapping ( BASE_PATH + "/login" )
     public ResponseEntity<String> loginUser ( @RequestBody final User user ) {
         System.out.println( "HERE" );
