@@ -146,15 +146,11 @@
 							newRecipe['ingredients'].push(newIngredient);
 						}
 						
-						$http.delete("/api/v1/recipes/" + $scope.recipe.name).then(
+						$http.put("/api/v1/recipes/" + newRecipe['name'], newRecipe).then(
 							function(success) {
-								$http.post("/api/v1/recipes", newRecipe).then(
-										function(success) {
-											$scope.success = true;
-											window.location.href = '/baristaHome';
-										}, function(rejection) {
-											console.error("Error while adding recipe");
-										});
+								$scope.success = true;
+								console.log(newRecipe);
+								window.location.href = '/baristaHome';
 							}, function(rejection) {
 								console.error("Error while adding recipe");
 							});

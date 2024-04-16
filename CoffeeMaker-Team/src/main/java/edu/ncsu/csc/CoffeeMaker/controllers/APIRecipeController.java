@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -110,5 +111,35 @@ public class APIRecipeController extends APIController {
         service.delete( recipe );
 
         return new ResponseEntity( successResponse( name + " was deleted successfully" ), HttpStatus.OK );
+    }
+
+    /**
+     * REST API put call for updating a recipe
+     *
+     * @param name
+     *            name of recipe
+     * @param recipe
+     *            recipe
+     * @return ingredient response entity
+     */
+    @PutMapping ( BASE_PATH + "/recipes/{name}" )
+    public ResponseEntity updateRecipe ( @PathVariable final String name, @RequestBody final Recipe recipe ) {
+
+        final Recipe rec = service.findByName( name );
+
+        if ( null == rec ) {
+            return new ResponseEntity( errorResponse( name + " not found." ), HttpStatus.NOT_FOUND );
+        }
+
+        try {
+            rec.editRecipe( recipe );
+            service.save( rec );
+            return new ResponseEntity( successResponse( name + " price was updated to " + rec.getPrice() ),
+                    HttpStatus.OK );
+        }
+        catch ( final Exception e ) {
+            return new ResponseEntity( HttpStatus.BAD_REQUEST );
+        }
+
     }
 }

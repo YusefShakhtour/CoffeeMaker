@@ -128,8 +128,7 @@ public class APIUserController extends APIController {
                     if ( user != null ) {
                         System.out.println( user.getName() );
                         // Return the user details if found
-                        return new ResponseEntity( successResponse( "Current name: " + user.getName() ),
-                                HttpStatus.OK );
+                        return new ResponseEntity( successResponse( "Current user: " + user.getId() ), HttpStatus.OK );
                     }
                     else {
                         // Handle case where user is not found

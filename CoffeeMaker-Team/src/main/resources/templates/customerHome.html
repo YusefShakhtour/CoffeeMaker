@@ -37,8 +37,6 @@
                 console.log('Request failed ', error);
             });
 			
-			window.location.reload();
-			
 			$scope.newOrder = [];
 			$scope.total = 0;
 			
@@ -116,12 +114,12 @@
 		<fieldset class="recipeContainer col-6 p-4">
 			<legend>Recipe List</legend>
 			<div class=" p-3 recipeList border border-dark">
-	            <div ng-repeat="recipe in recipes" class="recipeObject">
-	                <div class="p-2 recipeName col-3">{{recipe.name}} - ${{recipe.price}}</div>
+	        	<div ng-repeat="recipe in recipes" class="recipeObject">
+	            	<div class="p-2 recipeName col-3">{{recipe.name}} - ${{recipe.price}}</div>
 					<div class="col-2"></div>
 	                <button ng-click="addToOrder(recipe)" class="addToOrder m-2">Add To Order</button>
 	            </div>
-	        </div>
+	    	</div>
 		</fieldset>
 		</div>
 	</div>

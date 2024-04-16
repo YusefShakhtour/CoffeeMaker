@@ -143,6 +143,51 @@ public class Recipe extends DomainObject {
     }
 
     /**
+     * Edits recipe
+     *
+     * @param recipe
+     *            recipe details to edit
+     * @return true if successful
+     */
+    public boolean editRecipe ( final Recipe recipe ) {
+        final int newPrice = recipe.getPrice();
+        if ( newPrice < 0 ) {
+            throw new IllegalArgumentException( "Amount cannot be negative" );
+        }
+
+        final List<Ingredient> ingrs = recipe.getIngredients();
+
+        for ( int i = 0; i < ingrs.size(); i++ ) {
+            final Ingredient temp = ingrs.get( i );
+            if ( temp.getAmount() < 0 ) {
+                throw new IllegalArgumentException( "Amount cannot be negative" );
+            }
+        }
+
+        setPrice( newPrice );
+
+        for ( final Ingredient newIngr : ingrs ) {
+            boolean exists = false;
+            for ( int i = 0; i < ingredients.size(); i++ ) {
+                final Ingredient oldIngr = ingredients.get( i );
+                if ( oldIngr.getIngredient().equals( newIngr.getIngredient() ) ) {
+                    exists = true;
+                    if ( newIngr.getAmount() == 0 ) {
+                        ingredients.remove( i );
+                    }
+                    else {
+                        ingredients.set( i, newIngr );
+                    }
+                }
+            }
+            if ( !exists ) {
+                addIngredient( newIngr );
+            }
+        }
+        return true;
+    }
+
+    /**
      * Returns the name of the recipe.
      *
      * @return String
