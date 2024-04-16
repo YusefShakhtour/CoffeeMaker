@@ -13,39 +13,93 @@
 <body>
     <script th:inline="javascript">
         /*<![CDATA[*/
-
-        var app = angular.module('myApp', []);
-        app.controller('loginCtrl', function($scope, $http, $window) {
-            $scope.user = {
-            		"name": "",
-            		"password": "",
-            		"userType": 0
-            		};
-
-            $scope.login = function() {
-            	console.log($scope.user);
-            	$http.post("/api/v1/login", $scope.user).then(function(success) {
-                    console.log('Login successful', success);
-                    // Redirect to another page or show a success message
-                    // $window.location.href = '/index.html';
-                }, function(error) {
-                    console.log('Login failed', error);
-                    // Show an error message
-                });
-            };
-            
+        	
+		var app = angular.module('myApp', []);
+		app.controller('loginCtrl', function($scope, $http, $q) {
+			
+			var manager = {
+				id: 1,
+				name: "manager",
+				password: "password",
+				userType: "MANAGER"
+			}
+			
+			var barista = {
+				id: 2,
+        name: "barista",
+        password: "password",
+        userType: "BARISTA"
+			}
+			
+			$http.post("/api/v1/users", JSON.stringify(manager))
+            .then(res => {
+                console.log('Register successful', res);
+            }) 
+            .catch(error => {
+            });
+			
+			$http.post("/api/v1/users", JSON.stringify(barista))
+            .then(res => {
+                console.log('Register successful', res);
+            }) 
+            .catch(error => {
+            });
+		    
+		    $scope.login = function() {
+			    var user = {
+		    		name: $scope.userInput,
+	                password: $scope.passInput
+			    };
+			
+			    $http.post("/api/v1/login", JSON.stringify(user))
+			    .then(res => {
+			    	console.log(res.data.message);
+			        if (res.data.message == "CUSTOMER") {
+			        	window.location.href = "/customerHome";
+			        }
+			        else if (res.data.message == "MANAGER") {
+			        	window.location.href = "/managerHome";
+			        }
+			        else if (res.data.message == "BARISTA") {
+			        	window.location.href = "/baristaHome";
+			        }
+			    })
+			    .catch(error => {
+			          console.log('Request failed ', error);
+			    });
+		    }
+          
             $scope.register = function() {
-            	console.log($scope.user);
-            	$http.post("/api/v1/users", $scope.user).then(function(success) {
-                    console.log('Register successful', success);
-                    // Redirect to another page or show a success message
-                }, function(error) {
-                    console.log('Register failed', error);
-                    // Show an error message
+               window.location.href = '/register';
+            }
+        	
+            $scope.continueGuest = function() {
+            	var user = {
+            		id: null,
+            		name: "",
+            		pass: "",
+            		userType: "ANONYMOUS"
+                };
+            	
+            	$http.post("/api/v1/login", JSON.stringify(user))
+                .then(res => {
+                    console.log(res);
+                	window.location.href = '/customerHome';
+                })
+                .catch(error => {
+                	$http.post("/api/v1/users", user).then(function(response) {
+                        $scope.change = response.data.message;
+                        $scope.submissionSuccess = true;
+                        window.location.href = '/customerHome';
+                    }, function(errResponse) {
+                        console.log(errResponse);
+                        $scope.submissionFailure = true;
+                        $scope.error = "Error while changing order";
+                    });
                 });
-            };
+            	
+            }
         });
-
 
         /*]]>*/
     </script>
@@ -60,14 +114,29 @@
 	            </div>
 	            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
 	              <form>
-	                <input type="text" id="form3Example3" class="form-control form-control-lg"
-					    placeholder="Enter a valid username" ng-model="user.name" />
-					<input type="password" id="form3Example4" class="form-control form-control-lg"
-					    placeholder="Enter password" ng-model="user.password" />
-					<button type="button" class="loginBtn" ng-click="login()"
-					    style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-					<button type="button" class="registerBtn" ng-click="register()"
-					    style="padding-left: 2.5rem; padding-right: 2.5rem;">Register</button>
+	                <!-- Email input -->
+	                <div class="form-outline mb-4">
+	                  <input type="text" id="username" ng-model="userInput" class="form-control form-control-lg"
+	                    placeholder="Enter a valid username" />
+	                  <label class="form-label" for="form3Example3">Username</label>
+	                </div>
+	      
+	                <!-- Password input -->
+	                <div class="form-outline mb-3">
+	                  <input type="password" id="password" ng-model="passInput" class="form-control form-control-lg"
+	                    placeholder="Enter password" />
+	                  <label class="form-label" for="form3Example4">Password</label>
+	                </div>
+	      
+	                <div class="text-center text-lg-start mt-4 pt-2">
+	                    <button type="button" class="loginBtn" ng-click="login()"
+	                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
+	                    <button type="button" class="m-3 newaccBtn " ng-click="register()"
+	                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Create Account</button>
+	                    <button type="button" class="guestBtn" ng-click="continueGuest()"
+	                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Continue As Guest</button>
+	                </div>
+	      
 	              </form>
 	            </div>
 	          </div>

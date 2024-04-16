@@ -91,6 +91,7 @@ public class UserService extends Service<User, Long> implements UserDetailsServi
 
     }
 
+
     /**
      * Get's user permissions
      *
@@ -109,15 +110,13 @@ public class UserService extends Service<User, Long> implements UserDetailsServi
      *            user to compare
      * @return true if authenticated, otherwise false
      */
-    public boolean authenticate ( final User user ) {
-        final User u = userRepository.findByName( user.getName() );
-        if ( u != null ) {
-            if ( passwordEncoder.matches( user.getPassword(), u.getPassword() ) ) {
-                // System.out.println( "Login Success" );
-                return true;
-            }
+    public boolean authenticate ( final String username, final String password ) {
+        final User user = userRepository.findByName( username );
+        final boolean match = passwordEncoder.matches( password, user.getPassword() );
+        System.out.println( "Passwords match:" + match );
+        if ( user != null && passwordEncoder.matches( password, user.getPassword() ) ) {
+            return true;
         }
-        // System.out.println( "Login Failure" );
         return false;
     }
 
