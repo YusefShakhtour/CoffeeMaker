@@ -39,7 +39,6 @@ public class APIUserController extends APIController {
     @Autowired
     private UserService userService;
 
-
     @PostMapping ( BASE_PATH + "/login" )
     public ResponseEntity<String> loginUser ( @RequestBody final User user ) {
         System.out.println( "HERE" );
@@ -129,7 +128,8 @@ public class APIUserController extends APIController {
                     if ( user != null ) {
                         System.out.println( user.getName() );
                         // Return the user details if found
-                        return new ResponseEntity( successResponse( "Current user: " + user.getId() ), HttpStatus.OK );
+                        return new ResponseEntity( successResponse( "Current name: " + user.getName() ),
+                                HttpStatus.OK );
                     }
                     else {
                         // Handle case where user is not found

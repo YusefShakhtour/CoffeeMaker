@@ -24,15 +24,20 @@
                 console.log('Request failed ', error);
         	});
 			
-			
 			$http.get("/api/v1/recipes").then(function(response) {
 				$scope.recipes = response.data;
 			});
 			
-			$http.get("/api/v1/orders").then(function(response) {
-                $scope.orders = response.data;
+			$http.get("/api/v1/users/" + localStorage.getItem("user"))
+            .then(res => {
+                $scope.orders = res.data.orders;
                 console.log($scope.orders);
+            })
+            .catch(error => {
+                console.log('Request failed ', error);
             });
+			
+			window.location.reload();
 			
 			$scope.newOrder = [];
 			$scope.total = 0;
@@ -54,7 +59,7 @@
 					var newOrder = {
 	                    id: null,
 	                    total: null,
-	                    timestamp: null,
+	                    timeStamp: null,
 	                    fulfilled: false,
 	                    recipes: $scope.newOrder
 	                };

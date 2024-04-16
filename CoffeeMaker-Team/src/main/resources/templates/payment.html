@@ -15,6 +15,12 @@
         var app = angular.module('payment', []);
         app.controller('paymentCtrl', function($scope, $http, $q) {
         	
+        	$http.get("/api/v1/users/" + localStorage.getItem("user"))
+            .then(res => {
+                $scope.user = res.data;
+                console.log($scope.user);
+            })
+        	
             function getOrder() {
             	var queryString = window.location.search.substring(1);
                 var params = {};
@@ -49,13 +55,20 @@
                 }
                 
                 $scope.order['total'] = $scope.amount;
-                $scope.order['timestamp'] = new Date();
-            	console.log($scope.order);
+                var timestamp = new Date();
+                $scope.order['timeStamp'] = timestamp;
+            	$scope.user.orders.push($scope.order);
             	
             	$http.post("/api/v1/orders", $scope.order).then(
                         function(success) {
                             $scope.success = true;
-                            window.location.href = '/customerHome';
+                            $http.put("/api/v1/users/" + $scope.user.name, $scope.user).then(
+                                    function(success) {
+                                        $scope.success = true;
+                                        window.location.href = '/customerHome';
+                                    }, function(rejection) {
+                                        console.error("Error while adding order");
+                                    });
                         }, function(rejection) {
                             console.error("Error while adding order");
                         });

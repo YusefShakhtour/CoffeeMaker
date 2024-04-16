@@ -55,7 +55,6 @@ public class User extends DomainObject {
         setName( name );
         setPassword( pass );
         setUserType( userType );
-
     }
 
     /**
@@ -134,9 +133,7 @@ public class User extends DomainObject {
      *            user parameter with new user info
      */
     public void editUser ( final User user ) {
-        setName( user.getName() );
-        setPassword( user.getPassword() );
-        setUserType( user.getUserType() );
+        orders = user.orders;
     }
 
     /**
