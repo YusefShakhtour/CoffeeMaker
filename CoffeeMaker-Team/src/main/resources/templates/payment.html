@@ -57,8 +57,9 @@
                 $scope.order['total'] = $scope.amount;
                 var timestamp = new Date();
                 $scope.order['timeStamp'] = timestamp;
+                $scope.user.orders.push($scope.order);
             	
-                $http.put("/api/v1/users/" + $scope.user.name, $scope.order).then(
+                $http.put("/api/v1/users/" + $scope.user.name, $scope.user).then(
                         function(success) {
                             $scope.success = true;
                             window.location.href = '/customerHome';

@@ -25,20 +25,20 @@ public class User extends DomainObject {
     /** User id */
     @Id
     @GeneratedValue
-    private Long                    id;
+    private Long              id;
 
     /** Name */
-    private String                  name;
+    private String            name;
 
     /** Password */
-    private String                  password;
+    private String            password;
 
     /** User type */
-    private UserType                userType;
+    private UserType          userType;
 
     /** list of orders for this user */
     @OneToMany ( cascade = CascadeType.MERGE, fetch = FetchType.EAGER )
-    private final List<CoffeeOrder> orders;
+    private List<CoffeeOrder> orders;
 
     /**
      * User constructor
@@ -132,18 +132,18 @@ public class User extends DomainObject {
      *            user parameter with new user info
      */
     public void editUser ( final User user ) {
-        this.orders = user.orders;
+        orders = user.orders;
     }
 
-    /**
-     * add a new order to the list of orders for this user
-     *
-     * @param order
-     *            new order
-     */
-    public void addOrder ( final CoffeeOrder order ) {
-        orders.add( order );
-    }
+    // /**
+    // * add a new order to the list of orders for this user
+    // *
+    // * @param order
+    // * new order
+    // */
+    // public void addOrder ( final CoffeeOrder order ) {
+    // orders.add( order );
+    // }
 
     /**
      * return the list of orders for the current user
