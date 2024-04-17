@@ -22,6 +22,7 @@
         	})
         	.catch(error => {
                 console.log('Request failed ', error);
+                window.location.href = '/login';
         	});
 			
 			$http.get("/api/v1/recipes").then(function(response) {
@@ -49,6 +50,19 @@
 			$scope.removeFromOrder = function(index) {
 				$scope.total -= $scope.newOrder[index].price;
 				$scope.newOrder.splice(index, 1);
+			}
+			
+			$scope.logout = function() {
+				console.log("click");
+				$http.post("/api/v1/logout")
+	            .then(res => {
+	            	console.log("removinguser");
+	            	localStorage.removeItem("user");
+	            	window.location.href = "/login";
+	            }) 
+	            .catch(error => {
+	            	console.log(error);
+	            });
 			}
 			
 			$scope.submitOrder = function() {
@@ -82,7 +96,7 @@
 	            <a class="navbar-brand" href="./customerHome.html">CoffeeMaker</a>
 	            <div class="navbar-collapse collapse" id="navbar5">
 	                <ul class="navbar-nav">
-                  		<a href="./login.html" class="logoutBtn">Logout</a>
+                  		<a href="#" ng-click="logout()" class="logoutBtn">Logout</a>
 	                </ul>
 	            </div>
 	        </div>

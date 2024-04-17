@@ -21,6 +21,29 @@
                 $scope.orders = response.data;
                 console.log($scope.orders);
             });
+        	
+			$scope.logout = function() {
+				console.log("click");
+				$http.post("/api/v1/logout")
+	            .then(res => {
+	            	console.log("removinguser");
+	            	localStorage.removeItem("user");
+	            	window.location.href = "/login";
+	            }) 
+	            .catch(error => {
+	            	console.log(error);
+	            });
+			}
+			
+        	$http.get("/api/v1/current")
+        	.then(res => {
+                console.log('Current user: ', res);
+                localStorage.setItem("user", res.data.message.substring(14));
+        	})
+        	.catch(error => {
+                console.log('Request failed ', error);
+                window.location.href = '/login';
+        	});
         });
 
         /*]]>*/
@@ -35,7 +58,7 @@
 	            <a class="navbar-brand" href="./managerHome.html">CoffeeMaker</a>
 	            <div class="navbar-collapse collapse" id="navbar5">
 	                <ul class="navbar-nav">
-	                  <a href="./login.html" class="logoutBtn">Logout</a>
+	                  <a href="#" ng-click="logout()" class="logoutBtn">Logout</a>
 	                </ul>
 	            </div>
 	        </div>
