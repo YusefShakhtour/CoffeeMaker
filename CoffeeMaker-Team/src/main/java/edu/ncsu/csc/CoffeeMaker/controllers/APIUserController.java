@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.ncsu.csc.CoffeeMaker.models.CoffeeOrder;
 import edu.ncsu.csc.CoffeeMaker.models.User;
+import edu.ncsu.csc.CoffeeMaker.services.CoffeeOrderService;
 import edu.ncsu.csc.CoffeeMaker.services.UserService;
 
 /**
@@ -38,7 +40,10 @@ public class APIUserController extends APIController {
      * manipulating the User model
      */
     @Autowired
-    private UserService userService;
+    private UserService        userService;
+
+    @Autowired
+    private CoffeeOrderService orderService;
 
     @PostMapping ( BASE_PATH + "/login" )
     public ResponseEntity<String> loginUser ( @RequestBody final User user ) {
@@ -172,7 +177,7 @@ public class APIUserController extends APIController {
      *         an error if it could not be
      */
     @PutMapping ( BASE_PATH + "/users/{name}" )
-    public ResponseEntity updateUser ( @PathVariable final String name, @RequestBody final User user ) {
+    public ResponseEntity updateUser ( @PathVariable final String name, @RequestBody final CoffeeOrder order ) {
 
         final User u = userService.findByName( name );
 
@@ -181,12 +186,13 @@ public class APIUserController extends APIController {
         }
 
         try {
-            u.editUser( user );
+            u.addOrder( order );
             userService.save( u );
             return new ResponseEntity( successResponse( name + " user type was updated to " + u.getUserType() ),
                     HttpStatus.OK );
         }
         catch ( final Exception e ) {
+            System.out.println( e.toString() );
             return new ResponseEntity( HttpStatus.BAD_REQUEST );
         }
 

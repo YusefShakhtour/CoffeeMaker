@@ -57,18 +57,12 @@
                 $scope.order['total'] = $scope.amount;
                 var timestamp = new Date();
                 $scope.order['timeStamp'] = timestamp;
-            	$scope.user.orders.push($scope.order);
+            	$scope.user.orders = [$scope.order];
             	
-            	$http.post("/api/v1/orders", $scope.order).then(
+                $http.put("/api/v1/users/" + $scope.user.name, $scope.user).then(
                         function(success) {
                             $scope.success = true;
-                            $http.put("/api/v1/users/" + $scope.user.name, $scope.user).then(
-                                    function(success) {
-                                        $scope.success = true;
-                                        window.location.href = '/customerHome';
-                                    }, function(rejection) {
-                                        console.error("Error while adding order");
-                                    });
+                            window.location.href = '/customerHome';
                         }, function(rejection) {
                             console.error("Error while adding order");
                         });
