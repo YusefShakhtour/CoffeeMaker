@@ -145,7 +145,7 @@ public class APIUserController extends APIController {
                         System.out.println( user.getName() );
                         // Return the user details if found
                         return new ResponseEntity(
-                                successResponse( "Current user: " + user.getId() + " " + user.getUserType() ),
+                                successResponse( "Current user: " + user.getName() + "+" + user.getUserType() ),
                                 HttpStatus.OK );
                     }
                     else {

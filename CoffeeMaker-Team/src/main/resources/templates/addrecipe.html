@@ -95,6 +95,7 @@
 		            .then(res => {
 		            	console.log("removinguser");
 		            	localStorage.removeItem("user");
+		            	localStorage.removeItem("type");
 		            	window.location.href = "/login";
 		            }) 
 		            .catch(error => {

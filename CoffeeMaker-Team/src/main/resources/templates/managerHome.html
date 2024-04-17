@@ -22,12 +22,17 @@
                 console.log($scope.orders);
             });
         	
+        	if (localStorage.getItem("type") != "MANAGER") {
+        		console.log("not manager");
+        	}
+        	
 			$scope.logout = function() {
 				console.log("click");
 				$http.post("/api/v1/logout")
 	            .then(res => {
 	            	console.log("removinguser");
 	            	localStorage.removeItem("user");
+	            	localStorage.removeItem("type");
 	            	window.location.href = "/login";
 	            }) 
 	            .catch(error => {
@@ -38,7 +43,8 @@
         	$http.get("/api/v1/current")
         	.then(res => {
                 console.log('Current user: ', res);
-                localStorage.setItem("user", res.data.message.substring(14));
+                localStorage.setItem("user", res.data.message.substring(14, res.data.message.indexOf("+")));
+                localStorage.setItem("type", res.data.message.substring(res.data.message.indexOf("+") + 1));
         	})
         	.catch(error => {
                 console.log('Request failed ', error);
