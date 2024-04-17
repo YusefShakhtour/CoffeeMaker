@@ -21,6 +21,35 @@
                 $scope.orders = response.data;
                 console.log($scope.orders);
             });
+        	
+        	if (localStorage.getItem("type") != "MANAGER") {
+        		console.log("not manager");
+        	}
+        	
+			$scope.logout = function() {
+				console.log("click");
+				$http.post("/api/v1/logout")
+	            .then(res => {
+	            	console.log("removinguser");
+	            	localStorage.removeItem("user");
+	            	localStorage.removeItem("type");
+	            	window.location.href = "/login";
+	            }) 
+	            .catch(error => {
+	            	console.log(error);
+	            });
+			}
+			
+        	$http.get("/api/v1/current")
+        	.then(res => {
+                console.log('Current user: ', res);
+                localStorage.setItem("user", res.data.message.substring(14, res.data.message.indexOf("+")));
+                localStorage.setItem("type", res.data.message.substring(res.data.message.indexOf("+") + 1));
+        	})
+        	.catch(error => {
+                console.log('Request failed ', error);
+                window.location.href = '/login';
+        	});
         });
 
         /*]]>*/
@@ -35,7 +64,7 @@
 	            <a class="navbar-brand" href="./managerHome.html">CoffeeMaker</a>
 	            <div class="navbar-collapse collapse" id="navbar5">
 	                <ul class="navbar-nav">
-	                  <a href="./login.html" class="logoutBtn">Logout</a>
+	                  <a href="#" ng-click="logout()" class="logoutBtn">Logout</a>
 	                </ul>
 	            </div>
 	        </div>
@@ -66,7 +95,6 @@
 	                <tr>
 	                  <th scope="col">Order ID</th>
 	                  <th scope="col">Timestamp</th>
-	                  <th scope="col">User</th>
 	                  <th scope="col">Recipe</th>
 	                  <th scope="col">Status</th>
 	                </tr>
@@ -74,8 +102,7 @@
 	              <tbody class="table-group-divider">
 	                <tr ng-repeat="order in orders">
 	                  <th scope="row">{{order.id}}</th>
-	                  <td>{{order.time}}</td>
-	                  <td>student</td>
+	                  <td>{{order.timeStamp}}</td>
 	                  <td>
 				          <span ng-repeat="recipe in order.recipes">
 				              {{recipe.name}}<span ng-if="!$last">, </span>

@@ -18,20 +18,25 @@
         	$http.get("/api/v1/current")
         	.then(res => {
                 console.log('Current user: ', res);
-                localStorage.setItem("user", res.data.message.substring(14));
+                localStorage.setItem("user", res.data.message.substring(14, res.data.message.indexOf("+")));
+                localStorage.setItem("type", res.data.message.substring(res.data.message.indexOf("+") + 1));
         	})
         	.catch(error => {
                 console.log('Request failed ', error);
+                window.location.href = '/login';
         	});
-			
 			
 			$http.get("/api/v1/recipes").then(function(response) {
 				$scope.recipes = response.data;
 			});
 			
-			$http.get("/api/v1/orders").then(function(response) {
-                $scope.orders = response.data;
+			$http.get("/api/v1/users/" + localStorage.getItem("user"))
+            .then(res => {
+                $scope.orders = res.data.orders;
                 console.log($scope.orders);
+            })
+            .catch(error => {
+                console.log('Request failed ', error);
             });
 			
 			$scope.newOrder = [];
@@ -48,13 +53,27 @@
 				$scope.newOrder.splice(index, 1);
 			}
 			
+			$scope.logout = function() {
+				console.log("click");
+				$http.post("/api/v1/logout")
+	            .then(res => {
+	            	console.log("removinguser");
+	            	localStorage.removeItem("user");
+	            	localStorage.removeItem("type");
+	            	window.location.href = "/login";
+	            }) 
+	            .catch(error => {
+	            	console.log(error);
+	            });
+			}
+			
 			$scope.submitOrder = function() {
 				if ( $scope.newOrder.length > 0 ) {
 
 					var newOrder = {
 	                    id: null,
 	                    total: null,
-	                    timestamp: null,
+	                    timeStamp: null,
 	                    fulfilled: false,
 	                    recipes: $scope.newOrder
 	                };
@@ -79,7 +98,7 @@
 	            <a class="navbar-brand" href="./customerHome.html">CoffeeMaker</a>
 	            <div class="navbar-collapse collapse" id="navbar5">
 	                <ul class="navbar-nav">
-                  		<a href="./login.html" class="logoutBtn">Logout</a>
+                  		<a href="#" ng-click="logout()" class="logoutBtn">Logout</a>
 	                </ul>
 	            </div>
 	        </div>
@@ -111,12 +130,12 @@
 		<fieldset class="recipeContainer col-6 p-4">
 			<legend>Recipe List</legend>
 			<div class=" p-3 recipeList border border-dark">
-	            <div ng-repeat="recipe in recipes" class="recipeObject">
-	                <div class="p-2 recipeName col-3">{{recipe.name}} - ${{recipe.price}}</div>
+	        	<div ng-repeat="recipe in recipes" class="recipeObject">
+	            	<div class="p-2 recipeName col-3">{{recipe.name}} - ${{recipe.price}}</div>
 					<div class="col-2"></div>
 	                <button ng-click="addToOrder(recipe)" class="addToOrder m-2">Add To Order</button>
 	            </div>
-	        </div>
+	    	</div>
 		</fieldset>
 		</div>
 	</div>

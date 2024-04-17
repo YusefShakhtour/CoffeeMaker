@@ -24,6 +24,20 @@
 				});
 
 				
+				$scope.logout = function() {
+					console.log("click");
+					$http.post("/api/v1/logout")
+		            .then(res => {
+		            	console.log("removinguser");
+		            	localStorage.removeItem("user");
+		            	localStorage.removeItem("type");
+		            	window.location.href = "/login";
+		            }) 
+		            .catch(error => {
+		            	console.log(error);
+		            });
+				}
+				
 				/* Logic that handles controlling your page goes here */
 				$scope.submit = function() {
 					
@@ -93,7 +107,7 @@
 	            <a class="navbar-brand" href="./managerHome.html">CoffeeMaker</a>
 	            <div class="navbar-collapse collapse" id="navbar5">
 	                <ul class="navbar-nav">
-                  		<a href="./login.html" class="logoutBtn">Logout</a>
+                  		<a href="#" ng-click="logout()" class="logoutBtn">Logout</a>
 	                </ul>
 	            </div>
 	        </div>

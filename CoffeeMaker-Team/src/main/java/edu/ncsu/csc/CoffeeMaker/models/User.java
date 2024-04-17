@@ -1,6 +1,5 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -9,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-// import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import edu.ncsu.csc.CoffeeMaker.models.enums.UserType;
@@ -27,20 +25,20 @@ public class User extends DomainObject {
     /** User id */
     @Id
     @GeneratedValue
-    private Long                    id;
+    private Long              id;
 
     /** Name */
-    private String                  name;
+    private String            name;
 
     /** Password */
-    private String                  password;
+    private String            password;
 
     /** User type */
-    private UserType                userType;
+    private UserType          userType;
 
     /** list of orders for this user */
     @OneToMany ( cascade = CascadeType.MERGE, fetch = FetchType.EAGER )
-    private final List<CoffeeOrder> orders;
+    private List<CoffeeOrder> orders;
 
     /**
      * User constructor
@@ -56,8 +54,6 @@ public class User extends DomainObject {
         setName( name );
         setPassword( pass );
         setUserType( userType );
-
-        this.orders = new ArrayList<>();
     }
 
     /**
@@ -136,20 +132,18 @@ public class User extends DomainObject {
      *            user parameter with new user info
      */
     public void editUser ( final User user ) {
-        setName( user.getName() );
-        setPassword( user.getPassword() );
-        setUserType( user.getUserType() );
+        orders = user.orders;
     }
 
-    /**
-     * add a new order to the list of orders for this user
-     *
-     * @param order
-     *            new order
-     */
-    public void addOrder ( final CoffeeOrder order ) {
-        orders.add( order );
-    }
+    // /**
+    // * add a new order to the list of orders for this user
+    // *
+    // * @param order
+    // * new order
+    // */
+    // public void addOrder ( final CoffeeOrder order ) {
+    // orders.add( order );
+    // }
 
     /**
      * return the list of orders for the current user

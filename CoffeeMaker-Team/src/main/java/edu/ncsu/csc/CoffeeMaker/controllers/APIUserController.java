@@ -2,6 +2,7 @@ package edu.ncsu.csc.CoffeeMaker.controllers;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -39,7 +40,6 @@ public class APIUserController extends APIController {
     @Autowired
     private UserService userService;
 
-
     @PostMapping ( BASE_PATH + "/login" )
     public ResponseEntity<String> loginUser ( @RequestBody final User user ) {
         System.out.println( "HERE" );
@@ -64,6 +64,23 @@ public class APIUserController extends APIController {
         }
     }
 
+    @PostMapping ( BASE_PATH + "/logout" )
+    public ResponseEntity<String> logout ( final HttpServletRequest request, final HttpServletResponse response ) {
+        final Cookie[] cookies = request.getCookies();
+        if ( cookies != null ) {
+            for ( final Cookie cookie : cookies ) {
+                if ( cookie.getName().equals( "userId" ) ) {
+                    cookie.setValue( "" );
+                    cookie.setPath( "/" );
+                    cookie.setMaxAge( 0 );
+                    response.addCookie( cookie );
+                    break;
+                }
+            }
+        }
+        return new ResponseEntity( successResponse( "Logged out successfully" ), HttpStatus.OK );
+    }
+
     /**
      * REST API method to provide POST access to the User model. This is used to
      * create a new User by automatically converting the JSON RequestBody
@@ -75,8 +92,6 @@ public class APIUserController extends APIController {
      *         an error if it could not be
      */
 
-    // TODO Need validation to prevent empty users to be made. (No
-    // username/password etc.)
     @PostMapping ( BASE_PATH + "/users" )
     public ResponseEntity createUser ( @RequestBody final User user ) {
         System.out.println( user.toString() );
@@ -129,7 +144,9 @@ public class APIUserController extends APIController {
                     if ( user != null ) {
                         System.out.println( user.getName() );
                         // Return the user details if found
-                        return new ResponseEntity( successResponse( "Current user: " + user.getId() ), HttpStatus.OK );
+                        return new ResponseEntity(
+                                successResponse( "Current user: " + user.getName() + "+" + user.getUserType() ),
+                                HttpStatus.OK );
                     }
                     else {
                         // Handle case where user is not found
@@ -170,6 +187,7 @@ public class APIUserController extends APIController {
                     HttpStatus.OK );
         }
         catch ( final Exception e ) {
+            System.out.println( e.toString() );
             return new ResponseEntity( HttpStatus.BAD_REQUEST );
         }
 

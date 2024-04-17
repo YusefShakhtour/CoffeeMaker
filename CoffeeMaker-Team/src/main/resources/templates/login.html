@@ -99,6 +99,55 @@
                 });
             	
             }
+            
+            const loginButton = document.querySelector('#loginButton');
+            const username = document.querySelector('#username');
+            const password = document.querySelector('#password');
+            const errorBox = document.querySelector('#errorBox');
+            
+            (function () {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        loginButton.addEventListener('click', function (event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            } else {
+                			    var user = {
+                			    		name: $scope.userInput,
+                		                password: $scope.passInput
+                				    };
+                				
+                				    $http.post("/api/v1/login", JSON.stringify(user))
+                				    .then(res => {
+                				    	console.log(res.data.message);
+                				        if (res.data.message == "CUSTOMER") {
+                				        	window.location.href = "/customerHome";
+                				        }
+                				        else if (res.data.message == "MANAGER") {
+                				        	window.location.href = "/managerHome";
+                				        }
+                				        else if (res.data.message == "BARISTA") {
+                				        	window.location.href = "/baristaHome";
+                				        }
+                				    })
+                				    .catch(error => {
+                                          errorBox.classList.remove('hidden');
+                                          errorBox.innerHTML = "Invalid username or password";
+                                          
+                				    });
+                            }
+                            form.classList.add('was-validated')
+                        }, false)
+                    })
+            })()
+            
         });
 
         /*]]>*/
@@ -113,23 +162,26 @@
 	                class="img-fluid" alt="Sample image">
 	            </div>
 	            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-	              <form>
+	              <form class="needs-validation" novalidate>
+	              <!--oninput='up2.setCustomValidity(up2.value != up.value ? "Passwords do not match." : "")'> -->
+	              <div id="errorBox" class="hidden"></div>
+	              
 	                <!-- Email input -->
 	                <div class="form-outline mb-4">
 	                  <input type="text" id="username" ng-model="userInput" class="form-control form-control-lg"
-	                    placeholder="Enter a valid username" />
-	                  <label class="form-label" for="form3Example3">Username</label>
+	                    placeholder="Enter a valid username" required/>
+	                  <label class="form-label" for="username">Username</label>
 	                </div>
 	      
 	                <!-- Password input -->
 	                <div class="form-outline mb-3">
 	                  <input type="password" id="password" ng-model="passInput" class="form-control form-control-lg"
-	                    placeholder="Enter password" />
-	                  <label class="form-label" for="form3Example4">Password</label>
+	                    placeholder="Enter password" required/>
+	                  <label class="form-label" for="password">Password</label>
 	                </div>
 	      
 	                <div class="text-center text-lg-start mt-4 pt-2">
-	                    <button type="button" class="loginBtn" ng-click="login()"
+	                    <button type="button" id="loginButton" class="loginBtn"
 	                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
 	                    <button type="button" class="m-3 newaccBtn " ng-click="register()"
 	                    style="padding-left: 2.5rem; padding-right: 2.5rem;">Create Account</button>

@@ -34,7 +34,7 @@ public class UserService extends Service<User, Long> implements UserDetailsServi
     @Autowired
     private UserRepository        userRepository;
 
-    /** Hashing enoder */
+    /** Hashing encoder */
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -90,7 +90,6 @@ public class UserService extends Service<User, Long> implements UserDetailsServi
         }
 
     }
-
 
     /**
      * Get's user permissions
