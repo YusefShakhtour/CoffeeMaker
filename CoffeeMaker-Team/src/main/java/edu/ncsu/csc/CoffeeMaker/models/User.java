@@ -1,6 +1,5 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,7 +54,6 @@ public class User extends DomainObject {
         setName( name );
         setPassword( pass );
         setUserType( userType );
-        this.orders = new ArrayList<>();
     }
 
     /**
