@@ -182,7 +182,7 @@ public class APIUserController extends APIController {
 
         try {
             u.editUser( user );
-            userService.encodeUser( u );
+            userService.save( u );
             return new ResponseEntity( successResponse( name + " user type was updated to " + u.getUserType() ),
                     HttpStatus.OK );
         }
