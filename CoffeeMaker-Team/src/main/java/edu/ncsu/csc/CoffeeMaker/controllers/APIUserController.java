@@ -186,8 +186,8 @@ public class APIUserController extends APIController {
         }
 
         try {
-            u.addOrder( order );
-            userService.save( u );
+            u.editUser( user );
+            userService.encodeUser( u );
             return new ResponseEntity( successResponse( name + " user type was updated to " + u.getUserType() ),
                     HttpStatus.OK );
         }
