@@ -15,19 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MappingController {
 
     /**
-     * On a GET request to /index, the IndexController will return
-     * /src/main/resources/templates/index.html.
-     *
-     * @param model
-     *            underlying UI model
-     * @return contents of the page
-     */
-    @GetMapping ( { "/index", "/" } )
-    public String index ( final Model model ) {
-        return "index";
-    }
-
-    /**
      * On a GET request to /addrecipe, the RecipeController will return
      * /src/main/resources/templates/addrecipe.html.
      *
@@ -82,6 +69,20 @@ public class MappingController {
     }
 
     /**
+     * Handles a GET request for managerHome. The GET request provides a view to
+     * the client that includes permissions of the manager such as adding to
+     * inventory, viewing revenue, and viewing order history
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/managerHome", "/managerHome.html" } )
+    public String managerForm ( final Model model ) {
+        return "managerHome";
+    }
+
+    /**
      * On a GET request to /makecoffee, the MakeCoffeeController will return
      * /src/main/resources/templates/makecoffee.html.
      *
@@ -107,8 +108,32 @@ public class MappingController {
     }
 
     /**
-     * On a GET request to /customerHome, the RecipeController will return
-     * /src/main/resources/templates/customerHome.html.
+     * On a GET request to /index, it will return the login page.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+
+    @GetMapping ( { "/index", "login", "/", "/login.html" } )
+    public String loginPage ( final Model model ) {
+        return "login";
+    }
+
+    /**
+     * On a GET request to /register, it will return the register page.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/register", "/register.html" } )
+    public String registerPage ( final Model model ) {
+        return "register";
+    }
+
+    /**
+     * On a GET request to /customerHome, it will return the login page.
      *
      * @param model
      *            underlying UI model
@@ -120,8 +145,7 @@ public class MappingController {
     }
 
     /**
-     * On a GET request to /payment, the Controller will return
-     * /src/main/resources/templates/payment.html.
+     * On a GET request to /payment, it will return the payment page.
      *
      * @param model
      *            underlying UI model
@@ -133,16 +157,28 @@ public class MappingController {
     }
 
     /**
-     * On a GET request to /privacypolicy, the Controller will return
-     * /src/main/resources/templates/privacypolicy.html.
+     * On a GET request to /baristaHome, it will return the baristaHome page.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @GetMapping ( { "/baristaHome", "/baristaHome.html" } )
+    public String baristaHomePage ( final Model model ) {
+        return "baristaHome";
+    }
+
+    /**
+     * On a GET request to /privacypolicy, it will return the privacy policy
+     * page.
      *
      * @param model
      *            underlying UI model
      * @return contents of the page
      */
     @GetMapping ( { "/privacypolicy", "/privacypolicy.html" } )
-    public String privacyPolicyPage ( final Model model ) {
-        return "privacyPolicy";
+    public String privacypolicyPage ( final Model model ) {
+        return "privacypolicy";
     }
 
 }

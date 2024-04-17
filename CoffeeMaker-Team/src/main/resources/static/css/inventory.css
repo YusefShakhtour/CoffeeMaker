@@ -1,8 +1,3 @@
-
-nav { 
-    margin: 5px;
-}
-
 .title {
     text-align: center;
 
@@ -14,8 +9,12 @@ nav {
 }
 
 .submit {
-    float: right;
-    margin-right: 30px;
+	height: 8vh;
+	width: 100%;
+	font-size: larger;
+    background-color: rgb(29, 29, 29);
+    color: white;
+    margin-bottom: 2vh;
 }
 
 main {
@@ -102,3 +101,55 @@ main {
 .label5 {
     color: red
 }
+
+legend {
+	padding: 1vw;	
+	font-weight: bold;
+}
+
+#navbar5 {
+    justify-content: end;
+}
+
+.logoutBtn {
+    margin-right: 2vw;
+    text-decoration: none;
+}
+
+.logoutBtn:hover {
+    font-size: larger;
+    color: white;
+    text-decoration: underline;
+}
+
+.logoutBtn {
+    color: white;
+}
+
+nav {
+    background-color: rgb(29, 29, 29);
+    margin-bottom: 2vh;
+}
+
+.navbar-brand {
+    color: white;
+
+}
+
+legend {
+	padding: 1vw;	
+	font-weight: bold;
+}
+
+li {
+	font-size: larger;
+}
+
+label {
+	font-size: larger;
+}
+
+.submit:hover {
+	font-weight: bolder;
+}
+

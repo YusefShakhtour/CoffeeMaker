@@ -1,21 +1,47 @@
-
-nav { 
-    margin: 5px;
-}
-
 .title {
     text-align: center;
+    font-size: 2vw;
+    font-weight: bolder;
+    border-bottom: 1px solid black;
+    margin-bottom: 2vw;
+    padding-bottom: 1vw;
 
 }
 
 .add {
-    float: right;
-    margin-right: 25px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 98%;
+	height: 6vh;
+    justify-content: center;
+    align-content: center;
+    font-size: larger;
+    background-color: rgb(92, 255, 92);
+}
+
+.add:hover {
+    font-weight: bolder;
+}
+
+.delete {
+    background-color: rgb(255, 114, 112);
+}
+
+.delete:hover {
+    font-weight: bolder;
 }
 
 .submit {
-    float: right;
-    margin-right: 30px;
+	height: 10vh;
+	width: 94%;
+	margin-left: 2vw;
+	font-size: larger;
+    background-color: rgb(29, 29, 29);
+    color: white;
+}
+
+.submit:hover {
+	font-weight: bolder;
 }
 
 main {
@@ -31,6 +57,7 @@ main {
 
 .book {
     width: 25%;
+    border: 1px solid black;
     overflow-y: scroll;
 }
 
@@ -93,3 +120,42 @@ main {
     text-align: center;
     grid-column: 4 / 5;
 }
+
+legend {
+	padding: 1vw;	
+	font-weight: bold;
+}
+
+li {
+	font-size: larger;
+}
+
+#navbar5 {
+    justify-content: end;
+}
+
+.logoutBtn {
+    margin-right: 2vw;
+    text-decoration: none;
+}
+
+.logoutBtn:hover {
+    font-size: larger;
+    color: white;
+    text-decoration: underline;
+}
+
+.logoutBtn {
+    color: white;
+}
+
+nav {
+    background-color: rgb(29, 29, 29);
+    margin-bottom: 2vh;
+}
+
+.navbar-brand {
+    color: white;
+
+}
+

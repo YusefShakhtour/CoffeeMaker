@@ -1,0 +1,41 @@
+nav {
+    background-color: rgb(29, 29, 29);
+}
+
+.navbar-brand {
+    color: white;
+}
+
+.endLabel {
+    margin-top: 1vh;
+}
+
+.btn-group {
+    height: 5vh;
+}
+
+.tableContainer {
+    padding-left: 8vw;
+    padding-right: 8vw;
+    padding-top: 4vh;
+
+}
+
+#navbar5 {
+    justify-content: end;
+}
+
+.logoutBtn {
+    margin-right: 2vw;
+    text-decoration: none;
+}
+
+.logoutBtn:hover {
+    font-size: larger;
+    color: white;
+    text-decoration: underline;
+}
+
+.logoutBtn {
+    color: white;
+}
