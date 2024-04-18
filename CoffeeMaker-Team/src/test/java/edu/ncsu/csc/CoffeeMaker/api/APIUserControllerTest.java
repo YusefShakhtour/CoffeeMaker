@@ -182,4 +182,19 @@ class APIUserControllerTest {
 
     }
 
+    @Test
+    @Transactional
+    public void testLoginAPI () throws Exception {
+
+        service.deleteAll();
+
+        final User u1 = new User( "User01", "password", UserType.CUSTOMER );
+        service.save( u1 );
+
+        Assertions.assertEquals( 1, service.findAll().size(), "There should only be one user in the CoffeeMaker" );
+
+        mvc.perform( post( "/api/v1/login" ).contentType( MediaType.APPLICATION_JSON )
+                .content( TestUtils.asJsonString( u1 ) ) ).andExpect( status().isUnauthorized() );
+    }
+
 }
