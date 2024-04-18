@@ -160,6 +160,16 @@ public class APIUserController extends APIController {
     }
 
     /**
+     * REST API method to provide GET access to the currently authenticated user
+     *
+     * @return response to the request
+     */
+    @GetMapping ( BASE_PATH + "/users" )
+    public ResponseEntity getUsers ( final HttpServletRequest request ) {
+        return new ResponseEntity( successResponse( "total: " + userService.count() ), HttpStatus.OK );
+    }
+
+    /**
      * REST API method to provide PUT access to the User model. This is used to
      * update a user by automatically converting the JSON RequestBody provided
      * to a User object. Invalid JSON will fail.

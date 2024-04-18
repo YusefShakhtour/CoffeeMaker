@@ -74,30 +74,41 @@
             }
         	
             $scope.continueGuest = function() {
-            	var user = {
-            		id: null,
-            		name: "",
-            		pass: "",
-            		userType: "ANONYMOUS"
-                };
-            	
-            	$http.post("/api/v1/login", JSON.stringify(user))
+                let anonID = 0;
+                $http.get("/api/v1/users")
                 .then(res => {
-                    console.log(res);
-                	window.location.href = '/customerHome';
-                })
-                .catch(error => {
-                	$http.post("/api/v1/users", user).then(function(response) {
-                        $scope.change = response.data.message;
-                        $scope.submissionSuccess = true;
-                        window.location.href = '/customerHome';
-                    }, function(errResponse) {
-                        console.log(errResponse);
-                        $scope.submissionFailure = true;
-                        $scope.error = "Error while changing order";
-                    });
+                    let anonID = res.data.message.substring(7);
+                	console.log("THIS RES " + anonID);
+	            	var user = {
+	            		id: null,
+	            		name: "ANON" + anonID,
+	            		pass: "",
+	            		userType: "ANONYMOUS"
+	                };
+    		
+		            $http.post("/api/v1/users", JSON.stringify(user))
+	                .then(res => {
+	                    console.log('Register successful', res);
+	                })
+	                .then(res => {
+	                	$http.post("/api/v1/login", JSON.stringify(user))
+	                    .then(res => {
+	                        console.log(res);
+	                    	window.location.href = '/customerHome';
+	                    })
+	                    .catch(error => {
+	                    	$http.post("/api/v1/users", user).then(function(response) {
+	                            $scope.change = response.data.message;
+	                            $scope.submissionSuccess = true;
+	                       //     window.location.href = '/customerHome';
+	                        }, function(errResponse) {
+	                            console.log(errResponse);
+	                            $scope.submissionFailure = true;
+	                            $scope.error = "Error while changing order";
+	                        });
+	                    });
+	                });
                 });
-            	
             }
             
             const loginButton = document.querySelector('#loginButton');
