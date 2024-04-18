@@ -76,6 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @param auth
      *            aythetnication builder
      * @throws Exception
+     *             exception thrown if error
      */
     @Autowired
     public void configureGlobal ( final AuthenticationManagerBuilder auth ) throws Exception {
