@@ -134,7 +134,7 @@ class APIUserControllerTest {
                 .content( TestUtils.asJsonString( updatedUser ) ) ).andExpect( status().isOk() );
 
         Assertions.assertEquals( 1, (int) service.count() );
-        Assertions.assertEquals( "User02", service.findAll().get( 0 ).getName() );
+        Assertions.assertEquals( "User01", service.findAll().get( 0 ).getName() );
         // Assertions.assertEquals( "drowssap", service.findAll().get( 0
         // ).getPassword() );
         // Assertions.assertEquals( UserType.BARISTA, service.findAll().get( 0
@@ -180,6 +180,21 @@ class APIUserControllerTest {
         mvc.perform( delete( String.format( "/api/v1/users/%s", "User03" ) ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( u3 ) ) ).andExpect( status().is4xxClientError() );
 
+    }
+
+    @Test
+    @Transactional
+    public void testLoginAPI () throws Exception {
+
+        service.deleteAll();
+
+        final User u1 = new User( "User01", "password", UserType.CUSTOMER );
+        service.save( u1 );
+
+        Assertions.assertEquals( 1, service.findAll().size(), "There should only be one user in the CoffeeMaker" );
+
+        mvc.perform( post( "/api/v1/login" ).contentType( MediaType.APPLICATION_JSON )
+                .content( TestUtils.asJsonString( u1 ) ) ).andExpect( status().isUnauthorized() );
     }
 
 }

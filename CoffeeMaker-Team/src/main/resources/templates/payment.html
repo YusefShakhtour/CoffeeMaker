@@ -15,6 +15,25 @@
         var app = angular.module('payment', []);
         app.controller('paymentCtrl', function($scope, $http, $q) {
         	
+        	$http.get("/api/v1/users/" + localStorage.getItem("user"))
+            .then(res => {
+                $scope.user = res.data;
+                console.log($scope.user);
+            })
+            
+                if (localStorage.getItem("type") != "CUSTOMER" && localStorage.getItem("type") != "ANONYMOUS") {
+    				$http.post("/api/v1/logout")
+    	            .then(res => {
+    	            	console.log("removinguser");
+    	            	localStorage.removeItem("user");
+    	            	localStorage.removeItem("type");
+    	            	window.location.href = "/login";
+    	            }) 
+    	            .catch(error => {
+    	            	console.log(error);
+    	            });
+                }
+        	
             function getOrder() {
             	var queryString = window.location.search.substring(1);
                 var params = {};
@@ -47,15 +66,13 @@
                 if ($scope.amount < $scope.total) {
                 	return;
                 }
-                $scope.order['total'] = $scope.total;
-                $scope.order['user'] = {
-                	    "id": null,
-                	    "name": "",
-                	    "userType": "CUSTOMER",
-                	    "password": ""
-                	  }
-            	console.log($scope.order);
-            	$http.post("/api/v1/orders", $scope.order).then(
+                
+                $scope.order['total'] = $scope.amount;
+                var timestamp = new Date();
+                $scope.order['timeStamp'] = timestamp;
+                $scope.user.orders.push($scope.order);
+            	
+                $http.put("/api/v1/users/" + $scope.user.name, $scope.user).then(
                         function(success) {
                             $scope.success = true;
                             window.location.href = '/customerHome';
@@ -75,7 +92,7 @@
                 <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar5">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand" href="#">CoffeeMaker</a>
+                <a class="navbar-brand" href="./customerHome.html">CoffeeMaker</a>
                 <div class="justify-content-center navbar-collapse collapse" id="navbar5">
                     <ul class="navbar-nav">
                     </ul>

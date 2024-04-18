@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="css/baristaHome.css" />
+
+<title>Barista Home</title>
+</head>
+<script
+    src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<body>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        var app = angular.module('myApp', []);
+        app.controller('baristaCtrl', function($scope, $http, $q) {
+        	function updateRecipes() {
+                $http.get("/api/v1/recipes").then(function (response) {
+                    $scope.recipes = response.data;
+                });
+            }
+        	
+        	$http.get("/api/v1/orders").then(function(response) {
+                $scope.orders = response.data;
+            });
+        	
+        	$http.get("/api/v1/current")
+        	.then(res => {
+                console.log('Current user: ', res);
+                localStorage.setItem("user", res.data.message.substring(14, res.data.message.indexOf("+")));
+                localStorage.setItem("type", res.data.message.substring(res.data.message.indexOf("+") + 1));
+                
+                if (localStorage.getItem("type") != "BARISTA") {
+    				$http.post("/api/v1/logout")
+    	            .then(res => {
+    	            	console.log("removinguser");
+    	            	localStorage.removeItem("user");
+    	            	localStorage.removeItem("type");
+    	            	window.location.href = "/login";
+    	            }) 
+    	            .catch(error => {
+    	            	console.log(error);
+    	            });
+                }
+        	})
+        	.catch(error => {
+                console.log('Request failed ', error);
+                window.location.href = '/login';
+        	});
+        	
+        	$scope.fulfill = function(order) {
+        		
+        		for ( i = 0; i < order.recipes.length; i++ ) {
+                    var amtPaid = order.total;
+                    var name = order.recipes[i].name;
+                    $scope.submissionFailure = false;
+                    $scope.submissionSuccess = false;
+                    $http.post("/api/v1/makecoffee/" + name, amtPaid).then(
+                            function(response) {
+                                $scope.change = response.data.message;
+                                $scope.submissionSuccess = true;
+                            }, function(errResponse) {
+                                console.log(errResponse);
+                                $scope.submissionFailure = true;
+                                return;
+                                $scope.error = "Error while making recipe";
+                            });
+        		}
+        		
+        		order.fulfilled = true;
+        		$http.put("/api/v1/orders/" + order.id, order).then(function(response) {
+                    $scope.change = response.data.message;
+                    $scope.submissionSuccess = true;
+                }, function(errResponse) {
+                    console.log(errResponse);
+                    $scope.submissionFailure = true;
+                    $scope.error = "Error while changing order";
+                });
+        	}
+        	
+        	$scope.newRecipe = function() {
+        		window.location.href = '/addrecipe';
+        	}
+        	
+        	$scope.editRecipe = function(recipe) {
+        		window.location.href = '/editrecipe?=' + recipe.name;
+        	}
+        	
+			$scope.logout = function() {
+				console.log("click");
+				$http.post("/api/v1/logout")
+	            .then(res => {
+	            	console.log("removinguser");
+	            	localStorage.removeItem("user");
+	            	localStorage.removeItem("type");
+	            	window.location.href = "/login";
+	            }) 
+	            .catch(error => {
+	            	console.log(error);
+	            });
+			}
+        	
+            $scope.deleteRecipe = function(recipe) {
+                $http.delete("/api/v1/recipes/" + recipe)
+                    .then(
+                    function (response) {
+                            console.log(response);
+                            $scope.submissionSuccess=true;  
+                            
+                        
+                        updateRecipes();
+                    },
+                    function(rejection){
+                        console.error('Error while deleting recipe');
+                        console.log(rejection);
+                        
+                        $scope.submissionSuccess=false; 
+                        
+                        $http.get("/api/v1/recipes").then(function (response) {
+                            $scope.recipes = response.data;
+                        });
+                    }
+                );
+            }
+            
+            $scope.cancelOrder = function(order) {
+                $http.delete("/api/v1/orders/" + order.id).then(function (response) {
+                    console.log('Order cancelled:', response.data);
+                    const index = $scope.orders.indexOf(order);
+                    if (index !== -1) {
+                        $scope.orders.splice(index, 1);
+                    }
+                    $scope.submissionSuccess = true;
+                }, function(errResponse) {
+                    console.error('Failed to cancel order', errResponse);
+                    $scope.error = "Error while cancelling order";
+                    $scope.submissionFailure = true;
+                });
+            }
+
+
+            
+            updateRecipes();
+        });
+
+        /*]]>*/
+    </script>
+    <div layout:fragment="content" class="generic-container ng-cloak"
+        ng-app="myApp" ng-controller="baristaCtrl">
+	    <nav class="navbar navbar-expand-sm flex-sm-nowrap flex-wrap">
+	        <div class="container-fluid">
+	            <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar5">
+	                <span class="navbar-toggler-icon"></span>
+	            </button>
+	            <a class="navbar-brand" href="./baristaHome.html">CoffeeMaker</a>
+	            <div class="navbar-collapse collapse" id="navbar5">
+	                <ul class="navbar-nav">
+                  		<a href="#" ng-click="logout()" class="logoutBtn">Logout</a>
+	                </ul>
+	            </div>
+	        </div>
+	    </nav>
+	    <div class="flexContainer">
+			<fieldset class="recipeContainer col-6 p-4">
+				<legend>Recipe List</legend>
+				<div class="p-3 recipeList border border-dark">
+		            <div ng-repeat="recipe in recipes" class="recipeObject pb-2 pt-2">
+		                <div class="p-2 recipeName col-3">{{recipe.name}}</div>
+		                <div class="col-2"></div>
+		                
+		                <button class="editRecipe m-2 col-3" ng-click="editRecipe(recipe)" >Edit Recipe</button>
+		                <button class="deleteRecipe m-2 col-3" ng-click="deleteRecipe(recipe.name)">Delete Recipe</button>
+		            </div>
+		        </div>
+		        <button class="createButton col-12 mt-3" ng-click="newRecipe()">Create New Recipe</button>
+		
+			</fieldset>
+		    <fieldset class="orderContainer col-6 p-4">
+				<legend>Orders In Progress</legend>
+				<div class="currentOrder border border-dark p-4">
+		            <div ng-repeat="order in orders" ng-if="!order.fulfilled" class="orderName d-flex pt-2 pb-2">
+		                <div class="p-2 recipeName col-3">Order {{order.id}}</div>
+		                <div class="col-2"></div>
+		                <button ng-click="fulfill(order)" class="fulfillOrder m-2 col-3">Fulfill</button>
+		            </div>
+				</div>
+			</fieldset>
+	   </div>
+	</div>
+</body>
+</html>

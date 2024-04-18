@@ -1,21 +1,48 @@
 
-nav { 
-    margin: 5px;
-}
-
 .title {
     text-align: center;
+    font-size: 2vw;
+    font-weight: bolder;
+    border-bottom: 1px solid black;
+    margin-bottom: 1vw;
+    padding-bottom: 1vw;
+
 
 }
 
 .add {
-    float: right;
-    margin-right: 25px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 98%;
+	height: 6vh;
+    justify-content: center;
+    align-content: center;
+    font-size: larger;
+    background-color: rgb(92, 255, 92);
+}
+
+.add:hover {
+    font-weight: bolder;
+}
+
+.delete {
+    background-color: rgb(255, 114, 112);
+}
+
+.delete:hover {
+    font-weight: bolder;
 }
 
 .submit {
-    float: right;
-    margin-right: 30px;
+	height: 10vh;
+	width: 100%;
+	font-size: larger;
+    background-color: rgb(29, 29, 29);
+    color: white;
+}
+
+.submit:hover {
+	font-weight: bolder;
 }
 
 main {
@@ -27,7 +54,7 @@ main {
 .recipe {
     height: 750px;
     width: 70%;
-    margin: auto
+    margin: auto;
 }
 
 .book {
@@ -56,7 +83,7 @@ main {
 
 .inContainer {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr .1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     column-gap: 10px;
     border: 1px solid black;
     padding: 1%;
@@ -93,4 +120,38 @@ main {
 .label4 { 
     text-align: center;
     grid-column: 4 / 5;
+}
+
+legend {
+	padding: 1vw;	
+	font-weight: bold;
+}
+
+#navbar5 {
+    justify-content: end;
+}
+
+.logoutBtn {
+    margin-right: 2vw;
+    text-decoration: none;
+}
+
+.logoutBtn:hover {
+    font-size: larger;
+    color: white;
+    text-decoration: underline;
+}
+
+.logoutBtn {
+    color: white;
+}
+
+nav {
+    background-color: rgb(29, 29, 29);
+    margin-bottom: 2vh;
+}
+
+.navbar-brand {
+    color: white;
+
 }

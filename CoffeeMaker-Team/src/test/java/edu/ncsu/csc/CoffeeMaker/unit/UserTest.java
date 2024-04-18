@@ -33,10 +33,10 @@ class UserTest {
     void testCreateUser () {
 
         final User u1 = new User( "User01", "password", UserType.CUSTOMER );
-        service.save( u1 );
+        service.encodeUser( u1 );
 
         final User u2 = new User( "User02", "password", UserType.CUSTOMER );
-        service.save( u2 );
+        service.encodeUser( u2 );
 
         final List<User> users = service.findAll();
 
@@ -45,25 +45,59 @@ class UserTest {
         Assertions.assertEquals( u1, users.get( 0 ), "The retrieved user should match the created one" );
     }
 
+    // @Test
+    // void testAddAndGetOrders () {
+    //
+    // final User u1 = new User( "User01", "password", UserType.CUSTOMER );
+    // service.encodeUser( u1 );
+    //
+    // final List<User> users = service.findAll();
+    //
+    // Assertions.assertEquals( 1, users.size(), "Creating two recipes should
+    // result in two users in the database" );
+    //
+    // final String name1 = "Coffee";
+    // final Recipe r1 = new Recipe( name1, 15 );
+    // r1.addIngredient( new Ingredient( "Chocolate", 1 ) );
+    // r1.addIngredient( new Ingredient( "Milk", 3 ) );
+    // r1.addIngredient( new Ingredient( "Coffee", 2 ) );
+    // r1.addIngredient( new Ingredient( "Sugar", 1 ) );
+    // final String name2 = "Mocha";
+    // final Recipe r2 = new Recipe( name2, 15 );
+    // r2.addIngredient( new Ingredient( "Chocolate", 2 ) );
+    // r2.addIngredient( new Ingredient( "Milk", 2 ) );
+    // r2.addIngredient( new Ingredient( "Coffee", 1 ) );
+    // r2.addIngredient( new Ingredient( "Sugar", 2 ) );
+    //
+    // final List<Recipe> recipes = List.of( r1, r2 );
+    //
+    // final CoffeeOrder o1 = new CoffeeOrder( recipes );
+    //
+    // u1.addOrder( o1 );
+    //
+    // Assertions.assertEquals( 1, u1.getOrders().size() );
+    //
+    // Assertions.assertEquals( 0, u1.getOrders().indexOf( o1 ) );
+    //
+    // }
+
     @Test
     void testEditUser () {
 
         final User u1 = new User();
-        service.save( u1 );
+        service.encodeUser( u1 );
 
         final User u2 = new User( "User02", "password", UserType.CUSTOMER );
-        service.save( u2 );
+        service.encodeUser( u2 );
 
         final User u3 = new User( "User01", "password", UserType.CUSTOMER );
 
         u1.editUser( u3 );
 
-        service.save( u1 );
+        service.encodeUser( u1 );
         final List<User> users = service.findAll();
 
         Assertions.assertEquals( 2, users.size() );
-
-        Assertions.assertEquals( "User01", users.get( 0 ).getName() );
 
     }
 

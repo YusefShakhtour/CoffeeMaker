@@ -1,6 +1,7 @@
 package edu.ncsu.csc.CoffeeMaker.api;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -180,6 +181,25 @@ public class APIRecipeTest {
 
         mvc.perform( delete( String.format( "/api/v1/recipes/%s", "Coffee" ) ).contentType( MediaType.APPLICATION_JSON )
                 .content( TestUtils.asJsonString( r3 ) ) ).andExpect( status().is4xxClientError() );
+
+    }
+
+    @Test
+    @Transactional
+    public void getRecipe () throws Exception {
+        service.deleteAll();
+
+        final Recipe r1 = createRecipe( "Mocha", 50, 3, 1, 1, 0 );
+        service.save( r1 );
+        final Recipe r2 = createRecipe( "Latte", 50, 3, 1, 1, 2 );
+        service.save( r2 );
+        final Recipe r3 = createRecipe( "Espresso", 60, 3, 2, 2, 0 );
+        service.save( r3 );
+
+        Assertions.assertEquals( 3, service.findAll().size(), "There should only be three recipe in the CoffeeMaker" );
+
+        mvc.perform( get( String.format( "/api/v1/recipes/%s", "Mocha" ) ).contentType( MediaType.APPLICATION_JSON )
+                .content( TestUtils.asJsonString( r1 ) ) ).andExpect( status().isOk() );
 
     }
 

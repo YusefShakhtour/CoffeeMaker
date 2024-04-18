@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="css/inventory.css" />
     <title>Add Inventory</title>
 </head>
@@ -30,6 +33,19 @@
 					});
 				}
 				
+                if (localStorage.getItem("type") != "MANAGER") {
+    				$http.post("/api/v1/logout")
+    	            .then(res => {
+    	            	console.log("removinguser");
+    	            	localStorage.removeItem("user");
+    	            	localStorage.removeItem("type");
+    	            	window.location.href = "/login";
+    	            }) 
+    	            .catch(error => {
+    	            	console.log(error);
+    	            });
+                }
+				
 				$scope.checkValidity = function() {
 					for (i = 0; i < $scope.ingredients.length; i++ ) {
 						var input = document.getElementById("units-" + i);
@@ -43,6 +59,20 @@
 					}
 					
 					return true;
+				}
+				
+				$scope.logout = function() {
+					console.log("click");
+					$http.post("/api/v1/logout")
+		            .then(res => {
+		            	console.log("removinguser");
+		            	localStorage.removeItem("user");
+		            	localStorage.removeItem("type");
+		            	window.location.href = "/login";
+		            }) 
+		            .catch(error => {
+		            	console.log(error);
+		            });
 				}
 	
 				$scope.submit = function() {
@@ -84,16 +114,24 @@
 		
 			<!--- Various HTML elements, with extra tags telling Angular how to work with them, go here -->
 
-			    <nav>
-			        <a href="/index">Home</a>
-			        <div class="title">Add Inventory</div>
-			    </nav>
+				<nav class="navbar navbar-expand-sm flex-sm-nowrap flex-wrap">
+			        <div class="container-fluid">
+			            <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar5">
+			                <span class="navbar-toggler-icon"></span>
+			            </button>
+			            <a class="navbar-brand" href="./managerHome.html">CoffeeMaker</a>
+			            <div class="navbar-collapse collapse" id="navbar5">
+			                <ul class="navbar-nav">
+		                  		<a href="#" ng-click="logout()" class="logoutBtn">Logout</a>
+			                </ul>
+			            </div>
+			        </div>
+		    	</nav>
 			    <main>
 			    
 			    	<fieldset class="inventory">
-			            <legend>Inventory</legend>
 			            <fieldset>
-				            <legend>Ingredients</legend>
+				            <legend>Current Inventory</legend>
 				            <div ng-repeat="item in inventory.ingredients" class="inContainer">
 				                <div class="label1">Name</div>
 				                <div>{{item.ingredient}}</div>
@@ -103,11 +141,9 @@
 				            </div>
 			            </fieldset>
 			        </fieldset>
-			        <fieldset class="addinventory">
-			            <legend>Add Inventory</legend>
-			
+			        <fieldset class="addinventory">			
 			            <fieldset class="outContainer">
-			                <legend>Ingredients</legend>
+			            	<legend>Add To Inventory</legend>
 			                <div ng-repeat="item in ingredients" class="inContainer">
 			                    <div class="label1">Name</div>
 			                    <div>{{item.ingredient}}</div>

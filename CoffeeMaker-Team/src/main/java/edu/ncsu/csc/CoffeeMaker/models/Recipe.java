@@ -1,7 +1,10 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -140,6 +143,54 @@ public class Recipe extends DomainObject {
      */
     public List<Ingredient> getIngredients () {
         return ingredients;
+    }
+
+    /**
+     * Edits recipe
+     *
+     * @param newRecipe
+     *            recipe details to edit
+     * @return true if successful
+     */
+    public boolean editRecipe ( final Recipe newRecipe ) {
+        final int newPrice = newRecipe.getPrice();
+        if ( newPrice < 0 ) {
+            throw new IllegalArgumentException( "Price cannot be negative" );
+        }
+        setPrice( newPrice );
+
+        final List<Ingredient> newIngredients = newRecipe.getIngredients();
+        for ( final Ingredient ingredient : newIngredients ) {
+            if ( ingredient.getAmount() < 0 ) {
+                throw new IllegalArgumentException( "Amount cannot be negative" );
+            }
+        }
+
+        final Map<String, Ingredient> newIngredientsMap = new HashMap<>();
+        for ( final Ingredient ingr : newIngredients ) {
+            newIngredientsMap.put( ingr.getIngredient(), ingr );
+        }
+
+        final Iterator<Ingredient> it = ingredients.iterator();
+        while ( it.hasNext() ) {
+            final Ingredient oldIngr = it.next();
+            final Ingredient newIngr = newIngredientsMap.get( oldIngr.getIngredient() );
+            if ( newIngr == null ) {
+                it.remove();
+            }
+            else {
+                oldIngr.setAmount( newIngr.getAmount() );
+                newIngredientsMap.remove( oldIngr.getIngredient() );
+            }
+        }
+
+        for ( final Ingredient newIngr : newIngredientsMap.values() ) {
+            addIngredient( newIngr );
+        }
+
+        // System.out.println( "Updated Ingredients: " + getIngredients() );
+
+        return true;
     }
 
     /**
