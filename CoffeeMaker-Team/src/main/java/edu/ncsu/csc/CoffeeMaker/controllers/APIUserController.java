@@ -181,12 +181,18 @@ public class APIUserController extends APIController {
         }
 
         try {
+            System.out.println( "Enter" );
             u.editUser( user );
-            userService.encodeUser( u );
+            System.out.println();
+            System.out.println( user.toString() );
+            System.out.println( "After edit" );
+            userService.save( u );
+            System.out.println( "After save" );
             return new ResponseEntity( successResponse( name + " user type was updated to " + u.getUserType() ),
                     HttpStatus.OK );
         }
         catch ( final Exception e ) {
+            System.out.println( "----- Problem ------" );
             System.out.println( e.toString() );
             return new ResponseEntity( HttpStatus.BAD_REQUEST );
         }

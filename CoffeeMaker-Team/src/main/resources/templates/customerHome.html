@@ -21,6 +21,16 @@
                 localStorage.setItem("user", res.data.message.substring(14, res.data.message.indexOf("+")));
                 localStorage.setItem("type", res.data.message.substring(res.data.message.indexOf("+") + 1));
         	})
+        	.then(res => {
+    			$http.get("/api/v1/users/" + localStorage.getItem("user"))
+                .then(res => {
+                    $scope.orders = res.data.orders;
+                    console.log($scope.orders);
+                })
+                .catch(error => {
+                    console.log('Request failed ', error);
+                });
+        	})
         	.catch(error => {
                 console.log('Request failed ', error);
                 window.location.href = '/login';
@@ -30,14 +40,14 @@
 				$scope.recipes = response.data;
 			});
 			
-			$http.get("/api/v1/users/" + localStorage.getItem("user"))
+/* 			$http.get("/api/v1/users/" + localStorage.getItem("user"))
             .then(res => {
                 $scope.orders = res.data.orders;
                 console.log($scope.orders);
             })
             .catch(error => {
                 console.log('Request failed ', error);
-            });
+            }); */
 			
 			$scope.newOrder = [];
 			$scope.total = 0;

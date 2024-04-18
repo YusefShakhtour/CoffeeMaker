@@ -37,7 +37,7 @@ public class User extends DomainObject {
     private UserType          userType;
 
     /** list of orders for this user */
-    @OneToMany ( cascade = CascadeType.MERGE, fetch = FetchType.EAGER )
+    @OneToMany ( cascade = CascadeType.PERSIST, fetch = FetchType.EAGER )
     private List<CoffeeOrder> orders;
 
     /**
