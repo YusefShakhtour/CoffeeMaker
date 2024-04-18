@@ -1,7 +1,10 @@
 package edu.ncsu.csc.CoffeeMaker.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -149,41 +152,44 @@ public class Recipe extends DomainObject {
      *            recipe details to edit
      * @return true if successful
      */
-    public boolean editRecipe ( final Recipe recipe ) {
-        final int newPrice = recipe.getPrice();
+    public boolean editRecipe ( final Recipe newRecipe ) {
+        final int newPrice = newRecipe.getPrice();
         if ( newPrice < 0 ) {
-            throw new IllegalArgumentException( "Amount cannot be negative" );
+            throw new IllegalArgumentException( "Price cannot be negative" );
         }
+        setPrice( newPrice );
 
-        final List<Ingredient> ingrs = recipe.getIngredients();
-
-        for ( int i = 0; i < ingrs.size(); i++ ) {
-            final Ingredient temp = ingrs.get( i );
-            if ( temp.getAmount() < 0 ) {
+        final List<Ingredient> newIngredients = newRecipe.getIngredients();
+        for ( final Ingredient ingredient : newIngredients ) {
+            if ( ingredient.getAmount() < 0 ) {
                 throw new IllegalArgumentException( "Amount cannot be negative" );
             }
         }
 
-        setPrice( newPrice );
+        final Map<String, Ingredient> newIngredientsMap = new HashMap<>();
+        for ( final Ingredient ingr : newIngredients ) {
+            newIngredientsMap.put( ingr.getIngredient(), ingr );
+        }
 
-        for ( final Ingredient newIngr : ingrs ) {
-            boolean exists = false;
-            for ( int i = 0; i < ingredients.size(); i++ ) {
-                final Ingredient oldIngr = ingredients.get( i );
-                if ( oldIngr.getIngredient().equals( newIngr.getIngredient() ) ) {
-                    exists = true;
-                    if ( newIngr.getAmount() == 0 ) {
-                        ingredients.remove( i );
-                    }
-                    else {
-                        ingredients.set( i, newIngr );
-                    }
-                }
+        final Iterator<Ingredient> it = ingredients.iterator();
+        while ( it.hasNext() ) {
+            final Ingredient oldIngr = it.next();
+            final Ingredient newIngr = newIngredientsMap.get( oldIngr.getIngredient() );
+            if ( newIngr == null ) {
+                it.remove();
             }
-            if ( !exists ) {
-                addIngredient( newIngr );
+            else {
+                oldIngr.setAmount( newIngr.getAmount() );
+                newIngredientsMap.remove( oldIngr.getIngredient() );
             }
         }
+
+        for ( final Ingredient newIngr : newIngredientsMap.values() ) {
+            addIngredient( newIngr );
+        }
+
+        // System.out.println( "Updated Ingredients: " + getIngredients() );
+
         return true;
     }
 
