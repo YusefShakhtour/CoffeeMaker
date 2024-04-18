@@ -148,7 +148,7 @@ public class Recipe extends DomainObject {
     /**
      * Edits recipe
      *
-     * @param recipe
+     * @param newRecipe
      *            recipe details to edit
      * @return true if successful
      */

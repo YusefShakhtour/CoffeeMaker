@@ -105,8 +105,11 @@ public class UserService extends Service<User, Long> implements UserDetailsServi
     /**
      * Authenticates user by comparing passwords
      *
-     * @param user
+     * @param username
      *            user to compare
+     * 
+     * @param password
+     *            password to check
      * @return true if authenticated, otherwise false
      */
     public boolean authenticate ( final String username, final String password ) {

@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Global configuration for hashing encoder
      *
-     * @param auth
+     * @param http
      *            authentication builder
      * @throws Exception
      *             exception
@@ -70,6 +70,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // .permitAll();
     }
 
+    /**
+     * Configure password encoder
+     *
+     * @param auth
+     *            aythetnication builder
+     * @throws Exception
+     */
     @Autowired
     public void configureGlobal ( final AuthenticationManagerBuilder auth ) throws Exception {
         auth.userDetailsService( userService ).passwordEncoder( passwordEncoder() );

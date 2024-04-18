@@ -40,6 +40,13 @@ public class APIUserController extends APIController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Endpoint to login/authenticate a user
+     *
+     * @param user
+     *            user to login
+     * @return Response entity indicating successful or unsuccessful login
+     */
     @PostMapping ( BASE_PATH + "/login" )
     public ResponseEntity<String> loginUser ( @RequestBody final User user ) {
         System.out.println( "HERE" );
@@ -64,6 +71,15 @@ public class APIUserController extends APIController {
         }
     }
 
+    /**
+     * Endpoint to logout a user
+     *
+     * @param request
+     *            request info
+     * @param response
+     *            response info
+     * @return response entity indicating successful logout
+     */
     @PostMapping ( BASE_PATH + "/logout" )
     public ResponseEntity<String> logout ( final HttpServletRequest request, final HttpServletResponse response ) {
         final Cookie[] cookies = request.getCookies();
@@ -123,6 +139,9 @@ public class APIUserController extends APIController {
     /**
      * REST API method to provide GET access to the currently authenticated user
      *
+     * @param request
+     *            the request info
+     *
      * @return response to the request
      */
     @GetMapping ( BASE_PATH + "/current" )
@@ -161,6 +180,9 @@ public class APIUserController extends APIController {
 
     /**
      * REST API method to provide GET access to the currently authenticated user
+     *
+     * @param request
+     *            request info
      *
      * @return response to the request
      */
