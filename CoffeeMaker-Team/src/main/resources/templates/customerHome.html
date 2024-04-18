@@ -20,6 +20,19 @@
                 console.log('Current user: ', res);
                 localStorage.setItem("user", res.data.message.substring(14, res.data.message.indexOf("+")));
                 localStorage.setItem("type", res.data.message.substring(res.data.message.indexOf("+") + 1));
+                
+                if (localStorage.getItem("type") != "CUSTOMER" && localStorage.getItem("type") != "ANONYMOUS") {
+    				$http.post("/api/v1/logout")
+    	            .then(res => {
+    	            	console.log("removinguser");
+    	            	localStorage.removeItem("user");
+    	            	localStorage.removeItem("type");
+    	            	window.location.href = "/login";
+    	            }) 
+    	            .catch(error => {
+    	            	console.log(error);
+    	            });
+                }
         	})
         	.then(res => {
     			$http.get("/api/v1/users/" + localStorage.getItem("user"))
@@ -120,7 +133,6 @@
 		        <div class="pt-2 pb-2 orderObject d-flex" ng-repeat="recipe in newOrder track by $index">
                 	<div class="p-2 orderName col-3">{{recipe.name}} (${{recipe.price}})</div>
                 	<div class="col-2"></div>
-                	<button class="editOrder m-2 col-3">Edit</button>
                 	<button class="deleteFromOrder m-2 col-3" ng-click="removeFromOrder($index)">Delete</button>
             	</div>
 			</div>

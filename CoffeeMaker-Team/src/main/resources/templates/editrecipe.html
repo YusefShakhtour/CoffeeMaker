@@ -33,6 +33,19 @@
 					console.log($scope.recipe);
 				});
 				
+                if (localStorage.getItem("type") != "BARISTA") {
+    				$http.post("/api/v1/logout")
+    	            .then(res => {
+    	            	console.log("removinguser");
+    	            	localStorage.removeItem("user");
+    	            	localStorage.removeItem("type");
+    	            	window.location.href = "/login";
+    	            }) 
+    	            .catch(error => {
+    	            	console.log(error);
+    	            });
+                }
+				
 				$http.get("/api/v1/inventory").then(function(response) {
 					$scope.inventory = response.data;
 					$scope.ingredients = $scope.inventory.ingredients;

@@ -20,6 +20,19 @@
                 $scope.user = res.data;
                 console.log($scope.user);
             })
+            
+                if (localStorage.getItem("type") != "CUSTOMER" && localStorage.getItem("type") != "ANONYMOUS") {
+    				$http.post("/api/v1/logout")
+    	            .then(res => {
+    	            	console.log("removinguser");
+    	            	localStorage.removeItem("user");
+    	            	localStorage.removeItem("type");
+    	            	window.location.href = "/login";
+    	            }) 
+    	            .catch(error => {
+    	            	console.log(error);
+    	            });
+                }
         	
             function getOrder() {
             	var queryString = window.location.search.substring(1);

@@ -22,6 +22,19 @@
 					$scope.inventory = response.data;
 					$scope.ingredients = $scope.inventory.ingredients;
 				});
+				
+                if (localStorage.getItem("type") != "MANAGER") {
+    				$http.post("/api/v1/logout")
+    	            .then(res => {
+    	            	console.log("removinguser");
+    	            	localStorage.removeItem("user");
+    	            	localStorage.removeItem("type");
+    	            	window.location.href = "/login";
+    	            }) 
+    	            .catch(error => {
+    	            	console.log(error);
+    	            });
+                }
 
 				
 				$scope.logout = function() {

@@ -31,6 +31,19 @@
                 console.log('Current user: ', res);
                 localStorage.setItem("user", res.data.message.substring(14, res.data.message.indexOf("+")));
                 localStorage.setItem("type", res.data.message.substring(res.data.message.indexOf("+") + 1));
+                
+                if (localStorage.getItem("type") != "BARISTA") {
+    				$http.post("/api/v1/logout")
+    	            .then(res => {
+    	            	console.log("removinguser");
+    	            	localStorage.removeItem("user");
+    	            	localStorage.removeItem("type");
+    	            	window.location.href = "/login";
+    	            }) 
+    	            .catch(error => {
+    	            	console.log(error);
+    	            });
+                }
         	})
         	.catch(error => {
                 console.log('Request failed ', error);
@@ -171,7 +184,6 @@
 		                <div class="p-2 recipeName col-3">Order {{order.id}}</div>
 		                <div class="col-2"></div>
 		                <button ng-click="fulfill(order)" class="fulfillOrder m-2 col-3">Fulfill</button>
-		                <button ng-click="cancelOrder(order)" class="cancelOrder m-2 col-3">Cancel</button>
 		            </div>
 				</div>
 			</fieldset>

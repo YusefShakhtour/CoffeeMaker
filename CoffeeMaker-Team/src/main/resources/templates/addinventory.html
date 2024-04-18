@@ -33,6 +33,19 @@
 					});
 				}
 				
+                if (localStorage.getItem("type") != "MANAGER") {
+    				$http.post("/api/v1/logout")
+    	            .then(res => {
+    	            	console.log("removinguser");
+    	            	localStorage.removeItem("user");
+    	            	localStorage.removeItem("type");
+    	            	window.location.href = "/login";
+    	            }) 
+    	            .catch(error => {
+    	            	console.log(error);
+    	            });
+                }
+				
 				$scope.checkValidity = function() {
 					for (i = 0; i < $scope.ingredients.length; i++ ) {
 						var input = document.getElementById("units-" + i);
