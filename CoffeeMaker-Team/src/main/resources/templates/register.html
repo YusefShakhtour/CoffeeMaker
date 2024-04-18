@@ -17,27 +17,76 @@
 
         var app = angular.module('myApp', []);
         app.controller('registerCtrl', function($scope, $http, $q) {
-        	let userInput = document.querySelector("#username");
-        	let passInput = document.querySelector("#password");
+        	const registerButton = document.querySelector('#registerButton');
+        	const firstName = document.querySelector('#firstName');
+        	const lastName = document.querySelector('#lastName');
+        	const username = document.querySelector('#username');
+        	const pass = document.querySelector('#password');
+        	const rptPass = document.querySelector('#repeatPassword');
+        	const errorBox = document.querySelector('#errorBox');
         	
         	
-        	$scope.register = function() {
-				let user = {};
-				user['name'] = userInput.value;
-				user['password'] = passInput.value;
-				user['userType'] = "CUSTOMER";
-        		
-            	$http.post("/api/v1/users", JSON.stringify(user))
-            	.then(res => {
-                    console.log('Register successful', res);
-                    window.location.href = "/login.html"
-                    // Redirect to another page or show a success message
-                }) 
-                .catch(error => {
-                    console.log('Register failed', error);
-                    // Show an error message
-                });
-        	}
+        	(function () {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        registerButton.addEventListener('click', function (event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            } else {
+                				// Function to check if passwords match
+                			    $scope.checkPasswordMatch = function () {
+                			        $scope.passwordMismatch = $scope.password !== $scope.repeatPassword;
+                			    };
+                			    
+                			    // Watch for changes in the password and repeatPassword fields
+                			    $scope.$watchGroup(['password', 'repeatPassword'], function () {
+                			        $scope.checkPasswordMatch();
+                			    });
+                				
+                						// Check if passwords match before proceeding
+                		        if (pass.value !== rptPass.value) {
+                		            // Show error message
+                		            errorBox.classList.remove('hidden');
+                		            errorBox.innerHTML = "Passwords do not match.";
+                		            return; // Abort registration if passwords don't match
+                		        } else {
+                		            // Hide error message if passwords match
+                		            errorBox.classList.add('hidden');
+                		            console.log("else");
+                		        }
+                				
+                				let user = {};
+                				user['name'] = username.value;
+                				user['password'] = pass.value;
+                				user['userType'] = "CUSTOMER";
+                        		
+                				console.log("post");
+                            	$http.post("/api/v1/users", JSON.stringify(user))
+                            	.then(res => {
+                            		console.log("in post");
+                                    console.log('Register successful', res);
+                                    errorBox.classList.add('hidden');
+                                    window.location.href = "/login.html"
+                                    // Redirect to another page or show a success message
+                                }) 
+                                .catch(error => {
+                                    console.log('Register failed', error);
+                                    errorBox.classList.remove('hidden');
+                		            errorBox.innerHTML = "Registration failed.";
+                                    // Show an error message
+                                });
+                            }
+                            form.classList.add('was-validated')
+                        }, false)
+                    })
+            })()
         });
 
         /*]]>*/
@@ -54,45 +103,53 @@
 	              <div class="card-body p-5">
 	                <h2 class="text-uppercase text-center mb-5">Create an account</h2>
 	  
-	                <form>
+	                <form class="needs-validation" novalidate>
+						
+					<div id="errorBox" class="hidden"></div>
 	  
-	                  <div class="firstName mb-2">
-	                    <input type="text" id="firstName" class="form-control form-control-lg" />
+	                  <div class="form-outline firstName mb-2">
+	                    <input type="text" id="firstName" class="form-control form-control-lg"
+	                    placeholder="Enter a first name" required/>
 	                    <label class="form-label" for="firstName">First Name</label>
 	                  </div>
-	                  <div class="lastName mb-2">
-	                    <input type="text" id="lastName" class="form-control form-control-lg" />
+	                  <div class="form-outline lastName mb-2">
+	                    <input type="text" id="lastName" class="form-control form-control-lg" 
+	                    placeholder="Enter a last name" required/>
 	                    <label class="form-label" for="lastName">Last Name</label>
 	                  </div>
 	  
-	                  <div class="username mb-2">
-	                    <input type="text" id="username" class="form-control form-control-lg" />
-	                    <label class="form-label" for="email">Username</label>
+	                  <div class="form-outline username mb-2">
+	                    <input type="text" id="username" class="form-control form-control-lg" 
+	                    placeholder="Enter a valid username" required/>
+	                    <label class="form-label" for="username">Username</label>
 	                  </div>
 	  
-	                  <div class="password mb-2">
-	                    <input type="password" id="password" class="form-control form-control-lg" />
+	                  <div class="form-outline password mb-2">
+	                    <input type="password" id="password" class="form-control form-control-lg"
+	                    placeholder="Enter a password" required/>
 	                    <label class="form-label" for="password">Password</label>
 	                  </div>
 	  
-	                  <div class="repeatPassword mb-2">
-	                    <input type="password" id="repeatPassword" class="form-control form-control-lg" />
+	                  <div class="form-outline repeatPassword mb-2">
+	                    <input type="password" id="repeatPassword" class="form-control form-control-lg"
+	                    placeholder="Enter same password" ng-model="repeatPassword" required/>
 	                    <label class="form-label" for="repeatPassword">Repeat your password</label>
+	                    <div class="invalid-feedback" ng-show="passwordMismatch">Passwords do not match.</div>
 	                  </div>
 	  
-	                  <div class="form-check d-flex justify-content-center mb-5">
-	                    <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3cg" />
-	                    <label class="form-check-label" for="form2Example3g">
+	                  <div class="form-outline form-check d-flex justify-content-center mb-5">
+	                    <input class="form-check-input me-2" type="checkbox" value="" id="policyCheckBox" required/>
+	                    <label class="form-check-label" for="policyCheckBox">
 	                      I agree all statements in <a href="./privacypolicy.html" class="text-body"><u>Privacy Policy</u></a>
 	                    </label>
 	                  </div>
 	  
 	                  <div class="d-flex justify-content-center">
-	                    <button type="button"
+	                    <button type="button" id="registerButton"
 	                      class="registerBtn btn-lg" ng-click="register()">Register</button>
 	                  </div>
 	  
-	                  <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="./login.html"
+	                  <p class="text-center text-muted mt-5 mb-0">Already have an account? <a href="./login.html"
 	                      class="fw-bold text-body"><u>Login here</u></a></p>
 	  
 	                </form>
