@@ -17,60 +17,14 @@
 
         var app = angular.module('myApp', []);
         app.controller('registerCtrl', function($scope, $http, $q) {
-        	let userInput = document.querySelector("#username");
-        	let passInput = document.querySelector("#password");
-        	
-        	
-        	$scope.register = function() {
-				
-				// Function to check if passwords match
-			    $scope.checkPasswordMatch = function () {
-			        $scope.passwordMismatch = $scope.password !== $scope.repeatPassword;
-			    };
-			    
-			    // Watch for changes in the password and repeatPassword fields
-			    $scope.$watchGroup(['password', 'repeatPassword'], function () {
-			        $scope.checkPasswordMatch();
-			    });
-				
-						// Check if passwords match before proceeding
-		        if ($scope.password !== $scope.repeatPassword) {
-		            // Show error message
-		            errorBox.classList.remove('hidden');
-		            errorBox.innerHTML = "Passwords do not match.";
-		            return; // Abort registration if passwords don't match
-		        } else {
-		            // Hide error message if passwords match
-		            errorBox.classList.add('hidden');
-		        }
-				
-				let user = {};
-				user['name'] = userInput.value;
-				user['password'] = passInput.value;
-				user['userType'] = "CUSTOMER";
-        		
-            	$http.post("/api/v1/users", JSON.stringify(user))
-            	.then(res => {
-                    console.log('Register successful', res);
-                    errorBox.classList.add('hidden');
-                    window.location.href = "/login.html"
-                    // Redirect to another page or show a success message
-                }) 
-                .catch(error => {
-                    console.log('Register failed', error);
-                    errorBox.classList.remove('hidden');
-		            errorBox.innerHTML = "Registration failed.";
-                    // Show an error message
-                });
-        	}
-        	
         	const registerButton = document.querySelector('#registerButton');
         	const firstName = document.querySelector('#firstName');
         	const lastName = document.querySelector('#lastName');
-        	const username = document.querySelector('#firstName');
+        	const username = document.querySelector('#username');
         	const pass = document.querySelector('#password');
         	const rptPass = document.querySelector('#repeatPassword');
         	const errorBox = document.querySelector('#errorBox');
+        	
         	
         	(function () {
                 'use strict'
@@ -86,23 +40,48 @@
                                 event.preventDefault()
                                 event.stopPropagation()
                             } else {
-                			    var user = {
-            			    		name: $scope.userInput,
-            		                password: $scope.passInput,
-            		                userType: "CUSTOMER"
-            				    };
-
-            				    $http.post("/api/v1/users", JSON.stringify(user))
-				            	.then(res => {
-				                    console.log('Register successful', res);
-				                    // Redirect to another page or show a success message
-				                }) 
-				                .catch(error => {
-				                    console.log('Register failed', error);
-				                    errorBox.classList.remove('hidden');
-                                    errorBox.innerHTML = "Registration failed";
-				                    // Show an error message
-				                });
+                				// Function to check if passwords match
+                			    $scope.checkPasswordMatch = function () {
+                			        $scope.passwordMismatch = $scope.password !== $scope.repeatPassword;
+                			    };
+                			    
+                			    // Watch for changes in the password and repeatPassword fields
+                			    $scope.$watchGroup(['password', 'repeatPassword'], function () {
+                			        $scope.checkPasswordMatch();
+                			    });
+                				
+                						// Check if passwords match before proceeding
+                		        if (pass.value !== rptPass.value) {
+                		            // Show error message
+                		            errorBox.classList.remove('hidden');
+                		            errorBox.innerHTML = "Passwords do not match.";
+                		            return; // Abort registration if passwords don't match
+                		        } else {
+                		            // Hide error message if passwords match
+                		            errorBox.classList.add('hidden');
+                		            console.log("else");
+                		        }
+                				
+                				let user = {};
+                				user['name'] = username.value;
+                				user['password'] = pass.value;
+                				user['userType'] = "CUSTOMER";
+                        		
+                				console.log("post");
+                            	$http.post("/api/v1/users", JSON.stringify(user))
+                            	.then(res => {
+                            		console.log("in post");
+                                    console.log('Register successful', res);
+                                    errorBox.classList.add('hidden');
+                                    window.location.href = "/login.html"
+                                    // Redirect to another page or show a success message
+                                }) 
+                                .catch(error => {
+                                    console.log('Register failed', error);
+                                    errorBox.classList.remove('hidden');
+                		            errorBox.innerHTML = "Registration failed.";
+                                    // Show an error message
+                                });
                             }
                             form.classList.add('was-validated')
                         }, false)
