@@ -90,6 +90,13 @@
 	            });
 			}
 			
+            $scope.pickup = function(order) {
+            	console.log($scope.orders);
+            	console.log(order.id);
+            	
+            }
+			
+			
 			$scope.submitOrder = function() {
 				if ( $scope.newOrder.length > 0 ) {
 
@@ -98,6 +105,7 @@
 	                    total: null,
 	                    timeStamp: null,
 	                    fulfilled: false,
+	                    pickup: false,
 	                    recipes: $scope.newOrder
 	                };
 	                
@@ -143,7 +151,9 @@
 				<div ng-repeat="order in orders" class="p-2 order">
 					<div class="p-2 orderId col-4">Order {{order.id}}</div>
 					<div class="col-1"></div>
-					<button class="orderStatus {{ order.fulfilled ? 'ready' : 'inProgress' }} m-2 col-4">{{ order.fulfilled ? 'Ready' : 'In Progress' }}</button>                
+					<button class="orderStatus {{ order.fulfilled ? 'ready' : 'inProgress' }} m-2 col-4">{{ order.fulfilled ? 'Ready' : 'In Progress' }}</button>          
+					<button ng-click="pickup(order)" class="pickupBtn {{ order.fulfilled && !order.pickup ? 'pickup' : 'noPickup' }} m-2 col-2">{{ order.fulfilled && !order.pickup ? 'Pickup' : 'In Progress' }}</button>                
+      
 				</div>
 			</div>
 		</fieldset>	

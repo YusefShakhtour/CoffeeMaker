@@ -38,6 +38,9 @@ public class CoffeeOrder extends DomainObject {
     /** Time of order construction in UTC */
     private LocalDateTime timestamp;
 
+    /** Pickup status of order **/
+    private boolean       pickup;
+
     /** list of recipes in the order */
     @ManyToMany ( cascade = CascadeType.MERGE, fetch = FetchType.EAGER )
     private List<Recipe>  recipes;
@@ -57,6 +60,7 @@ public class CoffeeOrder extends DomainObject {
      */
     public CoffeeOrder ( final List<Recipe> recipes ) {
         setFulfilled( false );
+        setPickup( false );
         setRecipes( recipes );
         setOrderTotal();
         setTimeStamp( LocalDateTime.now() );
@@ -75,8 +79,9 @@ public class CoffeeOrder extends DomainObject {
      *            the time stamp of creation
      */
     public CoffeeOrder ( final List<Recipe> recipes, final boolean fulfilled, final Integer total,
-            final LocalDateTime stamp ) {
+            final LocalDateTime stamp, final boolean pickup ) {
         this.recipes = recipes;
+        this.pickup = pickup;
         this.fulfilled = fulfilled;
         this.total = total;
         this.timestamp = stamp;
@@ -90,6 +95,7 @@ public class CoffeeOrder extends DomainObject {
      */
     public void editOrder ( final CoffeeOrder order ) {
         setFulfilled( order.getFulfilled() );
+        setPickup( order.getPickup() );
         setRecipes( order.getRecipes() );
         setOrderTotal();
     }
@@ -126,6 +132,26 @@ public class CoffeeOrder extends DomainObject {
     public void setFulfilled ( final boolean fulfilled2 ) {
         this.fulfilled = fulfilled2;
 
+    }
+
+    /**
+     * set the pickup status of order
+     *
+     * @param pickup
+     *            status
+     */
+    public void setPickup ( final boolean pickup ) {
+        this.pickup = pickup;
+
+    }
+
+    /**
+     * return the pickup status of the order. true if pickedup; otherwise, false
+     *
+     * @return true if picked up;otherwise, false
+     */
+    public boolean getPickup () {
+        return pickup;
     }
 
     /**
