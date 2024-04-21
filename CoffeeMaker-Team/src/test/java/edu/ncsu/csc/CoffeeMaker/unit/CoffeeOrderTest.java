@@ -101,12 +101,13 @@ public class CoffeeOrderTest {
         Assertions.assertEquals( o2.getRecipes().get( 1 ), r2 );
         Assertions.assertEquals( o2.getTotal(), 30 );
 
-        final CoffeeOrder o3 = new CoffeeOrder( recipes, true, 30, LocalDateTime.now() );
+        final CoffeeOrder o3 = new CoffeeOrder( recipes, true, 30, LocalDateTime.now(), false );
         Assertions.assertTrue( o3.getFulfilled() );
         Assertions.assertEquals( o3.getRecipes().size(), 2 );
         Assertions.assertEquals( o3.getRecipes().get( 0 ), r1 );
         Assertions.assertEquals( o3.getRecipes().get( 1 ), r2 );
         Assertions.assertEquals( o3.getTotal(), 30 );
+        Assertions.assertFalse( o3.getPickup() );
         Assertions.assertEquals( LocalDateTime.now().getDayOfMonth(), o3.getTimeStamp().getDayOfMonth() );
 
     }

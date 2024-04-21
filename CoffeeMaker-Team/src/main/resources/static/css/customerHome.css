@@ -88,6 +88,22 @@
     background-color: rgb(92, 255, 92);
 }
 
+.noPickup {
+	display: none;
+}
+
+.pickedUp {
+	width: 0;
+	height: 0;
+	display: none;
+	visibility: hidden;
+}
+
+.pickup:hover {
+    font-weight: bolder;
+}
+
+
 .orderId {
     font-size: larger;
 }
