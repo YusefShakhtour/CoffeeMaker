@@ -77,6 +77,9 @@ public class CoffeeOrder extends DomainObject {
      *            total of recipes
      * @param stamp
      *            the time stamp of creation
+     * 
+     * @param pickup
+     *            pickedUp boolean
      */
     public CoffeeOrder ( final List<Recipe> recipes, final boolean fulfilled, final Integer total,
             final LocalDateTime stamp, final boolean pickup ) {
