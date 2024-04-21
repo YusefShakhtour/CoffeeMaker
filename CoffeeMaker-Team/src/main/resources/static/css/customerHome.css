@@ -92,6 +92,11 @@
 	display: none;
 }
 
+.pickedUp {
+	display: none;
+	visibility: hidden;
+}
+
 .pickup:hover {
     font-weight: bolder;
 }

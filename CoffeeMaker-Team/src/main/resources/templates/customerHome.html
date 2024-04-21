@@ -93,6 +93,15 @@
             $scope.pickup = function(order) {
             	console.log($scope.orders);
             	console.log(order.id);
+            	order.pickup = true;
+        		$http.put("/api/v1/orders/" + order.id, order).then(function(response) {
+                    $scope.change = response.data.message;
+                    $scope.submissionSuccess = true;
+                }, function(errResponse) {
+                    console.log(errResponse);
+                    $scope.submissionFailure = true;
+                    $scope.error = "Error while changing order";
+                });
             	
             }
 			
@@ -148,11 +157,11 @@
         		<fieldset class="statusContainer mt-3">
 			<legend>Order Status</legend>
 			<div class="p-3 orderList border border-dark">
-				<div ng-repeat="order in orders" class="p-2 order">
-					<div class="p-2 orderId col-4">Order {{order.id}}</div>
-					<div class="col-1"></div>
-					<button class="orderStatus {{ order.fulfilled ? 'ready' : 'inProgress' }} m-2 col-4">{{ order.fulfilled ? 'Ready' : 'In Progress' }}</button>          
-					<button ng-click="pickup(order)" class="pickupBtn {{ order.fulfilled && !order.pickup ? 'pickup' : 'noPickup' }} m-2 col-2">{{ order.fulfilled && !order.pickup ? 'Pickup' : 'In Progress' }}</button>                
+				<div ng-repeat="order in orders" class="p-2 order {{ order.pickup ? 'pickedUp' : '' }}">
+					<div class="{{ order.pickup ? 'pickedUp' : '' }} p-2 orderId col-4">Order {{order.id}}</div>
+					<div class="{{ order.pickup ? 'pickedUp' : '' }} col-1"></div>
+					<button class="{{ order.pickup ? 'pickedUp' : '' }} orderStatus {{ order.fulfilled ? 'ready' : 'inProgress' }} m-2 col-4">{{ order.fulfilled ? 'Ready' : 'In Progress' }}</button>          
+					<button ng-click="pickup(order)" class="pickupBtn {{ order.pickup ? 'pickedUp' : '' }} {{ order.fulfilled && !order.pickup ? 'pickup' : 'noPickup' }} m-2 col-2">{{ order.fulfilled && !order.pickup ? 'Pickup' : 'In Progress' }}</button>                
       
 				</div>
 			</div>
