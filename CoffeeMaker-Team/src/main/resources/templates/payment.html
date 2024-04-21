@@ -100,28 +100,7 @@
             </div>
         </nav>
         <div class="flexContainer">
-            <fieldset class="detialContainer p-4">
-                <legend>User Details</legend>
-                <div class="row userDetails border border-dark px-4">
-                    <div class="inField my-4">
-                        <label for="firstName" class="form-label">First Name</label>
-                        <input type="input" id="firstName" class="form-control">
-                    </div>
-                    <div class="inField my-4">
-                        <label for="lastName" class="form-label">Last Name</label>
-                        <input type="input" id="lastName" class="form-control">
-                    </div>
-                    <div class="inField my-4">
-                        <label for="mobile" class="form-label">Mobile</label>
-                        <input type="input" id="mobile" class="form-control">
-                    </div>
-                    <div class="inField my-4">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="input" id="email" class="form-control">
-                    </div>
-                </div>
-            </fieldset>
-            <fieldset class="cartContainer col-6 p-4">
+            <fieldset class="cartContainer col-8 p-4">
 				<legend>Cart</legend>
 				<div class="p-3 recipeList border border-dark">
 		            <div ng-repeat="recipe in order.recipes track by $index" class="p-2 recipeObject">

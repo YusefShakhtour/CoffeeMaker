@@ -11,6 +11,12 @@ nav {
     display: flex;
 }
 
+.cartContainer {
+	
+	margin-left:auto;
+	margin-right:auto;	
+}
+
 .userDetails {
     height: 60vh;
 }
